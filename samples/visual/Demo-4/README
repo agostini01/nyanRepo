@@ -1,0 +1,7 @@
+########################################################################################
+To Run simulation, modify the following for your binary:
+
+../../../bin/m2s --si-sim detailed --mem-config mem-si --si-config si-config --ctx-config ctx-config --mem-snapshot 2000 4096
+
+ps2eps 2000_4096_2D_loads.ps
+ps2eps 2000_4096_2D_stores.ps

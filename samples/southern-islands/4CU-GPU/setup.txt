@@ -1,0 +1,4 @@
+gcc main.c -o out -lm2s-opencl -lpthread -ldl -I ../../../runtime/include/ -L ../../../lib/.libs/
+../../../bin/m2c --amd --amd-device 11 matrix_mul.txt 
+export M2S_OPENCL_BINARY=/home/kavyan/m2s-visual/samples/visual/4CU-GPU/matrix_mul.bin
+../../.././bin/m2s --si-sim detailed --mem-config mem-si --net-config net-mesh-si --si-config si-config --ctx-config ctx-2 --si-max-cycles 5000 --trace trace.gz --mem-debug debug.mem

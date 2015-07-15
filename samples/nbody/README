@@ -1,0 +1,19 @@
+Compile with:
+../../bin/m2c --amd --amd-device Tahiti nbody_kern.cl
+
+export M2S_OPENCL_BINARY=nbody_kern.bin
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+g++ -g -Wall main.cpp -o out -I../../runtime/include/ -L/usr/lib/ -L../../lib/.libs -lm2s-opencl -lm
+
+With events:
+
+g++ -g -Wall main_event.cpp -o out -I../../runtime/include/ -L/usr/lib/ -L../../lib/.libs -lm2s-opencl -lm
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+../../bin/m2s --si-sim detailed --mem-config mem-si --net-config net-doubleSwitch-si --si-config si-config --ctx-config ctx-config
+
+
+For running natively:
+
+
+g++ -g -Wall main.cpp -o out -I/opt/AMDAPP/include/ -L/usr/lib/ -lOpenCL -lm

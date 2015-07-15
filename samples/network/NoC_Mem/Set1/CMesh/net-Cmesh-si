@@ -1,0 +1,2918 @@
+;--------------------------------------------Network
+[Network.si-net-l1-l2]
+DefaultInputBufferSize = 720
+DefaultOutputBufferSize = 720
+DefaultBandwidth = 72
+DefaultPacketSize = 0
+
+;--------------------------------------------------Nodes
+[Network.si-net-l1-l2.Node.l1v0]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l1v1]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l1v2]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l1v3]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l1v4]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l1v5]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l1v6]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l1v7]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l1v8]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l1v9]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l1v10]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l1v11]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l1v12]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l1v13]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l1v14]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l1v15]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l1v16]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l1v17]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l1v18]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l1v19]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l1v20]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l1v21]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l1v22]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l1v23]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l1v24]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l1v25]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l1v26]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l1v27]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l1v28]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l1v29]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l1v30]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l1v31]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l1s0]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l1s1]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l1s2]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l1s3]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l1s4]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l1s5]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l1s6]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l1s7]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l2n0]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l2n1]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l2n2]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l2n3]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l2n4]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l2n5]
+Type = EndNode
+
+;---------------------------------------------------Switches
+[Network.si-net-l1-l2.Node.s0]
+Type = Switch
+
+[Network.si-net-l1-l2.Node.s1]
+Type = Switch
+
+[Network.si-net-l1-l2.Node.s2]
+Type = Switch
+
+[Network.si-net-l1-l2.Node.s3]
+Type = Switch
+
+[Network.si-net-l1-l2.Node.s4]
+Type = Switch
+
+[Network.si-net-l1-l2.Node.s5]
+Type = Switch
+
+[Network.si-net-l1-l2.Node.s6]
+Type = Switch
+
+[Network.si-net-l1-l2.Node.s7]
+Type = Switch
+
+;-----------------------------------------------------Links
+[Network.si-net-l1-l2.Link.l2n0-s0]
+Type = Bidirectional
+Source = l2n0
+Dest = s0
+
+[Network.si-net-l1-l2.Link.l1s0-s0]
+Type = Bidirectional
+Source = l1s0
+Dest = s0
+
+[Network.si-net-l1-l2.Link.l1v0-s0]
+Type = Bidirectional
+Source = l1v0
+Dest = s0
+
+[Network.si-net-l1-l2.Link.l1v1-s0]
+Type = Bidirectional
+Source = l1v1
+Dest = s0
+
+[Network.si-net-l1-l2.Link.l1v2-s0]
+Type = Bidirectional
+Source = l1v2
+Dest = s0
+
+[Network.si-net-l1-l2.Link.l1v3-s0]
+Type = Bidirectional
+Source = l1v3
+Dest = s0
+
+[Network.si-net-l1-l2.Link.l2n1-s1]
+Type = Bidirectional
+Source = l2n1
+Dest = s1
+
+[Network.si-net-l1-l2.Link.l1s1-s1]
+Type = Bidirectional
+Source = l1s1
+Dest = s1
+
+[Network.si-net-l1-l2.Link.l1v4-s1]
+Type = Bidirectional
+Source = l1v4
+Dest = s1
+
+[Network.si-net-l1-l2.Link.l1v5-s1]
+Type = Bidirectional
+Source = l1v5
+Dest = s1
+
+[Network.si-net-l1-l2.Link.l1v6-s1]
+Type = Bidirectional
+Source = l1v6
+Dest = s1
+
+[Network.si-net-l1-l2.Link.l1v7-s1]
+Type = Bidirectional
+Source = l1v7
+Dest = s1
+
+[Network.si-net-l1-l2.Link.l1s2-s2]
+Type = Bidirectional
+Source = l1s2
+Dest = s2
+
+[Network.si-net-l1-l2.Link.l1v8-s2]
+Type = Bidirectional
+Source = l1v8
+Dest = s2
+
+[Network.si-net-l1-l2.Link.l1v9-s2]
+Type = Bidirectional
+Source = l1v9
+Dest = s2
+
+[Network.si-net-l1-l2.Link.l1v10-s2]
+Type = Bidirectional
+Source = l1v10
+Dest = s2
+
+[Network.si-net-l1-l2.Link.l1v11-s2]
+Type = Bidirectional
+Source = l1v11
+Dest = s2
+
+[Network.si-net-l1-l2.Link.l2n2-s3]
+Type = Bidirectional
+Source = l2n2
+Dest = s3
+
+[Network.si-net-l1-l2.Link.l1s3-s3]
+Type = Bidirectional
+Source = l1s3
+Dest = s3
+
+[Network.si-net-l1-l2.Link.l1v12-s3]
+Type = Bidirectional
+Source = l1v12
+Dest = s3
+
+[Network.si-net-l1-l2.Link.l1v13-s3]
+Type = Bidirectional
+Source = l1v13
+Dest = s3
+
+[Network.si-net-l1-l2.Link.l1v14-s3]
+Type = Bidirectional
+Source = l1v14
+Dest = s3
+
+[Network.si-net-l1-l2.Link.l1v15-s3]
+Type = Bidirectional
+Source = l1v15
+Dest = s3
+
+[Network.si-net-l1-l2.Link.l2n3-s4]
+Type = Bidirectional
+Source = l2n3
+Dest = s4
+
+[Network.si-net-l1-l2.Link.l1s4-s4]
+Type = Bidirectional
+Source = l1s4
+Dest = s4
+
+[Network.si-net-l1-l2.Link.l1v16-s4]
+Type = Bidirectional
+Source = l1v16
+Dest = s4
+
+[Network.si-net-l1-l2.Link.l1v17-s4]
+Type = Bidirectional
+Source = l1v17
+Dest = s4
+
+[Network.si-net-l1-l2.Link.l1v18-s4]
+Type = Bidirectional
+Source = l1v18
+Dest = s4
+
+[Network.si-net-l1-l2.Link.l1v19-s4]
+Type = Bidirectional
+Source = l1v19
+Dest = s4
+
+[Network.si-net-l1-l2.Link.l1s5-s5]
+Type = Bidirectional
+Source = l1s5
+Dest = s5
+
+[Network.si-net-l1-l2.Link.l1v20-s5]
+Type = Bidirectional
+Source = l1v20
+Dest = s5
+
+[Network.si-net-l1-l2.Link.l1v21-s5]
+Type = Bidirectional
+Source = l1v21
+Dest = s5
+
+[Network.si-net-l1-l2.Link.l1v22-s5]
+Type = Bidirectional
+Source = l1v22
+Dest = s5
+
+[Network.si-net-l1-l2.Link.l1v23-s5]
+Type = Bidirectional
+Source = l1v23
+Dest = s5
+
+[Network.si-net-l1-l2.Link.l2n4-s6]
+Type = Bidirectional
+Source = l2n4
+Dest = s6
+
+[Network.si-net-l1-l2.Link.l1s6-s6]
+Type = Bidirectional
+Source = l1s6
+Dest = s6
+
+[Network.si-net-l1-l2.Link.l1v24-s6]
+Type = Bidirectional
+Source = l1v24
+Dest = s6
+
+[Network.si-net-l1-l2.Link.l1v25-s6]
+Type = Bidirectional
+Source = l1v25
+Dest = s6
+
+[Network.si-net-l1-l2.Link.l1v26-s6]
+Type = Bidirectional
+Source = l1v26
+Dest = s6
+
+[Network.si-net-l1-l2.Link.l1v27-s6]
+Type = Bidirectional
+Source = l1v27
+Dest = s6
+
+[Network.si-net-l1-l2.Link.l2n5-s7]
+Type = Bidirectional
+Source = l2n5
+Dest = s7
+
+[Network.si-net-l1-l2.Link.l1s7-s7]
+Type = Bidirectional
+Source = l1s7
+Dest = s7
+
+[Network.si-net-l1-l2.Link.l1v28-s7]
+Type = Bidirectional
+Source = l1v28
+Dest = s7
+
+[Network.si-net-l1-l2.Link.l1v29-s7]
+Type = Bidirectional
+Source = l1v29
+Dest = s7
+
+[Network.si-net-l1-l2.Link.l1v30-s7]
+Type = Bidirectional
+Source = l1v30
+Dest = s7
+
+[Network.si-net-l1-l2.Link.l1v31-s7]
+Type = Bidirectional
+Source = l1v31
+Dest = s7
+
+[Network.si-net-l1-l2.Link.s0-s1]
+Type = Bidirectional
+Source = s0
+Dest = s1
+
+[Network.si-net-l1-l2.Link.s0-s4]
+Type = Bidirectional
+Source = s0
+Dest = s4
+
+[Network.si-net-l1-l2.Link.s1-s2]
+Type = Bidirectional
+Source = s1
+Dest = s2
+
+[Network.si-net-l1-l2.Link.s1-s5]
+Type = Bidirectional
+Source = s1
+Dest = s5
+
+[Network.si-net-l1-l2.Link.s2-s3]
+Type = Bidirectional
+Source = s2
+Dest = s3
+
+[Network.si-net-l1-l2.Link.s2-s6]
+Type = Bidirectional
+Source = s2
+Dest = s6
+
+[Network.si-net-l1-l2.Link.s3-s7]
+Type = Bidirectional
+Source = s3
+Dest = s7
+
+[Network.si-net-l1-l2.Link.s4-s5]
+Type = Bidirectional
+Source = s4
+Dest = s5
+
+[Network.si-net-l1-l2.Link.s5-s6]
+Type = Bidirectional
+Source = s5
+Dest = s6
+
+[Network.si-net-l1-l2.Link.s6-s7]
+Type = Bidirectional
+Source = s6
+Dest = s7
+
+;-----------------------------------------------------Routes
+[Network.si-net-l1-l2.Routes]
+;-----switch s0 inter-connections
+l1s0.to.l1v0 = s0 
+l1v0.to.l1s0 = s0 
+l1v1.to.l1v0 = s0
+l1v2.to.l1v0 = s0
+l1v3.to.l1v0 = s0
+l1v0.to.l2n0 = s0 
+l2n0.to.l1v0 = s0 
+l1v0.to.l1v1 = s0
+l1s0.to.l1v1 = s0 
+l1v1.to.l1s0 = s0 
+l1v2.to.l1v1 = s0
+l1v3.to.l1v1 = s0
+l1v1.to.l2n0 = s0 
+l2n0.to.l1v1 = s0 
+l1v0.to.l1v2 = s0
+l1v1.to.l1v2 = s0
+l1s0.to.l1v2 = s0 
+l1v2.to.l1s0 = s0 
+l1v3.to.l1v2 = s0
+l1v2.to.l2n0 = s0 
+l2n0.to.l1v2 = s0 
+l1v0.to.l1v3 = s0
+l1v1.to.l1v3 = s0
+l1v2.to.l1v3 = s0
+l1s0.to.l1v3 = s0 
+l1v3.to.l1s0 = s0 
+l1v3.to.l2n0 = s0 
+l2n0.to.l1v3 = s0 
+l2n0.to.l1s0 = s0 
+l1s0.to.l2n0 = s0 
+;--------connecting s0 internodes to s0 internodes
+;--------connecting s0 internodes to s1 internodes
+l1v0.to.l1v4 = s0
+l1v1.to.l1v4 = s0
+l1v2.to.l1v4 = s0
+l1v3.to.l1v4 = s0
+l1s0.to.l1v4 = s0
+l2n0.to.l1v4 = s0
+s0.to.l1v4 = s1
+l1v0.to.l1v5 = s0
+l1v1.to.l1v5 = s0
+l1v2.to.l1v5 = s0
+l1v3.to.l1v5 = s0
+l1s0.to.l1v5 = s0
+l2n0.to.l1v5 = s0
+s0.to.l1v5 = s1
+l1v0.to.l1v6 = s0
+l1v1.to.l1v6 = s0
+l1v2.to.l1v6 = s0
+l1v3.to.l1v6 = s0
+l1s0.to.l1v6 = s0
+l2n0.to.l1v6 = s0
+s0.to.l1v6 = s1
+l1v0.to.l1v7 = s0
+l1v1.to.l1v7 = s0
+l1v2.to.l1v7 = s0
+l1v3.to.l1v7 = s0
+l1s0.to.l1v7 = s0
+l2n0.to.l1v7 = s0
+s0.to.l1v7 = s1
+l1v0.to.l1s1 = s0
+l1v0.to.l2n1 = s0
+l1v1.to.l1s1 = s0
+l1v1.to.l2n1 = s0
+l1v2.to.l1s1 = s0
+l1v2.to.l2n1 = s0
+l1v3.to.l1s1 = s0
+l1v3.to.l2n1 = s0
+l1s0.to.l1s1 = s0
+l1s0.to.l2n1 = s0
+l2n0.to.l2n1= s0
+l2n0.to.l1s1 = s0
+s0.to.l1s1 = s1
+s0.to.l2n1 = s1
+;--------connecting s0 internodes to s2 internodes
+l1v0.to.l1v8 = s0
+l1v1.to.l1v8 = s0
+l1v2.to.l1v8 = s0
+l1v3.to.l1v8 = s0
+l1s0.to.l1v8 = s0
+l2n0.to.l1v8 = s0
+s0.to.l1v8 = s1
+l1v0.to.l1v9 = s0
+l1v1.to.l1v9 = s0
+l1v2.to.l1v9 = s0
+l1v3.to.l1v9 = s0
+l1s0.to.l1v9 = s0
+l2n0.to.l1v9 = s0
+s0.to.l1v9 = s1
+l1v0.to.l1v10 = s0
+l1v1.to.l1v10 = s0
+l1v2.to.l1v10 = s0
+l1v3.to.l1v10 = s0
+l1s0.to.l1v10 = s0
+l2n0.to.l1v10 = s0
+s0.to.l1v10 = s1
+l1v0.to.l1v11 = s0
+l1v1.to.l1v11 = s0
+l1v2.to.l1v11 = s0
+l1v3.to.l1v11 = s0
+l1s0.to.l1v11 = s0
+l2n0.to.l1v11 = s0
+s0.to.l1v11 = s1
+l1v0.to.l1s2 = s0
+l1v1.to.l1s2 = s0
+l1v2.to.l1s2 = s0
+l1v3.to.l1s2 = s0
+l1s0.to.l1s2 = s0
+l2n0.to.l1s2 = s0
+s0.to.l1s2 = s1
+;--------connecting s0 internodes to s3 internodes
+l1v0.to.l1v12 = s0
+l1v1.to.l1v12 = s0
+l1v2.to.l1v12 = s0
+l1v3.to.l1v12 = s0
+l1s0.to.l1v12 = s0
+l2n0.to.l1v12 = s0
+s0.to.l1v12 = s1
+l1v0.to.l1v13 = s0
+l1v1.to.l1v13 = s0
+l1v2.to.l1v13 = s0
+l1v3.to.l1v13 = s0
+l1s0.to.l1v13 = s0
+l2n0.to.l1v13 = s0
+s0.to.l1v13 = s1
+l1v0.to.l1v14 = s0
+l1v1.to.l1v14 = s0
+l1v2.to.l1v14 = s0
+l1v3.to.l1v14 = s0
+l1s0.to.l1v14 = s0
+l2n0.to.l1v14 = s0
+s0.to.l1v14 = s1
+l1v0.to.l1v15 = s0
+l1v1.to.l1v15 = s0
+l1v2.to.l1v15 = s0
+l1v3.to.l1v15 = s0
+l1s0.to.l1v15 = s0
+l2n0.to.l1v15 = s0
+s0.to.l1v15 = s1
+l1v0.to.l1s3 = s0
+l1v0.to.l2n2 = s0
+l1v1.to.l1s3 = s0
+l1v1.to.l2n2 = s0
+l1v2.to.l1s3 = s0
+l1v2.to.l2n2 = s0
+l1v3.to.l1s3 = s0
+l1v3.to.l2n2 = s0
+l1s0.to.l1s3 = s0
+l1s0.to.l2n2 = s0
+l2n0.to.l2n2= s0
+l2n0.to.l1s3 = s0
+s0.to.l1s3 = s1
+s0.to.l2n2 = s1
+;--------connecting s0 internodes to s4 internodes
+l1v0.to.l1v16 = s0
+l1v1.to.l1v16 = s0
+l1v2.to.l1v16 = s0
+l1v3.to.l1v16 = s0
+l1s0.to.l1v16 = s0
+l2n0.to.l1v16 = s0
+s0.to.l1v16 = s4
+l1v0.to.l1v17 = s0
+l1v1.to.l1v17 = s0
+l1v2.to.l1v17 = s0
+l1v3.to.l1v17 = s0
+l1s0.to.l1v17 = s0
+l2n0.to.l1v17 = s0
+s0.to.l1v17 = s4
+l1v0.to.l1v18 = s0
+l1v1.to.l1v18 = s0
+l1v2.to.l1v18 = s0
+l1v3.to.l1v18 = s0
+l1s0.to.l1v18 = s0
+l2n0.to.l1v18 = s0
+s0.to.l1v18 = s4
+l1v0.to.l1v19 = s0
+l1v1.to.l1v19 = s0
+l1v2.to.l1v19 = s0
+l1v3.to.l1v19 = s0
+l1s0.to.l1v19 = s0
+l2n0.to.l1v19 = s0
+s0.to.l1v19 = s4
+l1v0.to.l1s4 = s0
+l1v0.to.l2n3 = s0
+l1v1.to.l1s4 = s0
+l1v1.to.l2n3 = s0
+l1v2.to.l1s4 = s0
+l1v2.to.l2n3 = s0
+l1v3.to.l1s4 = s0
+l1v3.to.l2n3 = s0
+l1s0.to.l1s4 = s0
+l1s0.to.l2n3 = s0
+l2n0.to.l2n3= s0
+l2n0.to.l1s4 = s0
+s0.to.l1s4 = s4
+s0.to.l2n3 = s4
+;--------connecting s0 internodes to s5 internodes
+l1v0.to.l1v20 = s0
+l1v1.to.l1v20 = s0
+l1v2.to.l1v20 = s0
+l1v3.to.l1v20 = s0
+l1s0.to.l1v20 = s0
+l2n0.to.l1v20 = s0
+s0.to.l1v20 = s1
+l1v0.to.l1v21 = s0
+l1v1.to.l1v21 = s0
+l1v2.to.l1v21 = s0
+l1v3.to.l1v21 = s0
+l1s0.to.l1v21 = s0
+l2n0.to.l1v21 = s0
+s0.to.l1v21 = s1
+l1v0.to.l1v22 = s0
+l1v1.to.l1v22 = s0
+l1v2.to.l1v22 = s0
+l1v3.to.l1v22 = s0
+l1s0.to.l1v22 = s0
+l2n0.to.l1v22 = s0
+s0.to.l1v22 = s1
+l1v0.to.l1v23 = s0
+l1v1.to.l1v23 = s0
+l1v2.to.l1v23 = s0
+l1v3.to.l1v23 = s0
+l1s0.to.l1v23 = s0
+l2n0.to.l1v23 = s0
+s0.to.l1v23 = s1
+l1v0.to.l1s5 = s0
+l1v1.to.l1s5 = s0
+l1v2.to.l1s5 = s0
+l1v3.to.l1s5 = s0
+l1s0.to.l1s5 = s0
+l2n0.to.l1s5 = s0
+s0.to.l1s5 = s1
+;--------connecting s0 internodes to s6 internodes
+l1v0.to.l1v24 = s0
+l1v1.to.l1v24 = s0
+l1v2.to.l1v24 = s0
+l1v3.to.l1v24 = s0
+l1s0.to.l1v24 = s0
+l2n0.to.l1v24 = s0
+s0.to.l1v24 = s1
+l1v0.to.l1v25 = s0
+l1v1.to.l1v25 = s0
+l1v2.to.l1v25 = s0
+l1v3.to.l1v25 = s0
+l1s0.to.l1v25 = s0
+l2n0.to.l1v25 = s0
+s0.to.l1v25 = s1
+l1v0.to.l1v26 = s0
+l1v1.to.l1v26 = s0
+l1v2.to.l1v26 = s0
+l1v3.to.l1v26 = s0
+l1s0.to.l1v26 = s0
+l2n0.to.l1v26 = s0
+s0.to.l1v26 = s1
+l1v0.to.l1v27 = s0
+l1v1.to.l1v27 = s0
+l1v2.to.l1v27 = s0
+l1v3.to.l1v27 = s0
+l1s0.to.l1v27 = s0
+l2n0.to.l1v27 = s0
+s0.to.l1v27 = s1
+l1v0.to.l1s6 = s0
+l1v0.to.l2n4 = s0
+l1v1.to.l1s6 = s0
+l1v1.to.l2n4 = s0
+l1v2.to.l1s6 = s0
+l1v2.to.l2n4 = s0
+l1v3.to.l1s6 = s0
+l1v3.to.l2n4 = s0
+l1s0.to.l1s6 = s0
+l1s0.to.l2n4 = s0
+l2n0.to.l2n4= s0
+l2n0.to.l1s6 = s0
+s0.to.l1s6 = s1
+s0.to.l2n4 = s1
+;--------connecting s0 internodes to s7 internodes
+l1v0.to.l1v28 = s0
+l1v1.to.l1v28 = s0
+l1v2.to.l1v28 = s0
+l1v3.to.l1v28 = s0
+l1s0.to.l1v28 = s0
+l2n0.to.l1v28 = s0
+s0.to.l1v28 = s1
+l1v0.to.l1v29 = s0
+l1v1.to.l1v29 = s0
+l1v2.to.l1v29 = s0
+l1v3.to.l1v29 = s0
+l1s0.to.l1v29 = s0
+l2n0.to.l1v29 = s0
+s0.to.l1v29 = s1
+l1v0.to.l1v30 = s0
+l1v1.to.l1v30 = s0
+l1v2.to.l1v30 = s0
+l1v3.to.l1v30 = s0
+l1s0.to.l1v30 = s0
+l2n0.to.l1v30 = s0
+s0.to.l1v30 = s1
+l1v0.to.l1v31 = s0
+l1v1.to.l1v31 = s0
+l1v2.to.l1v31 = s0
+l1v3.to.l1v31 = s0
+l1s0.to.l1v31 = s0
+l2n0.to.l1v31 = s0
+s0.to.l1v31 = s1
+l1v0.to.l1s7 = s0
+l1v0.to.l2n5 = s0
+l1v1.to.l1s7 = s0
+l1v1.to.l2n5 = s0
+l1v2.to.l1s7 = s0
+l1v2.to.l2n5 = s0
+l1v3.to.l1s7 = s0
+l1v3.to.l2n5 = s0
+l1s0.to.l1s7 = s0
+l1s0.to.l2n5 = s0
+l2n0.to.l2n5= s0
+l2n0.to.l1s7 = s0
+s0.to.l1s7 = s1
+s0.to.l2n5 = s1
+;-----switch s1 inter-connections
+l1s1.to.l1v4 = s1 
+l1v4.to.l1s1 = s1 
+l1v5.to.l1v4 = s1
+l1v6.to.l1v4 = s1
+l1v7.to.l1v4 = s1
+l1v4.to.l2n1 = s1 
+l2n1.to.l1v4 = s1 
+l1v4.to.l1v5 = s1
+l1s1.to.l1v5 = s1 
+l1v5.to.l1s1 = s1 
+l1v6.to.l1v5 = s1
+l1v7.to.l1v5 = s1
+l1v5.to.l2n1 = s1 
+l2n1.to.l1v5 = s1 
+l1v4.to.l1v6 = s1
+l1v5.to.l1v6 = s1
+l1s1.to.l1v6 = s1 
+l1v6.to.l1s1 = s1 
+l1v7.to.l1v6 = s1
+l1v6.to.l2n1 = s1 
+l2n1.to.l1v6 = s1 
+l1v4.to.l1v7 = s1
+l1v5.to.l1v7 = s1
+l1v6.to.l1v7 = s1
+l1s1.to.l1v7 = s1 
+l1v7.to.l1s1 = s1 
+l1v7.to.l2n1 = s1 
+l2n1.to.l1v7 = s1 
+l2n1.to.l1s1 = s1 
+l1s1.to.l2n1 = s1 
+;--------connecting s1 internodes to s0 internodes
+l1v4.to.l1v0 = s1
+l1v5.to.l1v0 = s1
+l1v6.to.l1v0 = s1
+l1v7.to.l1v0 = s1
+l1s1.to.l1v0 = s1
+l2n1.to.l1v0 = s1
+s1.to.l1v0 = s0
+l1v4.to.l1v1 = s1
+l1v5.to.l1v1 = s1
+l1v6.to.l1v1 = s1
+l1v7.to.l1v1 = s1
+l1s1.to.l1v1 = s1
+l2n1.to.l1v1 = s1
+s1.to.l1v1 = s0
+l1v4.to.l1v2 = s1
+l1v5.to.l1v2 = s1
+l1v6.to.l1v2 = s1
+l1v7.to.l1v2 = s1
+l1s1.to.l1v2 = s1
+l2n1.to.l1v2 = s1
+s1.to.l1v2 = s0
+l1v4.to.l1v3 = s1
+l1v5.to.l1v3 = s1
+l1v6.to.l1v3 = s1
+l1v7.to.l1v3 = s1
+l1s1.to.l1v3 = s1
+l2n1.to.l1v3 = s1
+s1.to.l1v3 = s0
+l1v4.to.l1s0 = s1
+l1v4.to.l2n0 = s1
+l1v5.to.l1s0 = s1
+l1v5.to.l2n0 = s1
+l1v6.to.l1s0 = s1
+l1v6.to.l2n0 = s1
+l1v7.to.l1s0 = s1
+l1v7.to.l2n0 = s1
+l1s1.to.l1s0 = s1
+l1s1.to.l2n0 = s1
+l2n1.to.l2n0= s1
+l2n1.to.l1s0 = s1
+s1.to.l1s0 = s0
+s1.to.l2n0 = s0
+;--------connecting s1 internodes to s1 internodes
+;--------connecting s1 internodes to s2 internodes
+l1v4.to.l1v8 = s1
+l1v5.to.l1v8 = s1
+l1v6.to.l1v8 = s1
+l1v7.to.l1v8 = s1
+l1s1.to.l1v8 = s1
+l2n1.to.l1v8 = s1
+s1.to.l1v8 = s2
+l1v4.to.l1v9 = s1
+l1v5.to.l1v9 = s1
+l1v6.to.l1v9 = s1
+l1v7.to.l1v9 = s1
+l1s1.to.l1v9 = s1
+l2n1.to.l1v9 = s1
+s1.to.l1v9 = s2
+l1v4.to.l1v10 = s1
+l1v5.to.l1v10 = s1
+l1v6.to.l1v10 = s1
+l1v7.to.l1v10 = s1
+l1s1.to.l1v10 = s1
+l2n1.to.l1v10 = s1
+s1.to.l1v10 = s2
+l1v4.to.l1v11 = s1
+l1v5.to.l1v11 = s1
+l1v6.to.l1v11 = s1
+l1v7.to.l1v11 = s1
+l1s1.to.l1v11 = s1
+l2n1.to.l1v11 = s1
+s1.to.l1v11 = s2
+l1v4.to.l1s2 = s1
+l1v5.to.l1s2 = s1
+l1v6.to.l1s2 = s1
+l1v7.to.l1s2 = s1
+l1s1.to.l1s2 = s1
+l2n1.to.l1s2 = s1
+s1.to.l1s2 = s2
+;--------connecting s1 internodes to s3 internodes
+l1v4.to.l1v12 = s1
+l1v5.to.l1v12 = s1
+l1v6.to.l1v12 = s1
+l1v7.to.l1v12 = s1
+l1s1.to.l1v12 = s1
+l2n1.to.l1v12 = s1
+s1.to.l1v12 = s2
+l1v4.to.l1v13 = s1
+l1v5.to.l1v13 = s1
+l1v6.to.l1v13 = s1
+l1v7.to.l1v13 = s1
+l1s1.to.l1v13 = s1
+l2n1.to.l1v13 = s1
+s1.to.l1v13 = s2
+l1v4.to.l1v14 = s1
+l1v5.to.l1v14 = s1
+l1v6.to.l1v14 = s1
+l1v7.to.l1v14 = s1
+l1s1.to.l1v14 = s1
+l2n1.to.l1v14 = s1
+s1.to.l1v14 = s2
+l1v4.to.l1v15 = s1
+l1v5.to.l1v15 = s1
+l1v6.to.l1v15 = s1
+l1v7.to.l1v15 = s1
+l1s1.to.l1v15 = s1
+l2n1.to.l1v15 = s1
+s1.to.l1v15 = s2
+l1v4.to.l1s3 = s1
+l1v4.to.l2n2 = s1
+l1v5.to.l1s3 = s1
+l1v5.to.l2n2 = s1
+l1v6.to.l1s3 = s1
+l1v6.to.l2n2 = s1
+l1v7.to.l1s3 = s1
+l1v7.to.l2n2 = s1
+l1s1.to.l1s3 = s1
+l1s1.to.l2n2 = s1
+l2n1.to.l2n2= s1
+l2n1.to.l1s3 = s1
+s1.to.l1s3 = s2
+s1.to.l2n2 = s2
+;--------connecting s1 internodes to s4 internodes
+l1v4.to.l1v16 = s1
+l1v5.to.l1v16 = s1
+l1v6.to.l1v16 = s1
+l1v7.to.l1v16 = s1
+l1s1.to.l1v16 = s1
+l2n1.to.l1v16 = s1
+s1.to.l1v16 = s0
+l1v4.to.l1v17 = s1
+l1v5.to.l1v17 = s1
+l1v6.to.l1v17 = s1
+l1v7.to.l1v17 = s1
+l1s1.to.l1v17 = s1
+l2n1.to.l1v17 = s1
+s1.to.l1v17 = s0
+l1v4.to.l1v18 = s1
+l1v5.to.l1v18 = s1
+l1v6.to.l1v18 = s1
+l1v7.to.l1v18 = s1
+l1s1.to.l1v18 = s1
+l2n1.to.l1v18 = s1
+s1.to.l1v18 = s0
+l1v4.to.l1v19 = s1
+l1v5.to.l1v19 = s1
+l1v6.to.l1v19 = s1
+l1v7.to.l1v19 = s1
+l1s1.to.l1v19 = s1
+l2n1.to.l1v19 = s1
+s1.to.l1v19 = s0
+l1v4.to.l1s4 = s1
+l1v4.to.l2n3 = s1
+l1v5.to.l1s4 = s1
+l1v5.to.l2n3 = s1
+l1v6.to.l1s4 = s1
+l1v6.to.l2n3 = s1
+l1v7.to.l1s4 = s1
+l1v7.to.l2n3 = s1
+l1s1.to.l1s4 = s1
+l1s1.to.l2n3 = s1
+l2n1.to.l2n3= s1
+l2n1.to.l1s4 = s1
+s1.to.l1s4 = s0
+s1.to.l2n3 = s0
+;--------connecting s1 internodes to s5 internodes
+l1v4.to.l1v20 = s1
+l1v5.to.l1v20 = s1
+l1v6.to.l1v20 = s1
+l1v7.to.l1v20 = s1
+l1s1.to.l1v20 = s1
+l2n1.to.l1v20 = s1
+s1.to.l1v20 = s5
+l1v4.to.l1v21 = s1
+l1v5.to.l1v21 = s1
+l1v6.to.l1v21 = s1
+l1v7.to.l1v21 = s1
+l1s1.to.l1v21 = s1
+l2n1.to.l1v21 = s1
+s1.to.l1v21 = s5
+l1v4.to.l1v22 = s1
+l1v5.to.l1v22 = s1
+l1v6.to.l1v22 = s1
+l1v7.to.l1v22 = s1
+l1s1.to.l1v22 = s1
+l2n1.to.l1v22 = s1
+s1.to.l1v22 = s5
+l1v4.to.l1v23 = s1
+l1v5.to.l1v23 = s1
+l1v6.to.l1v23 = s1
+l1v7.to.l1v23 = s1
+l1s1.to.l1v23 = s1
+l2n1.to.l1v23 = s1
+s1.to.l1v23 = s5
+l1v4.to.l1s5 = s1
+l1v5.to.l1s5 = s1
+l1v6.to.l1s5 = s1
+l1v7.to.l1s5 = s1
+l1s1.to.l1s5 = s1
+l2n1.to.l1s5 = s1
+s1.to.l1s5 = s5
+;--------connecting s1 internodes to s6 internodes
+l1v4.to.l1v24 = s1
+l1v5.to.l1v24 = s1
+l1v6.to.l1v24 = s1
+l1v7.to.l1v24 = s1
+l1s1.to.l1v24 = s1
+l2n1.to.l1v24 = s1
+s1.to.l1v24 = s2
+l1v4.to.l1v25 = s1
+l1v5.to.l1v25 = s1
+l1v6.to.l1v25 = s1
+l1v7.to.l1v25 = s1
+l1s1.to.l1v25 = s1
+l2n1.to.l1v25 = s1
+s1.to.l1v25 = s2
+l1v4.to.l1v26 = s1
+l1v5.to.l1v26 = s1
+l1v6.to.l1v26 = s1
+l1v7.to.l1v26 = s1
+l1s1.to.l1v26 = s1
+l2n1.to.l1v26 = s1
+s1.to.l1v26 = s2
+l1v4.to.l1v27 = s1
+l1v5.to.l1v27 = s1
+l1v6.to.l1v27 = s1
+l1v7.to.l1v27 = s1
+l1s1.to.l1v27 = s1
+l2n1.to.l1v27 = s1
+s1.to.l1v27 = s2
+l1v4.to.l1s6 = s1
+l1v4.to.l2n4 = s1
+l1v5.to.l1s6 = s1
+l1v5.to.l2n4 = s1
+l1v6.to.l1s6 = s1
+l1v6.to.l2n4 = s1
+l1v7.to.l1s6 = s1
+l1v7.to.l2n4 = s1
+l1s1.to.l1s6 = s1
+l1s1.to.l2n4 = s1
+l2n1.to.l2n4= s1
+l2n1.to.l1s6 = s1
+s1.to.l1s6 = s2
+s1.to.l2n4 = s2
+;--------connecting s1 internodes to s7 internodes
+l1v4.to.l1v28 = s1
+l1v5.to.l1v28 = s1
+l1v6.to.l1v28 = s1
+l1v7.to.l1v28 = s1
+l1s1.to.l1v28 = s1
+l2n1.to.l1v28 = s1
+s1.to.l1v28 = s2
+l1v4.to.l1v29 = s1
+l1v5.to.l1v29 = s1
+l1v6.to.l1v29 = s1
+l1v7.to.l1v29 = s1
+l1s1.to.l1v29 = s1
+l2n1.to.l1v29 = s1
+s1.to.l1v29 = s2
+l1v4.to.l1v30 = s1
+l1v5.to.l1v30 = s1
+l1v6.to.l1v30 = s1
+l1v7.to.l1v30 = s1
+l1s1.to.l1v30 = s1
+l2n1.to.l1v30 = s1
+s1.to.l1v30 = s2
+l1v4.to.l1v31 = s1
+l1v5.to.l1v31 = s1
+l1v6.to.l1v31 = s1
+l1v7.to.l1v31 = s1
+l1s1.to.l1v31 = s1
+l2n1.to.l1v31 = s1
+s1.to.l1v31 = s2
+l1v4.to.l1s7 = s1
+l1v4.to.l2n5 = s1
+l1v5.to.l1s7 = s1
+l1v5.to.l2n5 = s1
+l1v6.to.l1s7 = s1
+l1v6.to.l2n5 = s1
+l1v7.to.l1s7 = s1
+l1v7.to.l2n5 = s1
+l1s1.to.l1s7 = s1
+l1s1.to.l2n5 = s1
+l2n1.to.l2n5= s1
+l2n1.to.l1s7 = s1
+s1.to.l1s7 = s2
+s1.to.l2n5 = s2
+;-----switch s2 inter-connections
+l1s2.to.l1v8 = s2 
+l1v8.to.l1s2 = s2 
+l1v9.to.l1v8 = s2
+l1v10.to.l1v8 = s2
+l1v11.to.l1v8 = s2
+l1v8.to.l1v9 = s2
+l1s2.to.l1v9 = s2 
+l1v9.to.l1s2 = s2 
+l1v10.to.l1v9 = s2
+l1v11.to.l1v9 = s2
+l1v8.to.l1v10 = s2
+l1v9.to.l1v10 = s2
+l1s2.to.l1v10 = s2 
+l1v10.to.l1s2 = s2 
+l1v11.to.l1v10 = s2
+l1v8.to.l1v11 = s2
+l1v9.to.l1v11 = s2
+l1v10.to.l1v11 = s2
+l1s2.to.l1v11 = s2 
+l1v11.to.l1s2 = s2 
+;--------connecting s2 internodes to s0 internodes
+l1v8.to.l1v0 = s2
+l1v9.to.l1v0 = s2
+l1v10.to.l1v0 = s2
+l1v11.to.l1v0 = s2
+l1s2.to.l1v0 = s2
+s2.to.l1v0 = s1
+l1v8.to.l1v1 = s2
+l1v9.to.l1v1 = s2
+l1v10.to.l1v1 = s2
+l1v11.to.l1v1 = s2
+l1s2.to.l1v1 = s2
+s2.to.l1v1 = s1
+l1v8.to.l1v2 = s2
+l1v9.to.l1v2 = s2
+l1v10.to.l1v2 = s2
+l1v11.to.l1v2 = s2
+l1s2.to.l1v2 = s2
+s2.to.l1v2 = s1
+l1v8.to.l1v3 = s2
+l1v9.to.l1v3 = s2
+l1v10.to.l1v3 = s2
+l1v11.to.l1v3 = s2
+l1s2.to.l1v3 = s2
+s2.to.l1v3 = s1
+l1v8.to.l1s0 = s2
+l1v8.to.l2n0 = s2
+l1v9.to.l1s0 = s2
+l1v9.to.l2n0 = s2
+l1v10.to.l1s0 = s2
+l1v10.to.l2n0 = s2
+l1v11.to.l1s0 = s2
+l1v11.to.l2n0 = s2
+l1s2.to.l1s0 = s2
+l1s2.to.l2n0 = s2
+s2.to.l1s0 = s1
+s2.to.l2n0 = s1
+;--------connecting s2 internodes to s1 internodes
+l1v8.to.l1v4 = s2
+l1v9.to.l1v4 = s2
+l1v10.to.l1v4 = s2
+l1v11.to.l1v4 = s2
+l1s2.to.l1v4 = s2
+s2.to.l1v4 = s1
+l1v8.to.l1v5 = s2
+l1v9.to.l1v5 = s2
+l1v10.to.l1v5 = s2
+l1v11.to.l1v5 = s2
+l1s2.to.l1v5 = s2
+s2.to.l1v5 = s1
+l1v8.to.l1v6 = s2
+l1v9.to.l1v6 = s2
+l1v10.to.l1v6 = s2
+l1v11.to.l1v6 = s2
+l1s2.to.l1v6 = s2
+s2.to.l1v6 = s1
+l1v8.to.l1v7 = s2
+l1v9.to.l1v7 = s2
+l1v10.to.l1v7 = s2
+l1v11.to.l1v7 = s2
+l1s2.to.l1v7 = s2
+s2.to.l1v7 = s1
+l1v8.to.l1s1 = s2
+l1v8.to.l2n1 = s2
+l1v9.to.l1s1 = s2
+l1v9.to.l2n1 = s2
+l1v10.to.l1s1 = s2
+l1v10.to.l2n1 = s2
+l1v11.to.l1s1 = s2
+l1v11.to.l2n1 = s2
+l1s2.to.l1s1 = s2
+l1s2.to.l2n1 = s2
+s2.to.l1s1 = s1
+s2.to.l2n1 = s1
+;--------connecting s2 internodes to s2 internodes
+;--------connecting s2 internodes to s3 internodes
+l1v8.to.l1v12 = s2
+l1v9.to.l1v12 = s2
+l1v10.to.l1v12 = s2
+l1v11.to.l1v12 = s2
+l1s2.to.l1v12 = s2
+s2.to.l1v12 = s3
+l1v8.to.l1v13 = s2
+l1v9.to.l1v13 = s2
+l1v10.to.l1v13 = s2
+l1v11.to.l1v13 = s2
+l1s2.to.l1v13 = s2
+s2.to.l1v13 = s3
+l1v8.to.l1v14 = s2
+l1v9.to.l1v14 = s2
+l1v10.to.l1v14 = s2
+l1v11.to.l1v14 = s2
+l1s2.to.l1v14 = s2
+s2.to.l1v14 = s3
+l1v8.to.l1v15 = s2
+l1v9.to.l1v15 = s2
+l1v10.to.l1v15 = s2
+l1v11.to.l1v15 = s2
+l1s2.to.l1v15 = s2
+s2.to.l1v15 = s3
+l1v8.to.l1s3 = s2
+l1v8.to.l2n2 = s2
+l1v9.to.l1s3 = s2
+l1v9.to.l2n2 = s2
+l1v10.to.l1s3 = s2
+l1v10.to.l2n2 = s2
+l1v11.to.l1s3 = s2
+l1v11.to.l2n2 = s2
+l1s2.to.l1s3 = s2
+l1s2.to.l2n2 = s2
+s2.to.l1s3 = s3
+s2.to.l2n2 = s3
+;--------connecting s2 internodes to s4 internodes
+l1v8.to.l1v16 = s2
+l1v9.to.l1v16 = s2
+l1v10.to.l1v16 = s2
+l1v11.to.l1v16 = s2
+l1s2.to.l1v16 = s2
+s2.to.l1v16 = s1
+l1v8.to.l1v17 = s2
+l1v9.to.l1v17 = s2
+l1v10.to.l1v17 = s2
+l1v11.to.l1v17 = s2
+l1s2.to.l1v17 = s2
+s2.to.l1v17 = s1
+l1v8.to.l1v18 = s2
+l1v9.to.l1v18 = s2
+l1v10.to.l1v18 = s2
+l1v11.to.l1v18 = s2
+l1s2.to.l1v18 = s2
+s2.to.l1v18 = s1
+l1v8.to.l1v19 = s2
+l1v9.to.l1v19 = s2
+l1v10.to.l1v19 = s2
+l1v11.to.l1v19 = s2
+l1s2.to.l1v19 = s2
+s2.to.l1v19 = s1
+l1v8.to.l1s4 = s2
+l1v8.to.l2n3 = s2
+l1v9.to.l1s4 = s2
+l1v9.to.l2n3 = s2
+l1v10.to.l1s4 = s2
+l1v10.to.l2n3 = s2
+l1v11.to.l1s4 = s2
+l1v11.to.l2n3 = s2
+l1s2.to.l1s4 = s2
+l1s2.to.l2n3 = s2
+s2.to.l1s4 = s1
+s2.to.l2n3 = s1
+;--------connecting s2 internodes to s5 internodes
+l1v8.to.l1v20 = s2
+l1v9.to.l1v20 = s2
+l1v10.to.l1v20 = s2
+l1v11.to.l1v20 = s2
+l1s2.to.l1v20 = s2
+s2.to.l1v20 = s1
+l1v8.to.l1v21 = s2
+l1v9.to.l1v21 = s2
+l1v10.to.l1v21 = s2
+l1v11.to.l1v21 = s2
+l1s2.to.l1v21 = s2
+s2.to.l1v21 = s1
+l1v8.to.l1v22 = s2
+l1v9.to.l1v22 = s2
+l1v10.to.l1v22 = s2
+l1v11.to.l1v22 = s2
+l1s2.to.l1v22 = s2
+s2.to.l1v22 = s1
+l1v8.to.l1v23 = s2
+l1v9.to.l1v23 = s2
+l1v10.to.l1v23 = s2
+l1v11.to.l1v23 = s2
+l1s2.to.l1v23 = s2
+s2.to.l1v23 = s1
+l1v8.to.l1s5 = s2
+l1v9.to.l1s5 = s2
+l1v10.to.l1s5 = s2
+l1v11.to.l1s5 = s2
+l1s2.to.l1s5 = s2
+s2.to.l1s5 = s1
+;--------connecting s2 internodes to s6 internodes
+l1v8.to.l1v24 = s2
+l1v9.to.l1v24 = s2
+l1v10.to.l1v24 = s2
+l1v11.to.l1v24 = s2
+l1s2.to.l1v24 = s2
+s2.to.l1v24 = s6
+l1v8.to.l1v25 = s2
+l1v9.to.l1v25 = s2
+l1v10.to.l1v25 = s2
+l1v11.to.l1v25 = s2
+l1s2.to.l1v25 = s2
+s2.to.l1v25 = s6
+l1v8.to.l1v26 = s2
+l1v9.to.l1v26 = s2
+l1v10.to.l1v26 = s2
+l1v11.to.l1v26 = s2
+l1s2.to.l1v26 = s2
+s2.to.l1v26 = s6
+l1v8.to.l1v27 = s2
+l1v9.to.l1v27 = s2
+l1v10.to.l1v27 = s2
+l1v11.to.l1v27 = s2
+l1s2.to.l1v27 = s2
+s2.to.l1v27 = s6
+l1v8.to.l1s6 = s2
+l1v8.to.l2n4 = s2
+l1v9.to.l1s6 = s2
+l1v9.to.l2n4 = s2
+l1v10.to.l1s6 = s2
+l1v10.to.l2n4 = s2
+l1v11.to.l1s6 = s2
+l1v11.to.l2n4 = s2
+l1s2.to.l1s6 = s2
+l1s2.to.l2n4 = s2
+s2.to.l1s6 = s6
+s2.to.l2n4 = s6
+;--------connecting s2 internodes to s7 internodes
+l1v8.to.l1v28 = s2
+l1v9.to.l1v28 = s2
+l1v10.to.l1v28 = s2
+l1v11.to.l1v28 = s2
+l1s2.to.l1v28 = s2
+s2.to.l1v28 = s3
+l1v8.to.l1v29 = s2
+l1v9.to.l1v29 = s2
+l1v10.to.l1v29 = s2
+l1v11.to.l1v29 = s2
+l1s2.to.l1v29 = s2
+s2.to.l1v29 = s3
+l1v8.to.l1v30 = s2
+l1v9.to.l1v30 = s2
+l1v10.to.l1v30 = s2
+l1v11.to.l1v30 = s2
+l1s2.to.l1v30 = s2
+s2.to.l1v30 = s3
+l1v8.to.l1v31 = s2
+l1v9.to.l1v31 = s2
+l1v10.to.l1v31 = s2
+l1v11.to.l1v31 = s2
+l1s2.to.l1v31 = s2
+s2.to.l1v31 = s3
+l1v8.to.l1s7 = s2
+l1v8.to.l2n5 = s2
+l1v9.to.l1s7 = s2
+l1v9.to.l2n5 = s2
+l1v10.to.l1s7 = s2
+l1v10.to.l2n5 = s2
+l1v11.to.l1s7 = s2
+l1v11.to.l2n5 = s2
+l1s2.to.l1s7 = s2
+l1s2.to.l2n5 = s2
+s2.to.l1s7 = s3
+s2.to.l2n5 = s3
+;-----switch s3 inter-connections
+l1s3.to.l1v12 = s3 
+l1v12.to.l1s3 = s3 
+l1v13.to.l1v12 = s3
+l1v14.to.l1v12 = s3
+l1v15.to.l1v12 = s3
+l1v12.to.l2n2 = s3 
+l2n2.to.l1v12 = s3 
+l1v12.to.l1v13 = s3
+l1s3.to.l1v13 = s3 
+l1v13.to.l1s3 = s3 
+l1v14.to.l1v13 = s3
+l1v15.to.l1v13 = s3
+l1v13.to.l2n2 = s3 
+l2n2.to.l1v13 = s3 
+l1v12.to.l1v14 = s3
+l1v13.to.l1v14 = s3
+l1s3.to.l1v14 = s3 
+l1v14.to.l1s3 = s3 
+l1v15.to.l1v14 = s3
+l1v14.to.l2n2 = s3 
+l2n2.to.l1v14 = s3 
+l1v12.to.l1v15 = s3
+l1v13.to.l1v15 = s3
+l1v14.to.l1v15 = s3
+l1s3.to.l1v15 = s3 
+l1v15.to.l1s3 = s3 
+l1v15.to.l2n2 = s3 
+l2n2.to.l1v15 = s3 
+l2n2.to.l1s3 = s3 
+l1s3.to.l2n2 = s3 
+;--------connecting s3 internodes to s0 internodes
+l1v12.to.l1v0 = s3
+l1v13.to.l1v0 = s3
+l1v14.to.l1v0 = s3
+l1v15.to.l1v0 = s3
+l1s3.to.l1v0 = s3
+l2n2.to.l1v0 = s3
+s3.to.l1v0 = s2
+l1v12.to.l1v1 = s3
+l1v13.to.l1v1 = s3
+l1v14.to.l1v1 = s3
+l1v15.to.l1v1 = s3
+l1s3.to.l1v1 = s3
+l2n2.to.l1v1 = s3
+s3.to.l1v1 = s2
+l1v12.to.l1v2 = s3
+l1v13.to.l1v2 = s3
+l1v14.to.l1v2 = s3
+l1v15.to.l1v2 = s3
+l1s3.to.l1v2 = s3
+l2n2.to.l1v2 = s3
+s3.to.l1v2 = s2
+l1v12.to.l1v3 = s3
+l1v13.to.l1v3 = s3
+l1v14.to.l1v3 = s3
+l1v15.to.l1v3 = s3
+l1s3.to.l1v3 = s3
+l2n2.to.l1v3 = s3
+s3.to.l1v3 = s2
+l1v12.to.l1s0 = s3
+l1v12.to.l2n0 = s3
+l1v13.to.l1s0 = s3
+l1v13.to.l2n0 = s3
+l1v14.to.l1s0 = s3
+l1v14.to.l2n0 = s3
+l1v15.to.l1s0 = s3
+l1v15.to.l2n0 = s3
+l1s3.to.l1s0 = s3
+l1s3.to.l2n0 = s3
+l2n2.to.l2n0= s3
+l2n2.to.l1s0 = s3
+s3.to.l1s0 = s2
+s3.to.l2n0 = s2
+;--------connecting s3 internodes to s1 internodes
+l1v12.to.l1v4 = s3
+l1v13.to.l1v4 = s3
+l1v14.to.l1v4 = s3
+l1v15.to.l1v4 = s3
+l1s3.to.l1v4 = s3
+l2n2.to.l1v4 = s3
+s3.to.l1v4 = s2
+l1v12.to.l1v5 = s3
+l1v13.to.l1v5 = s3
+l1v14.to.l1v5 = s3
+l1v15.to.l1v5 = s3
+l1s3.to.l1v5 = s3
+l2n2.to.l1v5 = s3
+s3.to.l1v5 = s2
+l1v12.to.l1v6 = s3
+l1v13.to.l1v6 = s3
+l1v14.to.l1v6 = s3
+l1v15.to.l1v6 = s3
+l1s3.to.l1v6 = s3
+l2n2.to.l1v6 = s3
+s3.to.l1v6 = s2
+l1v12.to.l1v7 = s3
+l1v13.to.l1v7 = s3
+l1v14.to.l1v7 = s3
+l1v15.to.l1v7 = s3
+l1s3.to.l1v7 = s3
+l2n2.to.l1v7 = s3
+s3.to.l1v7 = s2
+l1v12.to.l1s1 = s3
+l1v12.to.l2n1 = s3
+l1v13.to.l1s1 = s3
+l1v13.to.l2n1 = s3
+l1v14.to.l1s1 = s3
+l1v14.to.l2n1 = s3
+l1v15.to.l1s1 = s3
+l1v15.to.l2n1 = s3
+l1s3.to.l1s1 = s3
+l1s3.to.l2n1 = s3
+l2n2.to.l2n1= s3
+l2n2.to.l1s1 = s3
+s3.to.l1s1 = s2
+s3.to.l2n1 = s2
+;--------connecting s3 internodes to s2 internodes
+l1v12.to.l1v8 = s3
+l1v13.to.l1v8 = s3
+l1v14.to.l1v8 = s3
+l1v15.to.l1v8 = s3
+l1s3.to.l1v8 = s3
+l2n2.to.l1v8 = s3
+s3.to.l1v8 = s2
+l1v12.to.l1v9 = s3
+l1v13.to.l1v9 = s3
+l1v14.to.l1v9 = s3
+l1v15.to.l1v9 = s3
+l1s3.to.l1v9 = s3
+l2n2.to.l1v9 = s3
+s3.to.l1v9 = s2
+l1v12.to.l1v10 = s3
+l1v13.to.l1v10 = s3
+l1v14.to.l1v10 = s3
+l1v15.to.l1v10 = s3
+l1s3.to.l1v10 = s3
+l2n2.to.l1v10 = s3
+s3.to.l1v10 = s2
+l1v12.to.l1v11 = s3
+l1v13.to.l1v11 = s3
+l1v14.to.l1v11 = s3
+l1v15.to.l1v11 = s3
+l1s3.to.l1v11 = s3
+l2n2.to.l1v11 = s3
+s3.to.l1v11 = s2
+l1v12.to.l1s2 = s3
+l1v13.to.l1s2 = s3
+l1v14.to.l1s2 = s3
+l1v15.to.l1s2 = s3
+l1s3.to.l1s2 = s3
+l2n2.to.l1s2 = s3
+s3.to.l1s2 = s2
+;--------connecting s3 internodes to s3 internodes
+;--------connecting s3 internodes to s4 internodes
+l1v12.to.l1v16 = s3
+l1v13.to.l1v16 = s3
+l1v14.to.l1v16 = s3
+l1v15.to.l1v16 = s3
+l1s3.to.l1v16 = s3
+l2n2.to.l1v16 = s3
+s3.to.l1v16 = s2
+l1v12.to.l1v17 = s3
+l1v13.to.l1v17 = s3
+l1v14.to.l1v17 = s3
+l1v15.to.l1v17 = s3
+l1s3.to.l1v17 = s3
+l2n2.to.l1v17 = s3
+s3.to.l1v17 = s2
+l1v12.to.l1v18 = s3
+l1v13.to.l1v18 = s3
+l1v14.to.l1v18 = s3
+l1v15.to.l1v18 = s3
+l1s3.to.l1v18 = s3
+l2n2.to.l1v18 = s3
+s3.to.l1v18 = s2
+l1v12.to.l1v19 = s3
+l1v13.to.l1v19 = s3
+l1v14.to.l1v19 = s3
+l1v15.to.l1v19 = s3
+l1s3.to.l1v19 = s3
+l2n2.to.l1v19 = s3
+s3.to.l1v19 = s2
+l1v12.to.l1s4 = s3
+l1v12.to.l2n3 = s3
+l1v13.to.l1s4 = s3
+l1v13.to.l2n3 = s3
+l1v14.to.l1s4 = s3
+l1v14.to.l2n3 = s3
+l1v15.to.l1s4 = s3
+l1v15.to.l2n3 = s3
+l1s3.to.l1s4 = s3
+l1s3.to.l2n3 = s3
+l2n2.to.l2n3= s3
+l2n2.to.l1s4 = s3
+s3.to.l1s4 = s2
+s3.to.l2n3 = s2
+;--------connecting s3 internodes to s5 internodes
+l1v12.to.l1v20 = s3
+l1v13.to.l1v20 = s3
+l1v14.to.l1v20 = s3
+l1v15.to.l1v20 = s3
+l1s3.to.l1v20 = s3
+l2n2.to.l1v20 = s3
+s3.to.l1v20 = s2
+l1v12.to.l1v21 = s3
+l1v13.to.l1v21 = s3
+l1v14.to.l1v21 = s3
+l1v15.to.l1v21 = s3
+l1s3.to.l1v21 = s3
+l2n2.to.l1v21 = s3
+s3.to.l1v21 = s2
+l1v12.to.l1v22 = s3
+l1v13.to.l1v22 = s3
+l1v14.to.l1v22 = s3
+l1v15.to.l1v22 = s3
+l1s3.to.l1v22 = s3
+l2n2.to.l1v22 = s3
+s3.to.l1v22 = s2
+l1v12.to.l1v23 = s3
+l1v13.to.l1v23 = s3
+l1v14.to.l1v23 = s3
+l1v15.to.l1v23 = s3
+l1s3.to.l1v23 = s3
+l2n2.to.l1v23 = s3
+s3.to.l1v23 = s2
+l1v12.to.l1s5 = s3
+l1v13.to.l1s5 = s3
+l1v14.to.l1s5 = s3
+l1v15.to.l1s5 = s3
+l1s3.to.l1s5 = s3
+l2n2.to.l1s5 = s3
+s3.to.l1s5 = s2
+;--------connecting s3 internodes to s6 internodes
+l1v12.to.l1v24 = s3
+l1v13.to.l1v24 = s3
+l1v14.to.l1v24 = s3
+l1v15.to.l1v24 = s3
+l1s3.to.l1v24 = s3
+l2n2.to.l1v24 = s3
+s3.to.l1v24 = s2
+l1v12.to.l1v25 = s3
+l1v13.to.l1v25 = s3
+l1v14.to.l1v25 = s3
+l1v15.to.l1v25 = s3
+l1s3.to.l1v25 = s3
+l2n2.to.l1v25 = s3
+s3.to.l1v25 = s2
+l1v12.to.l1v26 = s3
+l1v13.to.l1v26 = s3
+l1v14.to.l1v26 = s3
+l1v15.to.l1v26 = s3
+l1s3.to.l1v26 = s3
+l2n2.to.l1v26 = s3
+s3.to.l1v26 = s2
+l1v12.to.l1v27 = s3
+l1v13.to.l1v27 = s3
+l1v14.to.l1v27 = s3
+l1v15.to.l1v27 = s3
+l1s3.to.l1v27 = s3
+l2n2.to.l1v27 = s3
+s3.to.l1v27 = s2
+l1v12.to.l1s6 = s3
+l1v12.to.l2n4 = s3
+l1v13.to.l1s6 = s3
+l1v13.to.l2n4 = s3
+l1v14.to.l1s6 = s3
+l1v14.to.l2n4 = s3
+l1v15.to.l1s6 = s3
+l1v15.to.l2n4 = s3
+l1s3.to.l1s6 = s3
+l1s3.to.l2n4 = s3
+l2n2.to.l2n4= s3
+l2n2.to.l1s6 = s3
+s3.to.l1s6 = s2
+s3.to.l2n4 = s2
+;--------connecting s3 internodes to s7 internodes
+l1v12.to.l1v28 = s3
+l1v13.to.l1v28 = s3
+l1v14.to.l1v28 = s3
+l1v15.to.l1v28 = s3
+l1s3.to.l1v28 = s3
+l2n2.to.l1v28 = s3
+s3.to.l1v28 = s7
+l1v12.to.l1v29 = s3
+l1v13.to.l1v29 = s3
+l1v14.to.l1v29 = s3
+l1v15.to.l1v29 = s3
+l1s3.to.l1v29 = s3
+l2n2.to.l1v29 = s3
+s3.to.l1v29 = s7
+l1v12.to.l1v30 = s3
+l1v13.to.l1v30 = s3
+l1v14.to.l1v30 = s3
+l1v15.to.l1v30 = s3
+l1s3.to.l1v30 = s3
+l2n2.to.l1v30 = s3
+s3.to.l1v30 = s7
+l1v12.to.l1v31 = s3
+l1v13.to.l1v31 = s3
+l1v14.to.l1v31 = s3
+l1v15.to.l1v31 = s3
+l1s3.to.l1v31 = s3
+l2n2.to.l1v31 = s3
+s3.to.l1v31 = s7
+l1v12.to.l1s7 = s3
+l1v12.to.l2n5 = s3
+l1v13.to.l1s7 = s3
+l1v13.to.l2n5 = s3
+l1v14.to.l1s7 = s3
+l1v14.to.l2n5 = s3
+l1v15.to.l1s7 = s3
+l1v15.to.l2n5 = s3
+l1s3.to.l1s7 = s3
+l1s3.to.l2n5 = s3
+l2n2.to.l2n5= s3
+l2n2.to.l1s7 = s3
+s3.to.l1s7 = s7
+s3.to.l2n5 = s7
+;-----switch s4 inter-connections
+l1s4.to.l1v16 = s4 
+l1v16.to.l1s4 = s4 
+l1v17.to.l1v16 = s4
+l1v18.to.l1v16 = s4
+l1v19.to.l1v16 = s4
+l1v16.to.l2n3 = s4 
+l2n3.to.l1v16 = s4 
+l1v16.to.l1v17 = s4
+l1s4.to.l1v17 = s4 
+l1v17.to.l1s4 = s4 
+l1v18.to.l1v17 = s4
+l1v19.to.l1v17 = s4
+l1v17.to.l2n3 = s4 
+l2n3.to.l1v17 = s4 
+l1v16.to.l1v18 = s4
+l1v17.to.l1v18 = s4
+l1s4.to.l1v18 = s4 
+l1v18.to.l1s4 = s4 
+l1v19.to.l1v18 = s4
+l1v18.to.l2n3 = s4 
+l2n3.to.l1v18 = s4 
+l1v16.to.l1v19 = s4
+l1v17.to.l1v19 = s4
+l1v18.to.l1v19 = s4
+l1s4.to.l1v19 = s4 
+l1v19.to.l1s4 = s4 
+l1v19.to.l2n3 = s4 
+l2n3.to.l1v19 = s4 
+l2n3.to.l1s4 = s4 
+l1s4.to.l2n3 = s4 
+;--------connecting s4 internodes to s0 internodes
+l1v16.to.l1v0 = s4
+l1v17.to.l1v0 = s4
+l1v18.to.l1v0 = s4
+l1v19.to.l1v0 = s4
+l1s4.to.l1v0 = s4
+l2n3.to.l1v0 = s4
+s4.to.l1v0 = s0
+l1v16.to.l1v1 = s4
+l1v17.to.l1v1 = s4
+l1v18.to.l1v1 = s4
+l1v19.to.l1v1 = s4
+l1s4.to.l1v1 = s4
+l2n3.to.l1v1 = s4
+s4.to.l1v1 = s0
+l1v16.to.l1v2 = s4
+l1v17.to.l1v2 = s4
+l1v18.to.l1v2 = s4
+l1v19.to.l1v2 = s4
+l1s4.to.l1v2 = s4
+l2n3.to.l1v2 = s4
+s4.to.l1v2 = s0
+l1v16.to.l1v3 = s4
+l1v17.to.l1v3 = s4
+l1v18.to.l1v3 = s4
+l1v19.to.l1v3 = s4
+l1s4.to.l1v3 = s4
+l2n3.to.l1v3 = s4
+s4.to.l1v3 = s0
+l1v16.to.l1s0 = s4
+l1v16.to.l2n0 = s4
+l1v17.to.l1s0 = s4
+l1v17.to.l2n0 = s4
+l1v18.to.l1s0 = s4
+l1v18.to.l2n0 = s4
+l1v19.to.l1s0 = s4
+l1v19.to.l2n0 = s4
+l1s4.to.l1s0 = s4
+l1s4.to.l2n0 = s4
+l2n3.to.l2n0= s4
+l2n3.to.l1s0 = s4
+s4.to.l1s0 = s0
+s4.to.l2n0 = s0
+;--------connecting s4 internodes to s1 internodes
+l1v16.to.l1v4 = s4
+l1v17.to.l1v4 = s4
+l1v18.to.l1v4 = s4
+l1v19.to.l1v4 = s4
+l1s4.to.l1v4 = s4
+l2n3.to.l1v4 = s4
+s4.to.l1v4 = s5
+l1v16.to.l1v5 = s4
+l1v17.to.l1v5 = s4
+l1v18.to.l1v5 = s4
+l1v19.to.l1v5 = s4
+l1s4.to.l1v5 = s4
+l2n3.to.l1v5 = s4
+s4.to.l1v5 = s5
+l1v16.to.l1v6 = s4
+l1v17.to.l1v6 = s4
+l1v18.to.l1v6 = s4
+l1v19.to.l1v6 = s4
+l1s4.to.l1v6 = s4
+l2n3.to.l1v6 = s4
+s4.to.l1v6 = s5
+l1v16.to.l1v7 = s4
+l1v17.to.l1v7 = s4
+l1v18.to.l1v7 = s4
+l1v19.to.l1v7 = s4
+l1s4.to.l1v7 = s4
+l2n3.to.l1v7 = s4
+s4.to.l1v7 = s5
+l1v16.to.l1s1 = s4
+l1v16.to.l2n1 = s4
+l1v17.to.l1s1 = s4
+l1v17.to.l2n1 = s4
+l1v18.to.l1s1 = s4
+l1v18.to.l2n1 = s4
+l1v19.to.l1s1 = s4
+l1v19.to.l2n1 = s4
+l1s4.to.l1s1 = s4
+l1s4.to.l2n1 = s4
+l2n3.to.l2n1= s4
+l2n3.to.l1s1 = s4
+s4.to.l1s1 = s5
+s4.to.l2n1 = s5
+;--------connecting s4 internodes to s2 internodes
+l1v16.to.l1v8 = s4
+l1v17.to.l1v8 = s4
+l1v18.to.l1v8 = s4
+l1v19.to.l1v8 = s4
+l1s4.to.l1v8 = s4
+l2n3.to.l1v8 = s4
+s4.to.l1v8 = s5
+l1v16.to.l1v9 = s4
+l1v17.to.l1v9 = s4
+l1v18.to.l1v9 = s4
+l1v19.to.l1v9 = s4
+l1s4.to.l1v9 = s4
+l2n3.to.l1v9 = s4
+s4.to.l1v9 = s5
+l1v16.to.l1v10 = s4
+l1v17.to.l1v10 = s4
+l1v18.to.l1v10 = s4
+l1v19.to.l1v10 = s4
+l1s4.to.l1v10 = s4
+l2n3.to.l1v10 = s4
+s4.to.l1v10 = s5
+l1v16.to.l1v11 = s4
+l1v17.to.l1v11 = s4
+l1v18.to.l1v11 = s4
+l1v19.to.l1v11 = s4
+l1s4.to.l1v11 = s4
+l2n3.to.l1v11 = s4
+s4.to.l1v11 = s5
+l1v16.to.l1s2 = s4
+l1v17.to.l1s2 = s4
+l1v18.to.l1s2 = s4
+l1v19.to.l1s2 = s4
+l1s4.to.l1s2 = s4
+l2n3.to.l1s2 = s4
+s4.to.l1s2 = s5
+;--------connecting s4 internodes to s3 internodes
+l1v16.to.l1v12 = s4
+l1v17.to.l1v12 = s4
+l1v18.to.l1v12 = s4
+l1v19.to.l1v12 = s4
+l1s4.to.l1v12 = s4
+l2n3.to.l1v12 = s4
+s4.to.l1v12 = s5
+l1v16.to.l1v13 = s4
+l1v17.to.l1v13 = s4
+l1v18.to.l1v13 = s4
+l1v19.to.l1v13 = s4
+l1s4.to.l1v13 = s4
+l2n3.to.l1v13 = s4
+s4.to.l1v13 = s5
+l1v16.to.l1v14 = s4
+l1v17.to.l1v14 = s4
+l1v18.to.l1v14 = s4
+l1v19.to.l1v14 = s4
+l1s4.to.l1v14 = s4
+l2n3.to.l1v14 = s4
+s4.to.l1v14 = s5
+l1v16.to.l1v15 = s4
+l1v17.to.l1v15 = s4
+l1v18.to.l1v15 = s4
+l1v19.to.l1v15 = s4
+l1s4.to.l1v15 = s4
+l2n3.to.l1v15 = s4
+s4.to.l1v15 = s5
+l1v16.to.l1s3 = s4
+l1v16.to.l2n2 = s4
+l1v17.to.l1s3 = s4
+l1v17.to.l2n2 = s4
+l1v18.to.l1s3 = s4
+l1v18.to.l2n2 = s4
+l1v19.to.l1s3 = s4
+l1v19.to.l2n2 = s4
+l1s4.to.l1s3 = s4
+l1s4.to.l2n2 = s4
+l2n3.to.l2n2= s4
+l2n3.to.l1s3 = s4
+s4.to.l1s3 = s5
+s4.to.l2n2 = s5
+;--------connecting s4 internodes to s4 internodes
+;--------connecting s4 internodes to s5 internodes
+l1v16.to.l1v20 = s4
+l1v17.to.l1v20 = s4
+l1v18.to.l1v20 = s4
+l1v19.to.l1v20 = s4
+l1s4.to.l1v20 = s4
+l2n3.to.l1v20 = s4
+s4.to.l1v20 = s5
+l1v16.to.l1v21 = s4
+l1v17.to.l1v21 = s4
+l1v18.to.l1v21 = s4
+l1v19.to.l1v21 = s4
+l1s4.to.l1v21 = s4
+l2n3.to.l1v21 = s4
+s4.to.l1v21 = s5
+l1v16.to.l1v22 = s4
+l1v17.to.l1v22 = s4
+l1v18.to.l1v22 = s4
+l1v19.to.l1v22 = s4
+l1s4.to.l1v22 = s4
+l2n3.to.l1v22 = s4
+s4.to.l1v22 = s5
+l1v16.to.l1v23 = s4
+l1v17.to.l1v23 = s4
+l1v18.to.l1v23 = s4
+l1v19.to.l1v23 = s4
+l1s4.to.l1v23 = s4
+l2n3.to.l1v23 = s4
+s4.to.l1v23 = s5
+l1v16.to.l1s5 = s4
+l1v17.to.l1s5 = s4
+l1v18.to.l1s5 = s4
+l1v19.to.l1s5 = s4
+l1s4.to.l1s5 = s4
+l2n3.to.l1s5 = s4
+s4.to.l1s5 = s5
+;--------connecting s4 internodes to s6 internodes
+l1v16.to.l1v24 = s4
+l1v17.to.l1v24 = s4
+l1v18.to.l1v24 = s4
+l1v19.to.l1v24 = s4
+l1s4.to.l1v24 = s4
+l2n3.to.l1v24 = s4
+s4.to.l1v24 = s5
+l1v16.to.l1v25 = s4
+l1v17.to.l1v25 = s4
+l1v18.to.l1v25 = s4
+l1v19.to.l1v25 = s4
+l1s4.to.l1v25 = s4
+l2n3.to.l1v25 = s4
+s4.to.l1v25 = s5
+l1v16.to.l1v26 = s4
+l1v17.to.l1v26 = s4
+l1v18.to.l1v26 = s4
+l1v19.to.l1v26 = s4
+l1s4.to.l1v26 = s4
+l2n3.to.l1v26 = s4
+s4.to.l1v26 = s5
+l1v16.to.l1v27 = s4
+l1v17.to.l1v27 = s4
+l1v18.to.l1v27 = s4
+l1v19.to.l1v27 = s4
+l1s4.to.l1v27 = s4
+l2n3.to.l1v27 = s4
+s4.to.l1v27 = s5
+l1v16.to.l1s6 = s4
+l1v16.to.l2n4 = s4
+l1v17.to.l1s6 = s4
+l1v17.to.l2n4 = s4
+l1v18.to.l1s6 = s4
+l1v18.to.l2n4 = s4
+l1v19.to.l1s6 = s4
+l1v19.to.l2n4 = s4
+l1s4.to.l1s6 = s4
+l1s4.to.l2n4 = s4
+l2n3.to.l2n4= s4
+l2n3.to.l1s6 = s4
+s4.to.l1s6 = s5
+s4.to.l2n4 = s5
+;--------connecting s4 internodes to s7 internodes
+l1v16.to.l1v28 = s4
+l1v17.to.l1v28 = s4
+l1v18.to.l1v28 = s4
+l1v19.to.l1v28 = s4
+l1s4.to.l1v28 = s4
+l2n3.to.l1v28 = s4
+s4.to.l1v28 = s5
+l1v16.to.l1v29 = s4
+l1v17.to.l1v29 = s4
+l1v18.to.l1v29 = s4
+l1v19.to.l1v29 = s4
+l1s4.to.l1v29 = s4
+l2n3.to.l1v29 = s4
+s4.to.l1v29 = s5
+l1v16.to.l1v30 = s4
+l1v17.to.l1v30 = s4
+l1v18.to.l1v30 = s4
+l1v19.to.l1v30 = s4
+l1s4.to.l1v30 = s4
+l2n3.to.l1v30 = s4
+s4.to.l1v30 = s5
+l1v16.to.l1v31 = s4
+l1v17.to.l1v31 = s4
+l1v18.to.l1v31 = s4
+l1v19.to.l1v31 = s4
+l1s4.to.l1v31 = s4
+l2n3.to.l1v31 = s4
+s4.to.l1v31 = s5
+l1v16.to.l1s7 = s4
+l1v16.to.l2n5 = s4
+l1v17.to.l1s7 = s4
+l1v17.to.l2n5 = s4
+l1v18.to.l1s7 = s4
+l1v18.to.l2n5 = s4
+l1v19.to.l1s7 = s4
+l1v19.to.l2n5 = s4
+l1s4.to.l1s7 = s4
+l1s4.to.l2n5 = s4
+l2n3.to.l2n5= s4
+l2n3.to.l1s7 = s4
+s4.to.l1s7 = s5
+s4.to.l2n5 = s5
+;-----switch s5 inter-connections
+l1s5.to.l1v20 = s5 
+l1v20.to.l1s5 = s5 
+l1v21.to.l1v20 = s5
+l1v22.to.l1v20 = s5
+l1v23.to.l1v20 = s5
+l1v20.to.l1v21 = s5
+l1s5.to.l1v21 = s5 
+l1v21.to.l1s5 = s5 
+l1v22.to.l1v21 = s5
+l1v23.to.l1v21 = s5
+l1v20.to.l1v22 = s5
+l1v21.to.l1v22 = s5
+l1s5.to.l1v22 = s5 
+l1v22.to.l1s5 = s5 
+l1v23.to.l1v22 = s5
+l1v20.to.l1v23 = s5
+l1v21.to.l1v23 = s5
+l1v22.to.l1v23 = s5
+l1s5.to.l1v23 = s5 
+l1v23.to.l1s5 = s5 
+;--------connecting s5 internodes to s0 internodes
+l1v20.to.l1v0 = s5
+l1v21.to.l1v0 = s5
+l1v22.to.l1v0 = s5
+l1v23.to.l1v0 = s5
+l1s5.to.l1v0 = s5
+s5.to.l1v0 = s4
+l1v20.to.l1v1 = s5
+l1v21.to.l1v1 = s5
+l1v22.to.l1v1 = s5
+l1v23.to.l1v1 = s5
+l1s5.to.l1v1 = s5
+s5.to.l1v1 = s4
+l1v20.to.l1v2 = s5
+l1v21.to.l1v2 = s5
+l1v22.to.l1v2 = s5
+l1v23.to.l1v2 = s5
+l1s5.to.l1v2 = s5
+s5.to.l1v2 = s4
+l1v20.to.l1v3 = s5
+l1v21.to.l1v3 = s5
+l1v22.to.l1v3 = s5
+l1v23.to.l1v3 = s5
+l1s5.to.l1v3 = s5
+s5.to.l1v3 = s4
+l1v20.to.l1s0 = s5
+l1v20.to.l2n0 = s5
+l1v21.to.l1s0 = s5
+l1v21.to.l2n0 = s5
+l1v22.to.l1s0 = s5
+l1v22.to.l2n0 = s5
+l1v23.to.l1s0 = s5
+l1v23.to.l2n0 = s5
+l1s5.to.l1s0 = s5
+l1s5.to.l2n0 = s5
+s5.to.l1s0 = s4
+s5.to.l2n0 = s4
+;--------connecting s5 internodes to s1 internodes
+l1v20.to.l1v4 = s5
+l1v21.to.l1v4 = s5
+l1v22.to.l1v4 = s5
+l1v23.to.l1v4 = s5
+l1s5.to.l1v4 = s5
+s5.to.l1v4 = s1
+l1v20.to.l1v5 = s5
+l1v21.to.l1v5 = s5
+l1v22.to.l1v5 = s5
+l1v23.to.l1v5 = s5
+l1s5.to.l1v5 = s5
+s5.to.l1v5 = s1
+l1v20.to.l1v6 = s5
+l1v21.to.l1v6 = s5
+l1v22.to.l1v6 = s5
+l1v23.to.l1v6 = s5
+l1s5.to.l1v6 = s5
+s5.to.l1v6 = s1
+l1v20.to.l1v7 = s5
+l1v21.to.l1v7 = s5
+l1v22.to.l1v7 = s5
+l1v23.to.l1v7 = s5
+l1s5.to.l1v7 = s5
+s5.to.l1v7 = s1
+l1v20.to.l1s1 = s5
+l1v20.to.l2n1 = s5
+l1v21.to.l1s1 = s5
+l1v21.to.l2n1 = s5
+l1v22.to.l1s1 = s5
+l1v22.to.l2n1 = s5
+l1v23.to.l1s1 = s5
+l1v23.to.l2n1 = s5
+l1s5.to.l1s1 = s5
+l1s5.to.l2n1 = s5
+s5.to.l1s1 = s1
+s5.to.l2n1 = s1
+;--------connecting s5 internodes to s2 internodes
+l1v20.to.l1v8 = s5
+l1v21.to.l1v8 = s5
+l1v22.to.l1v8 = s5
+l1v23.to.l1v8 = s5
+l1s5.to.l1v8 = s5
+s5.to.l1v8 = s6
+l1v20.to.l1v9 = s5
+l1v21.to.l1v9 = s5
+l1v22.to.l1v9 = s5
+l1v23.to.l1v9 = s5
+l1s5.to.l1v9 = s5
+s5.to.l1v9 = s6
+l1v20.to.l1v10 = s5
+l1v21.to.l1v10 = s5
+l1v22.to.l1v10 = s5
+l1v23.to.l1v10 = s5
+l1s5.to.l1v10 = s5
+s5.to.l1v10 = s6
+l1v20.to.l1v11 = s5
+l1v21.to.l1v11 = s5
+l1v22.to.l1v11 = s5
+l1v23.to.l1v11 = s5
+l1s5.to.l1v11 = s5
+s5.to.l1v11 = s6
+l1v20.to.l1s2 = s5
+l1v21.to.l1s2 = s5
+l1v22.to.l1s2 = s5
+l1v23.to.l1s2 = s5
+l1s5.to.l1s2 = s5
+s5.to.l1s2 = s6
+;--------connecting s5 internodes to s3 internodes
+l1v20.to.l1v12 = s5
+l1v21.to.l1v12 = s5
+l1v22.to.l1v12 = s5
+l1v23.to.l1v12 = s5
+l1s5.to.l1v12 = s5
+s5.to.l1v12 = s6
+l1v20.to.l1v13 = s5
+l1v21.to.l1v13 = s5
+l1v22.to.l1v13 = s5
+l1v23.to.l1v13 = s5
+l1s5.to.l1v13 = s5
+s5.to.l1v13 = s6
+l1v20.to.l1v14 = s5
+l1v21.to.l1v14 = s5
+l1v22.to.l1v14 = s5
+l1v23.to.l1v14 = s5
+l1s5.to.l1v14 = s5
+s5.to.l1v14 = s6
+l1v20.to.l1v15 = s5
+l1v21.to.l1v15 = s5
+l1v22.to.l1v15 = s5
+l1v23.to.l1v15 = s5
+l1s5.to.l1v15 = s5
+s5.to.l1v15 = s6
+l1v20.to.l1s3 = s5
+l1v20.to.l2n2 = s5
+l1v21.to.l1s3 = s5
+l1v21.to.l2n2 = s5
+l1v22.to.l1s3 = s5
+l1v22.to.l2n2 = s5
+l1v23.to.l1s3 = s5
+l1v23.to.l2n2 = s5
+l1s5.to.l1s3 = s5
+l1s5.to.l2n2 = s5
+s5.to.l1s3 = s6
+s5.to.l2n2 = s6
+;--------connecting s5 internodes to s4 internodes
+l1v20.to.l1v16 = s5
+l1v21.to.l1v16 = s5
+l1v22.to.l1v16 = s5
+l1v23.to.l1v16 = s5
+l1s5.to.l1v16 = s5
+s5.to.l1v16 = s4
+l1v20.to.l1v17 = s5
+l1v21.to.l1v17 = s5
+l1v22.to.l1v17 = s5
+l1v23.to.l1v17 = s5
+l1s5.to.l1v17 = s5
+s5.to.l1v17 = s4
+l1v20.to.l1v18 = s5
+l1v21.to.l1v18 = s5
+l1v22.to.l1v18 = s5
+l1v23.to.l1v18 = s5
+l1s5.to.l1v18 = s5
+s5.to.l1v18 = s4
+l1v20.to.l1v19 = s5
+l1v21.to.l1v19 = s5
+l1v22.to.l1v19 = s5
+l1v23.to.l1v19 = s5
+l1s5.to.l1v19 = s5
+s5.to.l1v19 = s4
+l1v20.to.l1s4 = s5
+l1v20.to.l2n3 = s5
+l1v21.to.l1s4 = s5
+l1v21.to.l2n3 = s5
+l1v22.to.l1s4 = s5
+l1v22.to.l2n3 = s5
+l1v23.to.l1s4 = s5
+l1v23.to.l2n3 = s5
+l1s5.to.l1s4 = s5
+l1s5.to.l2n3 = s5
+s5.to.l1s4 = s4
+s5.to.l2n3 = s4
+;--------connecting s5 internodes to s5 internodes
+;--------connecting s5 internodes to s6 internodes
+l1v20.to.l1v24 = s5
+l1v21.to.l1v24 = s5
+l1v22.to.l1v24 = s5
+l1v23.to.l1v24 = s5
+l1s5.to.l1v24 = s5
+s5.to.l1v24 = s6
+l1v20.to.l1v25 = s5
+l1v21.to.l1v25 = s5
+l1v22.to.l1v25 = s5
+l1v23.to.l1v25 = s5
+l1s5.to.l1v25 = s5
+s5.to.l1v25 = s6
+l1v20.to.l1v26 = s5
+l1v21.to.l1v26 = s5
+l1v22.to.l1v26 = s5
+l1v23.to.l1v26 = s5
+l1s5.to.l1v26 = s5
+s5.to.l1v26 = s6
+l1v20.to.l1v27 = s5
+l1v21.to.l1v27 = s5
+l1v22.to.l1v27 = s5
+l1v23.to.l1v27 = s5
+l1s5.to.l1v27 = s5
+s5.to.l1v27 = s6
+l1v20.to.l1s6 = s5
+l1v20.to.l2n4 = s5
+l1v21.to.l1s6 = s5
+l1v21.to.l2n4 = s5
+l1v22.to.l1s6 = s5
+l1v22.to.l2n4 = s5
+l1v23.to.l1s6 = s5
+l1v23.to.l2n4 = s5
+l1s5.to.l1s6 = s5
+l1s5.to.l2n4 = s5
+s5.to.l1s6 = s6
+s5.to.l2n4 = s6
+;--------connecting s5 internodes to s7 internodes
+l1v20.to.l1v28 = s5
+l1v21.to.l1v28 = s5
+l1v22.to.l1v28 = s5
+l1v23.to.l1v28 = s5
+l1s5.to.l1v28 = s5
+s5.to.l1v28 = s6
+l1v20.to.l1v29 = s5
+l1v21.to.l1v29 = s5
+l1v22.to.l1v29 = s5
+l1v23.to.l1v29 = s5
+l1s5.to.l1v29 = s5
+s5.to.l1v29 = s6
+l1v20.to.l1v30 = s5
+l1v21.to.l1v30 = s5
+l1v22.to.l1v30 = s5
+l1v23.to.l1v30 = s5
+l1s5.to.l1v30 = s5
+s5.to.l1v30 = s6
+l1v20.to.l1v31 = s5
+l1v21.to.l1v31 = s5
+l1v22.to.l1v31 = s5
+l1v23.to.l1v31 = s5
+l1s5.to.l1v31 = s5
+s5.to.l1v31 = s6
+l1v20.to.l1s7 = s5
+l1v20.to.l2n5 = s5
+l1v21.to.l1s7 = s5
+l1v21.to.l2n5 = s5
+l1v22.to.l1s7 = s5
+l1v22.to.l2n5 = s5
+l1v23.to.l1s7 = s5
+l1v23.to.l2n5 = s5
+l1s5.to.l1s7 = s5
+l1s5.to.l2n5 = s5
+s5.to.l1s7 = s6
+s5.to.l2n5 = s6
+;-----switch s6 inter-connections
+l1s6.to.l1v24 = s6 
+l1v24.to.l1s6 = s6 
+l1v25.to.l1v24 = s6
+l1v26.to.l1v24 = s6
+l1v27.to.l1v24 = s6
+l1v24.to.l2n4 = s6 
+l2n4.to.l1v24 = s6 
+l1v24.to.l1v25 = s6
+l1s6.to.l1v25 = s6 
+l1v25.to.l1s6 = s6 
+l1v26.to.l1v25 = s6
+l1v27.to.l1v25 = s6
+l1v25.to.l2n4 = s6 
+l2n4.to.l1v25 = s6 
+l1v24.to.l1v26 = s6
+l1v25.to.l1v26 = s6
+l1s6.to.l1v26 = s6 
+l1v26.to.l1s6 = s6 
+l1v27.to.l1v26 = s6
+l1v26.to.l2n4 = s6 
+l2n4.to.l1v26 = s6 
+l1v24.to.l1v27 = s6
+l1v25.to.l1v27 = s6
+l1v26.to.l1v27 = s6
+l1s6.to.l1v27 = s6 
+l1v27.to.l1s6 = s6 
+l1v27.to.l2n4 = s6 
+l2n4.to.l1v27 = s6 
+l2n4.to.l1s6 = s6 
+l1s6.to.l2n4 = s6 
+;--------connecting s6 internodes to s0 internodes
+l1v24.to.l1v0 = s6
+l1v25.to.l1v0 = s6
+l1v26.to.l1v0 = s6
+l1v27.to.l1v0 = s6
+l1s6.to.l1v0 = s6
+l2n4.to.l1v0 = s6
+s6.to.l1v0 = s5
+l1v24.to.l1v1 = s6
+l1v25.to.l1v1 = s6
+l1v26.to.l1v1 = s6
+l1v27.to.l1v1 = s6
+l1s6.to.l1v1 = s6
+l2n4.to.l1v1 = s6
+s6.to.l1v1 = s5
+l1v24.to.l1v2 = s6
+l1v25.to.l1v2 = s6
+l1v26.to.l1v2 = s6
+l1v27.to.l1v2 = s6
+l1s6.to.l1v2 = s6
+l2n4.to.l1v2 = s6
+s6.to.l1v2 = s5
+l1v24.to.l1v3 = s6
+l1v25.to.l1v3 = s6
+l1v26.to.l1v3 = s6
+l1v27.to.l1v3 = s6
+l1s6.to.l1v3 = s6
+l2n4.to.l1v3 = s6
+s6.to.l1v3 = s5
+l1v24.to.l1s0 = s6
+l1v24.to.l2n0 = s6
+l1v25.to.l1s0 = s6
+l1v25.to.l2n0 = s6
+l1v26.to.l1s0 = s6
+l1v26.to.l2n0 = s6
+l1v27.to.l1s0 = s6
+l1v27.to.l2n0 = s6
+l1s6.to.l1s0 = s6
+l1s6.to.l2n0 = s6
+l2n4.to.l2n0= s6
+l2n4.to.l1s0 = s6
+s6.to.l1s0 = s5
+s6.to.l2n0 = s5
+;--------connecting s6 internodes to s1 internodes
+l1v24.to.l1v4 = s6
+l1v25.to.l1v4 = s6
+l1v26.to.l1v4 = s6
+l1v27.to.l1v4 = s6
+l1s6.to.l1v4 = s6
+l2n4.to.l1v4 = s6
+s6.to.l1v4 = s5
+l1v24.to.l1v5 = s6
+l1v25.to.l1v5 = s6
+l1v26.to.l1v5 = s6
+l1v27.to.l1v5 = s6
+l1s6.to.l1v5 = s6
+l2n4.to.l1v5 = s6
+s6.to.l1v5 = s5
+l1v24.to.l1v6 = s6
+l1v25.to.l1v6 = s6
+l1v26.to.l1v6 = s6
+l1v27.to.l1v6 = s6
+l1s6.to.l1v6 = s6
+l2n4.to.l1v6 = s6
+s6.to.l1v6 = s5
+l1v24.to.l1v7 = s6
+l1v25.to.l1v7 = s6
+l1v26.to.l1v7 = s6
+l1v27.to.l1v7 = s6
+l1s6.to.l1v7 = s6
+l2n4.to.l1v7 = s6
+s6.to.l1v7 = s5
+l1v24.to.l1s1 = s6
+l1v24.to.l2n1 = s6
+l1v25.to.l1s1 = s6
+l1v25.to.l2n1 = s6
+l1v26.to.l1s1 = s6
+l1v26.to.l2n1 = s6
+l1v27.to.l1s1 = s6
+l1v27.to.l2n1 = s6
+l1s6.to.l1s1 = s6
+l1s6.to.l2n1 = s6
+l2n4.to.l2n1= s6
+l2n4.to.l1s1 = s6
+s6.to.l1s1 = s5
+s6.to.l2n1 = s5
+;--------connecting s6 internodes to s2 internodes
+l1v24.to.l1v8 = s6
+l1v25.to.l1v8 = s6
+l1v26.to.l1v8 = s6
+l1v27.to.l1v8 = s6
+l1s6.to.l1v8 = s6
+l2n4.to.l1v8 = s6
+s6.to.l1v8 = s2
+l1v24.to.l1v9 = s6
+l1v25.to.l1v9 = s6
+l1v26.to.l1v9 = s6
+l1v27.to.l1v9 = s6
+l1s6.to.l1v9 = s6
+l2n4.to.l1v9 = s6
+s6.to.l1v9 = s2
+l1v24.to.l1v10 = s6
+l1v25.to.l1v10 = s6
+l1v26.to.l1v10 = s6
+l1v27.to.l1v10 = s6
+l1s6.to.l1v10 = s6
+l2n4.to.l1v10 = s6
+s6.to.l1v10 = s2
+l1v24.to.l1v11 = s6
+l1v25.to.l1v11 = s6
+l1v26.to.l1v11 = s6
+l1v27.to.l1v11 = s6
+l1s6.to.l1v11 = s6
+l2n4.to.l1v11 = s6
+s6.to.l1v11 = s2
+l1v24.to.l1s2 = s6
+l1v25.to.l1s2 = s6
+l1v26.to.l1s2 = s6
+l1v27.to.l1s2 = s6
+l1s6.to.l1s2 = s6
+l2n4.to.l1s2 = s6
+s6.to.l1s2 = s2
+;--------connecting s6 internodes to s3 internodes
+l1v24.to.l1v12 = s6
+l1v25.to.l1v12 = s6
+l1v26.to.l1v12 = s6
+l1v27.to.l1v12 = s6
+l1s6.to.l1v12 = s6
+l2n4.to.l1v12 = s6
+s6.to.l1v12 = s7
+l1v24.to.l1v13 = s6
+l1v25.to.l1v13 = s6
+l1v26.to.l1v13 = s6
+l1v27.to.l1v13 = s6
+l1s6.to.l1v13 = s6
+l2n4.to.l1v13 = s6
+s6.to.l1v13 = s7
+l1v24.to.l1v14 = s6
+l1v25.to.l1v14 = s6
+l1v26.to.l1v14 = s6
+l1v27.to.l1v14 = s6
+l1s6.to.l1v14 = s6
+l2n4.to.l1v14 = s6
+s6.to.l1v14 = s7
+l1v24.to.l1v15 = s6
+l1v25.to.l1v15 = s6
+l1v26.to.l1v15 = s6
+l1v27.to.l1v15 = s6
+l1s6.to.l1v15 = s6
+l2n4.to.l1v15 = s6
+s6.to.l1v15 = s7
+l1v24.to.l1s3 = s6
+l1v24.to.l2n2 = s6
+l1v25.to.l1s3 = s6
+l1v25.to.l2n2 = s6
+l1v26.to.l1s3 = s6
+l1v26.to.l2n2 = s6
+l1v27.to.l1s3 = s6
+l1v27.to.l2n2 = s6
+l1s6.to.l1s3 = s6
+l1s6.to.l2n2 = s6
+l2n4.to.l2n2= s6
+l2n4.to.l1s3 = s6
+s6.to.l1s3 = s7
+s6.to.l2n2 = s7
+;--------connecting s6 internodes to s4 internodes
+l1v24.to.l1v16 = s6
+l1v25.to.l1v16 = s6
+l1v26.to.l1v16 = s6
+l1v27.to.l1v16 = s6
+l1s6.to.l1v16 = s6
+l2n4.to.l1v16 = s6
+s6.to.l1v16 = s5
+l1v24.to.l1v17 = s6
+l1v25.to.l1v17 = s6
+l1v26.to.l1v17 = s6
+l1v27.to.l1v17 = s6
+l1s6.to.l1v17 = s6
+l2n4.to.l1v17 = s6
+s6.to.l1v17 = s5
+l1v24.to.l1v18 = s6
+l1v25.to.l1v18 = s6
+l1v26.to.l1v18 = s6
+l1v27.to.l1v18 = s6
+l1s6.to.l1v18 = s6
+l2n4.to.l1v18 = s6
+s6.to.l1v18 = s5
+l1v24.to.l1v19 = s6
+l1v25.to.l1v19 = s6
+l1v26.to.l1v19 = s6
+l1v27.to.l1v19 = s6
+l1s6.to.l1v19 = s6
+l2n4.to.l1v19 = s6
+s6.to.l1v19 = s5
+l1v24.to.l1s4 = s6
+l1v24.to.l2n3 = s6
+l1v25.to.l1s4 = s6
+l1v25.to.l2n3 = s6
+l1v26.to.l1s4 = s6
+l1v26.to.l2n3 = s6
+l1v27.to.l1s4 = s6
+l1v27.to.l2n3 = s6
+l1s6.to.l1s4 = s6
+l1s6.to.l2n3 = s6
+l2n4.to.l2n3= s6
+l2n4.to.l1s4 = s6
+s6.to.l1s4 = s5
+s6.to.l2n3 = s5
+;--------connecting s6 internodes to s5 internodes
+l1v24.to.l1v20 = s6
+l1v25.to.l1v20 = s6
+l1v26.to.l1v20 = s6
+l1v27.to.l1v20 = s6
+l1s6.to.l1v20 = s6
+l2n4.to.l1v20 = s6
+s6.to.l1v20 = s5
+l1v24.to.l1v21 = s6
+l1v25.to.l1v21 = s6
+l1v26.to.l1v21 = s6
+l1v27.to.l1v21 = s6
+l1s6.to.l1v21 = s6
+l2n4.to.l1v21 = s6
+s6.to.l1v21 = s5
+l1v24.to.l1v22 = s6
+l1v25.to.l1v22 = s6
+l1v26.to.l1v22 = s6
+l1v27.to.l1v22 = s6
+l1s6.to.l1v22 = s6
+l2n4.to.l1v22 = s6
+s6.to.l1v22 = s5
+l1v24.to.l1v23 = s6
+l1v25.to.l1v23 = s6
+l1v26.to.l1v23 = s6
+l1v27.to.l1v23 = s6
+l1s6.to.l1v23 = s6
+l2n4.to.l1v23 = s6
+s6.to.l1v23 = s5
+l1v24.to.l1s5 = s6
+l1v25.to.l1s5 = s6
+l1v26.to.l1s5 = s6
+l1v27.to.l1s5 = s6
+l1s6.to.l1s5 = s6
+l2n4.to.l1s5 = s6
+s6.to.l1s5 = s5
+;--------connecting s6 internodes to s6 internodes
+;--------connecting s6 internodes to s7 internodes
+l1v24.to.l1v28 = s6
+l1v25.to.l1v28 = s6
+l1v26.to.l1v28 = s6
+l1v27.to.l1v28 = s6
+l1s6.to.l1v28 = s6
+l2n4.to.l1v28 = s6
+s6.to.l1v28 = s7
+l1v24.to.l1v29 = s6
+l1v25.to.l1v29 = s6
+l1v26.to.l1v29 = s6
+l1v27.to.l1v29 = s6
+l1s6.to.l1v29 = s6
+l2n4.to.l1v29 = s6
+s6.to.l1v29 = s7
+l1v24.to.l1v30 = s6
+l1v25.to.l1v30 = s6
+l1v26.to.l1v30 = s6
+l1v27.to.l1v30 = s6
+l1s6.to.l1v30 = s6
+l2n4.to.l1v30 = s6
+s6.to.l1v30 = s7
+l1v24.to.l1v31 = s6
+l1v25.to.l1v31 = s6
+l1v26.to.l1v31 = s6
+l1v27.to.l1v31 = s6
+l1s6.to.l1v31 = s6
+l2n4.to.l1v31 = s6
+s6.to.l1v31 = s7
+l1v24.to.l1s7 = s6
+l1v24.to.l2n5 = s6
+l1v25.to.l1s7 = s6
+l1v25.to.l2n5 = s6
+l1v26.to.l1s7 = s6
+l1v26.to.l2n5 = s6
+l1v27.to.l1s7 = s6
+l1v27.to.l2n5 = s6
+l1s6.to.l1s7 = s6
+l1s6.to.l2n5 = s6
+l2n4.to.l2n5= s6
+l2n4.to.l1s7 = s6
+s6.to.l1s7 = s7
+s6.to.l2n5 = s7
+;-----switch s7 inter-connections
+l1s7.to.l1v28 = s7 
+l1v28.to.l1s7 = s7 
+l1v29.to.l1v28 = s7
+l1v30.to.l1v28 = s7
+l1v31.to.l1v28 = s7
+l1v28.to.l2n5 = s7 
+l2n5.to.l1v28 = s7 
+l1v28.to.l1v29 = s7
+l1s7.to.l1v29 = s7 
+l1v29.to.l1s7 = s7 
+l1v30.to.l1v29 = s7
+l1v31.to.l1v29 = s7
+l1v29.to.l2n5 = s7 
+l2n5.to.l1v29 = s7 
+l1v28.to.l1v30 = s7
+l1v29.to.l1v30 = s7
+l1s7.to.l1v30 = s7 
+l1v30.to.l1s7 = s7 
+l1v31.to.l1v30 = s7
+l1v30.to.l2n5 = s7 
+l2n5.to.l1v30 = s7 
+l1v28.to.l1v31 = s7
+l1v29.to.l1v31 = s7
+l1v30.to.l1v31 = s7
+l1s7.to.l1v31 = s7 
+l1v31.to.l1s7 = s7 
+l1v31.to.l2n5 = s7 
+l2n5.to.l1v31 = s7 
+l2n5.to.l1s7 = s7 
+l1s7.to.l2n5 = s7 
+;--------connecting s7 internodes to s0 internodes
+l1v28.to.l1v0 = s7
+l1v29.to.l1v0 = s7
+l1v30.to.l1v0 = s7
+l1v31.to.l1v0 = s7
+l1s7.to.l1v0 = s7
+l2n5.to.l1v0 = s7
+s7.to.l1v0 = s6
+l1v28.to.l1v1 = s7
+l1v29.to.l1v1 = s7
+l1v30.to.l1v1 = s7
+l1v31.to.l1v1 = s7
+l1s7.to.l1v1 = s7
+l2n5.to.l1v1 = s7
+s7.to.l1v1 = s6
+l1v28.to.l1v2 = s7
+l1v29.to.l1v2 = s7
+l1v30.to.l1v2 = s7
+l1v31.to.l1v2 = s7
+l1s7.to.l1v2 = s7
+l2n5.to.l1v2 = s7
+s7.to.l1v2 = s6
+l1v28.to.l1v3 = s7
+l1v29.to.l1v3 = s7
+l1v30.to.l1v3 = s7
+l1v31.to.l1v3 = s7
+l1s7.to.l1v3 = s7
+l2n5.to.l1v3 = s7
+s7.to.l1v3 = s6
+l1v28.to.l1s0 = s7
+l1v28.to.l2n0 = s7
+l1v29.to.l1s0 = s7
+l1v29.to.l2n0 = s7
+l1v30.to.l1s0 = s7
+l1v30.to.l2n0 = s7
+l1v31.to.l1s0 = s7
+l1v31.to.l2n0 = s7
+l1s7.to.l1s0 = s7
+l1s7.to.l2n0 = s7
+l2n5.to.l2n0= s7
+l2n5.to.l1s0 = s7
+s7.to.l1s0 = s6
+s7.to.l2n0 = s6
+;--------connecting s7 internodes to s1 internodes
+l1v28.to.l1v4 = s7
+l1v29.to.l1v4 = s7
+l1v30.to.l1v4 = s7
+l1v31.to.l1v4 = s7
+l1s7.to.l1v4 = s7
+l2n5.to.l1v4 = s7
+s7.to.l1v4 = s6
+l1v28.to.l1v5 = s7
+l1v29.to.l1v5 = s7
+l1v30.to.l1v5 = s7
+l1v31.to.l1v5 = s7
+l1s7.to.l1v5 = s7
+l2n5.to.l1v5 = s7
+s7.to.l1v5 = s6
+l1v28.to.l1v6 = s7
+l1v29.to.l1v6 = s7
+l1v30.to.l1v6 = s7
+l1v31.to.l1v6 = s7
+l1s7.to.l1v6 = s7
+l2n5.to.l1v6 = s7
+s7.to.l1v6 = s6
+l1v28.to.l1v7 = s7
+l1v29.to.l1v7 = s7
+l1v30.to.l1v7 = s7
+l1v31.to.l1v7 = s7
+l1s7.to.l1v7 = s7
+l2n5.to.l1v7 = s7
+s7.to.l1v7 = s6
+l1v28.to.l1s1 = s7
+l1v28.to.l2n1 = s7
+l1v29.to.l1s1 = s7
+l1v29.to.l2n1 = s7
+l1v30.to.l1s1 = s7
+l1v30.to.l2n1 = s7
+l1v31.to.l1s1 = s7
+l1v31.to.l2n1 = s7
+l1s7.to.l1s1 = s7
+l1s7.to.l2n1 = s7
+l2n5.to.l2n1= s7
+l2n5.to.l1s1 = s7
+s7.to.l1s1 = s6
+s7.to.l2n1 = s6
+;--------connecting s7 internodes to s2 internodes
+l1v28.to.l1v8 = s7
+l1v29.to.l1v8 = s7
+l1v30.to.l1v8 = s7
+l1v31.to.l1v8 = s7
+l1s7.to.l1v8 = s7
+l2n5.to.l1v8 = s7
+s7.to.l1v8 = s6
+l1v28.to.l1v9 = s7
+l1v29.to.l1v9 = s7
+l1v30.to.l1v9 = s7
+l1v31.to.l1v9 = s7
+l1s7.to.l1v9 = s7
+l2n5.to.l1v9 = s7
+s7.to.l1v9 = s6
+l1v28.to.l1v10 = s7
+l1v29.to.l1v10 = s7
+l1v30.to.l1v10 = s7
+l1v31.to.l1v10 = s7
+l1s7.to.l1v10 = s7
+l2n5.to.l1v10 = s7
+s7.to.l1v10 = s6
+l1v28.to.l1v11 = s7
+l1v29.to.l1v11 = s7
+l1v30.to.l1v11 = s7
+l1v31.to.l1v11 = s7
+l1s7.to.l1v11 = s7
+l2n5.to.l1v11 = s7
+s7.to.l1v11 = s6
+l1v28.to.l1s2 = s7
+l1v29.to.l1s2 = s7
+l1v30.to.l1s2 = s7
+l1v31.to.l1s2 = s7
+l1s7.to.l1s2 = s7
+l2n5.to.l1s2 = s7
+s7.to.l1s2 = s6
+;--------connecting s7 internodes to s3 internodes
+l1v28.to.l1v12 = s7
+l1v29.to.l1v12 = s7
+l1v30.to.l1v12 = s7
+l1v31.to.l1v12 = s7
+l1s7.to.l1v12 = s7
+l2n5.to.l1v12 = s7
+s7.to.l1v12 = s3
+l1v28.to.l1v13 = s7
+l1v29.to.l1v13 = s7
+l1v30.to.l1v13 = s7
+l1v31.to.l1v13 = s7
+l1s7.to.l1v13 = s7
+l2n5.to.l1v13 = s7
+s7.to.l1v13 = s3
+l1v28.to.l1v14 = s7
+l1v29.to.l1v14 = s7
+l1v30.to.l1v14 = s7
+l1v31.to.l1v14 = s7
+l1s7.to.l1v14 = s7
+l2n5.to.l1v14 = s7
+s7.to.l1v14 = s3
+l1v28.to.l1v15 = s7
+l1v29.to.l1v15 = s7
+l1v30.to.l1v15 = s7
+l1v31.to.l1v15 = s7
+l1s7.to.l1v15 = s7
+l2n5.to.l1v15 = s7
+s7.to.l1v15 = s3
+l1v28.to.l1s3 = s7
+l1v28.to.l2n2 = s7
+l1v29.to.l1s3 = s7
+l1v29.to.l2n2 = s7
+l1v30.to.l1s3 = s7
+l1v30.to.l2n2 = s7
+l1v31.to.l1s3 = s7
+l1v31.to.l2n2 = s7
+l1s7.to.l1s3 = s7
+l1s7.to.l2n2 = s7
+l2n5.to.l2n2= s7
+l2n5.to.l1s3 = s7
+s7.to.l1s3 = s3
+s7.to.l2n2 = s3
+;--------connecting s7 internodes to s4 internodes
+l1v28.to.l1v16 = s7
+l1v29.to.l1v16 = s7
+l1v30.to.l1v16 = s7
+l1v31.to.l1v16 = s7
+l1s7.to.l1v16 = s7
+l2n5.to.l1v16 = s7
+s7.to.l1v16 = s6
+l1v28.to.l1v17 = s7
+l1v29.to.l1v17 = s7
+l1v30.to.l1v17 = s7
+l1v31.to.l1v17 = s7
+l1s7.to.l1v17 = s7
+l2n5.to.l1v17 = s7
+s7.to.l1v17 = s6
+l1v28.to.l1v18 = s7
+l1v29.to.l1v18 = s7
+l1v30.to.l1v18 = s7
+l1v31.to.l1v18 = s7
+l1s7.to.l1v18 = s7
+l2n5.to.l1v18 = s7
+s7.to.l1v18 = s6
+l1v28.to.l1v19 = s7
+l1v29.to.l1v19 = s7
+l1v30.to.l1v19 = s7
+l1v31.to.l1v19 = s7
+l1s7.to.l1v19 = s7
+l2n5.to.l1v19 = s7
+s7.to.l1v19 = s6
+l1v28.to.l1s4 = s7
+l1v28.to.l2n3 = s7
+l1v29.to.l1s4 = s7
+l1v29.to.l2n3 = s7
+l1v30.to.l1s4 = s7
+l1v30.to.l2n3 = s7
+l1v31.to.l1s4 = s7
+l1v31.to.l2n3 = s7
+l1s7.to.l1s4 = s7
+l1s7.to.l2n3 = s7
+l2n5.to.l2n3= s7
+l2n5.to.l1s4 = s7
+s7.to.l1s4 = s6
+s7.to.l2n3 = s6
+;--------connecting s7 internodes to s5 internodes
+l1v28.to.l1v20 = s7
+l1v29.to.l1v20 = s7
+l1v30.to.l1v20 = s7
+l1v31.to.l1v20 = s7
+l1s7.to.l1v20 = s7
+l2n5.to.l1v20 = s7
+s7.to.l1v20 = s6
+l1v28.to.l1v21 = s7
+l1v29.to.l1v21 = s7
+l1v30.to.l1v21 = s7
+l1v31.to.l1v21 = s7
+l1s7.to.l1v21 = s7
+l2n5.to.l1v21 = s7
+s7.to.l1v21 = s6
+l1v28.to.l1v22 = s7
+l1v29.to.l1v22 = s7
+l1v30.to.l1v22 = s7
+l1v31.to.l1v22 = s7
+l1s7.to.l1v22 = s7
+l2n5.to.l1v22 = s7
+s7.to.l1v22 = s6
+l1v28.to.l1v23 = s7
+l1v29.to.l1v23 = s7
+l1v30.to.l1v23 = s7
+l1v31.to.l1v23 = s7
+l1s7.to.l1v23 = s7
+l2n5.to.l1v23 = s7
+s7.to.l1v23 = s6
+l1v28.to.l1s5 = s7
+l1v29.to.l1s5 = s7
+l1v30.to.l1s5 = s7
+l1v31.to.l1s5 = s7
+l1s7.to.l1s5 = s7
+l2n5.to.l1s5 = s7
+s7.to.l1s5 = s6
+;--------connecting s7 internodes to s6 internodes
+l1v28.to.l1v24 = s7
+l1v29.to.l1v24 = s7
+l1v30.to.l1v24 = s7
+l1v31.to.l1v24 = s7
+l1s7.to.l1v24 = s7
+l2n5.to.l1v24 = s7
+s7.to.l1v24 = s6
+l1v28.to.l1v25 = s7
+l1v29.to.l1v25 = s7
+l1v30.to.l1v25 = s7
+l1v31.to.l1v25 = s7
+l1s7.to.l1v25 = s7
+l2n5.to.l1v25 = s7
+s7.to.l1v25 = s6
+l1v28.to.l1v26 = s7
+l1v29.to.l1v26 = s7
+l1v30.to.l1v26 = s7
+l1v31.to.l1v26 = s7
+l1s7.to.l1v26 = s7
+l2n5.to.l1v26 = s7
+s7.to.l1v26 = s6
+l1v28.to.l1v27 = s7
+l1v29.to.l1v27 = s7
+l1v30.to.l1v27 = s7
+l1v31.to.l1v27 = s7
+l1s7.to.l1v27 = s7
+l2n5.to.l1v27 = s7
+s7.to.l1v27 = s6
+l1v28.to.l1s6 = s7
+l1v28.to.l2n4 = s7
+l1v29.to.l1s6 = s7
+l1v29.to.l2n4 = s7
+l1v30.to.l1s6 = s7
+l1v30.to.l2n4 = s7
+l1v31.to.l1s6 = s7
+l1v31.to.l2n4 = s7
+l1s7.to.l1s6 = s7
+l1s7.to.l2n4 = s7
+l2n5.to.l2n4= s7
+l2n5.to.l1s6 = s7
+s7.to.l1s6 = s6
+s7.to.l2n4 = s6
+;--------connecting s7 internodes to s7 internodes

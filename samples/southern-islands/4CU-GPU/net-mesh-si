@@ -1,0 +1,135 @@
+;--------------------------------------------Network
+[Network.si-net-l1-l2]
+DefaultInputBufferSize = 528
+DefaultOutputBufferSize = 528
+DefaultBandwidth = 8
+DefaultPacketSize = 8 
+
+;--------------------------------------------------Nodes
+[Network.si-net-l1-l2.Node.l1v0]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l1v1]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l1v2]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l1v3]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l1s0]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l2n0]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l2n1]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l2n2]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l2n3]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l2n4]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l2n5]
+Type = EndNode
+
+;---------------------------------------------------Switches
+[Network.si-net-l1-l2.Node.sv0]
+Type = Switch
+
+[Network.si-net-l1-l2.Node.ss0]
+Type = Switch
+
+[Network.si-net-l1-l2.Node.sl0]
+Type = Switch
+
+;-----------------------------------------------------Links
+[Network.si-net-l1-l2.Link.l1v0-sv0]
+Type = Bidirectional
+Source = l1v0
+Dest = sv0
+VC = 1
+
+[Network.si-net-l1-l2.Link.l1v1-sv0]
+Type = Bidirectional
+Source = l1v1
+Dest = sv0
+VC = 1
+
+[Network.si-net-l1-l2.Link.l1v2-sv0]
+Type = Bidirectional
+Source = l1v2
+Dest = sv0
+VC = 1
+
+[Network.si-net-l1-l2.Link.l1v3-sv0]
+Type = Bidirectional
+Source = l1v3
+Dest = sv0
+VC = 1
+
+[Network.si-net-l1-l2.Link.l1s0-ss0]
+Type = Bidirectional
+Source = l1s0
+Dest = ss0
+VC = 1
+
+;-------------------------------------------------L2 Links
+
+[Network.si-net-l1-l2.Link.l2n0-sl0]
+Type = Bidirectional
+Source = l2n0
+Dest = sl0
+VC = 1
+
+[Network.si-net-l1-l2.Link.l2n1-sl0]
+Type = Bidirectional
+Source = l2n1
+Dest = sl0
+VC = 1
+
+[Network.si-net-l1-l2.Link.l2n2-sl0]
+Type = Bidirectional
+Source = l2n2
+Dest = sl0
+VC = 1
+
+[Network.si-net-l1-l2.Link.l2n3-sl0]
+Type = Bidirectional
+Source = l2n3
+Dest = sl0
+VC = 1
+
+[Network.si-net-l1-l2.Link.l2n4-sl0]
+Type = Bidirectional
+Source = l2n4
+Dest = sl0
+VC = 1
+
+[Network.si-net-l1-l2.Link.l2n5-sl0]
+Type = Bidirectional
+Source = l2n5
+Dest = sl0
+VC = 1
+
+
+;------------------------------------------------ connections
+[Network.si-net-l1-l2.Link.sv0-ss0]
+Type = Bidirectional
+Source = sv0
+Dest = ss0
+VC = 1
+Bandwdith = 36
+
+[Network.si-net-l1-l2.Link.sl0-ss0]
+Type = Bidirectional
+Source = sl0
+Dest = ss0
+VC = 1
+Bandwidth = 36

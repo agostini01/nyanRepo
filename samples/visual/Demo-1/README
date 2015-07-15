@@ -1,0 +1,7 @@
+########################################################################################
+To Run simulation, modify the following for your binary:
+
+../../../bin/m2s --si-sim detailed --mem-config mem-si --si-config si-config --ctx-config ctx-config --trace trace.gz
+
+../../../bin/m2s --visual trace.gz
+

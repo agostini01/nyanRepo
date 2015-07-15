@@ -1,0 +1,1650 @@
+;--------------------------------------------Network
+[Network.si-net-l1-l2]
+DefaultInputBufferSize = 720
+DefaultOutputBufferSize = 720
+DefaultBandwidth = 72
+DefaultPacketSize = 0
+
+;--------------------------------------------------Nodes
+[Network.si-net-l1-l2.Node.l1v0]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l1v1]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l1v2]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l1v3]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l1v4]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l1v5]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l1v6]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l1v7]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l1v8]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l1v9]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l1v10]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l1v11]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l1v12]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l1v13]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l1v14]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l1v15]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l1v16]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l1v17]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l1v18]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l1v19]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l1v20]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l1v21]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l1v22]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l1v23]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l1v24]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l1v25]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l1v26]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l1v27]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l1v28]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l1v29]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l1v30]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l1v31]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l1s0]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l1s1]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l1s2]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l1s3]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l1s4]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l1s5]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l1s6]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l1s7]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l2n0]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l2n1]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l2n2]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l2n3]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l2n4]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l2n5]
+Type = EndNode
+
+;---------------------------------------------------Switches
+[Network.si-net-l1-l2.Node.X0]
+Type = Switch
+Bandwidth = 72
+
+[Network.si-net-l1-l2.Node.X1]
+Type = Switch
+Bandwidth = 72
+
+[Network.si-net-l1-l2.Node.X2]
+Type = Switch
+Bandwidth = 72
+
+[Network.si-net-l1-l2.Node.X3]
+Type = Switch
+Bandwidth = 72
+
+[Network.si-net-l1-l2.Node.X4]
+Type = Switch
+Bandwidth = 72
+
+[Network.si-net-l1-l2.Node.X5]
+Type = Switch
+Bandwidth = 72
+
+[Network.si-net-l1-l2.Node.X6]
+Type = Switch
+Bandwidth = 72
+
+[Network.si-net-l1-l2.Node.X7]
+Type = Switch
+Bandwidth = 72
+
+[Network.si-net-l1-l2.Node.s0]
+Type = Switch
+Bandwidth = 72
+
+[Network.si-net-l1-l2.Node.s1]
+Type = Switch
+Bandwidth = 72
+
+[Network.si-net-l1-l2.Node.s2]
+Type = Switch
+Bandwidth = 72
+
+[Network.si-net-l1-l2.Node.s3]
+Type = Switch
+Bandwidth = 72
+
+[Network.si-net-l1-l2.Node.s4]
+Type = Switch
+Bandwidth = 72
+
+[Network.si-net-l1-l2.Node.s5]
+Type = Switch
+Bandwidth = 72
+
+[Network.si-net-l1-l2.Node.s6]
+Type = Switch
+Bandwidth = 72
+
+[Network.si-net-l1-l2.Node.s7]
+Type = Switch
+Bandwidth = 72
+
+;-----------------------------------------------------Links
+[Network.si-net-l1-l2.Link.l2n0-X0]
+Type = Unidirectional
+Dest = X0
+Source = l2n0
+
+[Network.si-net-l1-l2.Link.l1s0-X0]
+Type = Unidirectional
+Dest = l1s0
+Source = X0
+
+[Network.si-net-l1-l2.Link.l1v0-X0]
+Type = Unidirectional
+Dest = l1v0
+Source = X0
+
+[Network.si-net-l1-l2.Link.l1v1-X0]
+Type = Unidirectional
+Dest = l1v1
+Source = X0
+
+[Network.si-net-l1-l2.Link.l1v2-X0]
+Type = Unidirectional
+Dest = l1v2
+Source = X0
+
+[Network.si-net-l1-l2.Link.l1v3-X0]
+Type = Unidirectional
+Dest = l1v3
+Source = X0
+
+[Network.si-net-l1-l2.Link.l2n1-X1]
+Type = Unidirectional
+Dest = X1
+Source = l2n1
+
+[Network.si-net-l1-l2.Link.l1s1-X1]
+Type = Unidirectional
+Dest = l1s1
+Source = X1
+
+[Network.si-net-l1-l2.Link.l1v4-X1]
+Type = Unidirectional
+Dest = l1v4
+Source = X1
+
+[Network.si-net-l1-l2.Link.l1v5-X1]
+Type = Unidirectional
+Dest = l1v5
+Source = X1
+
+[Network.si-net-l1-l2.Link.l1v6-X1]
+Type = Unidirectional
+Dest = l1v6
+Source = X1
+
+[Network.si-net-l1-l2.Link.l1v7-X1]
+Type = Unidirectional
+Dest = l1v7
+Source = X1
+
+[Network.si-net-l1-l2.Link.l1s2-X2]
+Type = Unidirectional
+Dest = l1s2
+Source = X2
+
+[Network.si-net-l1-l2.Link.l1v8-X2]
+Type = Unidirectional
+Dest = l1v8
+Source = X2
+
+[Network.si-net-l1-l2.Link.l1v9-X2]
+Type = Unidirectional
+Dest = l1v9
+Source = X2
+
+[Network.si-net-l1-l2.Link.l1v10-X2]
+Type = Unidirectional
+Dest = l1v10
+Source = X2
+
+[Network.si-net-l1-l2.Link.l1v11-X2]
+Type = Unidirectional
+Dest = l1v11
+Source = X2
+
+[Network.si-net-l1-l2.Link.l2n2-X3]
+Type = Unidirectional
+Dest = X3
+Source = l2n2
+
+[Network.si-net-l1-l2.Link.l1s3-X3]
+Type = Unidirectional
+Dest = l1s3
+Source = X3
+
+[Network.si-net-l1-l2.Link.l1v12-X3]
+Type = Unidirectional
+Dest = l1v12
+Source = X3
+
+[Network.si-net-l1-l2.Link.l1v13-X3]
+Type = Unidirectional
+Dest = l1v13
+Source = X3
+
+[Network.si-net-l1-l2.Link.l1v14-X3]
+Type = Unidirectional
+Dest = l1v14
+Source = X3
+
+[Network.si-net-l1-l2.Link.l1v15-X3]
+Type = Unidirectional
+Dest = l1v15
+Source = X3
+
+[Network.si-net-l1-l2.Link.l2n3-X4]
+Type = Unidirectional
+Dest = X4
+Source = l2n3
+
+[Network.si-net-l1-l2.Link.l1s4-X4]
+Type = Unidirectional
+Dest = l1s4
+Source = X4
+
+[Network.si-net-l1-l2.Link.l1v16-X4]
+Type = Unidirectional
+Dest = l1v16
+Source = X4
+
+[Network.si-net-l1-l2.Link.l1v17-X4]
+Type = Unidirectional
+Dest = l1v17
+Source = X4
+
+[Network.si-net-l1-l2.Link.l1v18-X4]
+Type = Unidirectional
+Dest = l1v18
+Source = X4
+
+[Network.si-net-l1-l2.Link.l1v19-X4]
+Type = Unidirectional
+Dest = l1v19
+Source = X4
+
+[Network.si-net-l1-l2.Link.l1s5-X5]
+Type = Unidirectional
+Dest = l1s5
+Source = X5
+
+[Network.si-net-l1-l2.Link.l1v20-X5]
+Type = Unidirectional
+Dest = l1v20
+Source = X5
+
+[Network.si-net-l1-l2.Link.l1v21-X5]
+Type = Unidirectional
+Dest = l1v21
+Source = X5
+
+[Network.si-net-l1-l2.Link.l1v22-X5]
+Type = Unidirectional
+Dest = l1v22
+Source = X5
+
+[Network.si-net-l1-l2.Link.l1v23-X5]
+Type = Unidirectional
+Dest = l1v23
+Source = X5
+
+[Network.si-net-l1-l2.Link.l2n4-X6]
+Type = Bidirectional
+Dest = X6
+Source = l2n4
+
+[Network.si-net-l1-l2.Link.l1s6-X6]
+Type = Unidirectional
+Dest = l1s6
+Source = X6
+
+[Network.si-net-l1-l2.Link.l1v24-X6]
+Type = Unidirectional
+Dest = l1v24
+Source = X6
+
+[Network.si-net-l1-l2.Link.l1v25-X6]
+Type = Unidirectional
+Dest = l1v25
+Source = X6
+
+[Network.si-net-l1-l2.Link.l1v26-X6]
+Type = Unidirectional
+Dest = l1v26
+Source = X6
+
+[Network.si-net-l1-l2.Link.l1v27-X6]
+Type = Unidirectional
+Dest = l1v27
+Source = X6
+
+[Network.si-net-l1-l2.Link.l2n5-X7]
+Type = Unidirectional
+Dest = X7
+Source = l2n5
+
+[Network.si-net-l1-l2.Link.l1s7-X7]
+Type = Unidirectional
+Dest = l1s7
+Source = X7
+
+[Network.si-net-l1-l2.Link.l1v28-X7]
+Type = Unidirectional
+Dest = l1v28
+Source = X7
+
+[Network.si-net-l1-l2.Link.l1v29-X7]
+Type = Unidirectional
+Dest = l1v29
+Source = X7
+
+[Network.si-net-l1-l2.Link.l1v30-X7]
+Type = Unidirectional
+Dest = l1v30
+Source = X7
+
+[Network.si-net-l1-l2.Link.l1v31-X7]
+Type = Unidirectional
+Dest = l1v31
+Source = X7
+;===========================================Second Mesh
+[Network.si-net-l1-l2.Link.l2n0-s0]
+Type = Unidirectional
+Source = s0
+Dest = l2n0
+
+[Network.si-net-l1-l2.Link.l1s0-s0]
+Type = Unidirectional
+Source = l1s0
+Dest = s0
+
+[Network.si-net-l1-l2.Link.l1v0-s0]
+Type = Unidirectional
+Source = l1v0
+Dest = s0
+
+[Network.si-net-l1-l2.Link.l1v1-s0]
+Type = Unidirectional
+Source = l1v1
+Dest = s0
+
+[Network.si-net-l1-l2.Link.l1v2-s0]
+Type = Unidirectional
+Source = l1v2
+Dest = s0
+
+[Network.si-net-l1-l2.Link.l1v3-s0]
+Type = Unidirectional
+Source = l1v3
+Dest = s0
+
+[Network.si-net-l1-l2.Link.l2n1-s1]
+Type = Unidirectional
+Source = s1
+Dest = l2n1
+
+[Network.si-net-l1-l2.Link.l1s1-s1]
+Type = Unidirectional
+Source = l1s1
+Dest = s1
+
+[Network.si-net-l1-l2.Link.l1v4-s1]
+Type = Unidirectional
+Source = l1v4
+Dest = s1
+
+[Network.si-net-l1-l2.Link.l1v5-s1]
+Type = Unidirectional
+Source = l1v5
+Dest = s1
+
+[Network.si-net-l1-l2.Link.l1v6-s1]
+Type = Unidirectional
+Source = l1v6
+Dest = s1
+
+[Network.si-net-l1-l2.Link.l1v7-s1]
+Type = Unidirectional
+Source = l1v7
+Dest = s1
+
+[Network.si-net-l1-l2.Link.l1s2-s2]
+Type = Unidirectional
+Source = l1s2
+Dest = s2
+
+[Network.si-net-l1-l2.Link.l1v8-s2]
+Type = Unidirectional
+Source = l1v8
+Dest = s2
+
+[Network.si-net-l1-l2.Link.l1v9-s2]
+Type = Unidirectional
+Source = l1v9
+Dest = s2
+
+[Network.si-net-l1-l2.Link.l1v10-s2]
+Type = Unidirectional
+Source = l1v10
+Dest = s2
+
+[Network.si-net-l1-l2.Link.l1v11-s2]
+Type = Unidirectional
+Source = l1v11
+Dest = s2
+
+[Network.si-net-l1-l2.Link.l2n2-s3]
+Type = Unidirectional
+Source = s3
+Dest = l2n2
+
+[Network.si-net-l1-l2.Link.l1s3-s3]
+Type = Unidirectional
+Source = l1s3
+Dest = s3
+
+[Network.si-net-l1-l2.Link.l1v12-s3]
+Type = Unidirectional
+Source = l1v12
+Dest = s3
+
+[Network.si-net-l1-l2.Link.l1v13-s3]
+Type = Unidirectional
+Source = l1v13
+Dest = s3
+
+[Network.si-net-l1-l2.Link.l1v14-s3]
+Type = Unidirectional
+Source = l1v14
+Dest = s3
+
+[Network.si-net-l1-l2.Link.l1v15-s3]
+Type = Unidirectional
+Source = l1v15
+Dest = s3
+
+[Network.si-net-l1-l2.Link.l2n3-s4]
+Type = Unidirectional
+Source = s4
+Dest = l2n3
+
+[Network.si-net-l1-l2.Link.l1s4-s4]
+Type = Unidirectional
+Source = l1s4
+Dest = s4
+
+[Network.si-net-l1-l2.Link.l1v16-s4]
+Type = Unidirectional
+Source = l1v16
+Dest = s4
+
+[Network.si-net-l1-l2.Link.l1v17-s4]
+Type = Unidirectional
+Source = l1v17
+Dest = s4
+
+[Network.si-net-l1-l2.Link.l1v18-s4]
+Type = Unidirectional
+Source = l1v18
+Dest = s4
+
+[Network.si-net-l1-l2.Link.l1v19-s4]
+Type = Unidirectional
+Source = l1v19
+Dest = s4
+
+[Network.si-net-l1-l2.Link.l1s5-s5]
+Type = Unidirectional
+Source = l1s5
+Dest = s5
+
+[Network.si-net-l1-l2.Link.l1v20-s5]
+Type = Unidirectional
+Source = l1v20
+Dest = s5
+
+[Network.si-net-l1-l2.Link.l1v21-s5]
+Type = Unidirectional
+Source = l1v21
+Dest = s5
+
+[Network.si-net-l1-l2.Link.l1v22-s5]
+Type = Unidirectional
+Source = l1v22
+Dest = s5
+
+[Network.si-net-l1-l2.Link.l1v23-s5]
+Type = Unidirectional
+Source = l1v23
+Dest = s5
+
+[Network.si-net-l1-l2.Link.l2n4-s6]
+Type = Bidirectional
+Source = s6
+Dest = l2n4
+
+[Network.si-net-l1-l2.Link.l1s6-s6]
+Type = Unidirectional
+Source = l1s6
+Dest = s6
+
+[Network.si-net-l1-l2.Link.l1v24-s6]
+Type = Unidirectional
+Source = l1v24
+Dest = s6
+
+[Network.si-net-l1-l2.Link.l1v25-s6]
+Type = Unidirectional
+Source = l1v25
+Dest = s6
+
+[Network.si-net-l1-l2.Link.l1v26-s6]
+Type = Unidirectional
+Source = l1v26
+Dest = s6
+
+[Network.si-net-l1-l2.Link.l1v27-s6]
+Type = Unidirectional
+Source = l1v27
+Dest = s6
+
+[Network.si-net-l1-l2.Link.l2n5-s7]
+Type = Unidirectional
+Source = s7
+Dest = l2n5
+
+[Network.si-net-l1-l2.Link.l1s7-s7]
+Type = Unidirectional
+Source = l1s7
+Dest = s7
+
+[Network.si-net-l1-l2.Link.l1v28-s7]
+Type = Unidirectional
+Source = l1v28
+Dest = s7
+
+[Network.si-net-l1-l2.Link.l1v29-s7]
+Type = Unidirectional
+Source = l1v29
+Dest = s7
+
+[Network.si-net-l1-l2.Link.l1v30-s7]
+Type = Unidirectional
+Source = l1v30
+Dest = s7
+
+[Network.si-net-l1-l2.Link.l1v31-s7]
+Type = Unidirectional
+Source = l1v31
+Dest = s7
+
+;----------------------------------------------Mesh Links
+
+[Network.si-net-l1-l2.Link.X0-X1]
+Type = Bidirectional
+Source = X0
+Dest = X1
+
+[Network.si-net-l1-l2.Link.X0-X4]
+Type = Bidirectional
+Source = X0
+Dest = X4
+
+[Network.si-net-l1-l2.Link.X1-X2]
+Type = Bidirectional
+Source = X1
+Dest = X2
+
+[Network.si-net-l1-l2.Link.X1-X5]
+Type = Bidirectional
+Source = X1
+Dest = X5
+
+[Network.si-net-l1-l2.Link.X2-X3]
+Type = Bidirectional
+Source = X2
+Dest = X3
+
+[Network.si-net-l1-l2.Link.X2-X6]
+Type = Bidirectional
+Source = X2
+Dest = X6
+
+[Network.si-net-l1-l2.Link.X3-X7]
+Type = Bidirectional
+Source = X3
+Dest = X7
+
+[Network.si-net-l1-l2.Link.X4-X5]
+Type = Bidirectional
+Source = X4
+Dest = X5
+
+[Network.si-net-l1-l2.Link.X5-X6]
+Type = Bidirectional
+Source = X5
+Dest = X6
+
+[Network.si-net-l1-l2.Link.X6-X7]
+Type = Bidirectional
+Source = X6
+Dest = X7
+;------------------------------------------------Other Mesh
+[Network.si-net-l1-l2.Link.s0-s1]
+Type = Bidirectional
+Source = s0
+Dest = s1
+
+[Network.si-net-l1-l2.Link.s0-s4]
+Type = Bidirectional
+Source = s0
+Dest = s4
+
+[Network.si-net-l1-l2.Link.s1-s2]
+Type = Bidirectional
+Source = s1
+Dest = s2
+
+[Network.si-net-l1-l2.Link.s1-s5]
+Type = Bidirectional
+Source = s1
+Dest = s5
+
+[Network.si-net-l1-l2.Link.s2-s3]
+Type = Bidirectional
+Source = s2
+Dest = s3
+
+[Network.si-net-l1-l2.Link.s2-s6]
+Type = Bidirectional
+Source = s2
+Dest = s6
+
+[Network.si-net-l1-l2.Link.s3-s7]
+Type = Bidirectional
+Source = s3
+Dest = s7
+
+[Network.si-net-l1-l2.Link.s4-s5]
+Type = Bidirectional
+Source = s4
+Dest = s5
+
+[Network.si-net-l1-l2.Link.s5-s6]
+Type = Bidirectional
+Source = s5
+Dest = s6
+
+[Network.si-net-l1-l2.Link.s6-s7]
+Type = Bidirectional
+Source = s6
+Dest = s7
+
+;-----------------------------------------------------Routes
+[Network.si-net-l1-l2.Routes]
+;-----switch s0 inter-connections
+l1v0.to.l2n0 = s0 
+l2n0.to.l1v0 = X0 
+l1v1.to.l2n0 = s0 
+l2n0.to.l1v1 = X0 
+l1v2.to.l2n0 = s0 
+l2n0.to.l1v2 = X0 
+l1v3.to.l2n0 = s0 
+l2n0.to.l1v3 = X0 
+l2n0.to.l1s0 = X0 
+l1s0.to.l2n0 = s0 
+;--------connecting s0 internodes to s0 internodes
+;--------connecting s0 internodes to s1 internodes
+l2n0.to.l1v4 = X0
+X0.to.l1v4 = X1
+l2n0.to.l1v5 = X0
+X0.to.l1v5 = X1
+l2n0.to.l1v6 = X0
+X0.to.l1v6 = X1
+l2n0.to.l1v7 = X0
+X0.to.l1v7 = X1
+l1v0.to.l2n1 = s0
+l1v1.to.l2n1 = s0
+l1v2.to.l2n1 = s0
+l1v3.to.l2n1 = s0
+l1s0.to.l2n1 = s0
+l2n0.to.l1s1 = X0
+X0.to.l1s1 = X1
+s0.to.l2n1 = s1
+;--------connecting s0 internodes to s2 internodes
+l2n0.to.l1v8 = X0
+X0.to.l1v8 = X1
+l2n0.to.l1v9 = X0
+X0.to.l1v9 = X1
+l2n0.to.l1v10 = X0
+X0.to.l1v10 = X1
+l2n0.to.l1v11 = X0
+X0.to.l1v11 = X1
+l2n0.to.l1s2 = X0
+X0.to.l1s2 = X1
+;--------connecting s0 internodes to s3 internodes
+l2n0.to.l1v12 = X0
+X0.to.l1v12 = X1
+l2n0.to.l1v13 = X0
+X0.to.l1v13 = X1
+l2n0.to.l1v14 = X0
+X0.to.l1v14 = X1
+l2n0.to.l1v15 = X0
+X0.to.l1v15 = X1
+l1v0.to.l2n2 = s0
+l1v1.to.l2n2 = s0
+l1v2.to.l2n2 = s0
+l1v3.to.l2n2 = s0
+l1s0.to.l2n2 = s0
+l2n0.to.l1s3 = X0
+X0.to.l1s3 = X1
+s0.to.l2n2 = s1
+;--------connecting s0 internodes to s4 internodes
+l2n0.to.l1v16 = X0
+X0.to.l1v16 = X4
+l2n0.to.l1v17 = X0
+X0.to.l1v17 = X4
+l2n0.to.l1v18 = X0
+X0.to.l1v18 = X4
+l2n0.to.l1v19 = X0
+X0.to.l1v19 = X4
+l1v0.to.l2n3 = s0
+l1v1.to.l2n3 = s0
+l1v2.to.l2n3 = s0
+l1v3.to.l2n3 = s0
+l1s0.to.l2n3 = s0
+l2n0.to.l1s4 = X0
+X0.to.l1s4 = X4
+s0.to.l2n3 = s4
+;--------connecting s0 internodes to s5 internodes
+l2n0.to.l1v20 = X0
+X0.to.l1v20 = X1
+l2n0.to.l1v21 = X0
+X0.to.l1v21 = X1
+l2n0.to.l1v22 = X0
+X0.to.l1v22 = X1
+l2n0.to.l1v23 = X0
+X0.to.l1v23 = X1
+l2n0.to.l1s5 = X0
+X0.to.l1s5 = X1
+;--------connecting s0 internodes to s6 internodes
+l2n0.to.l1v24 = X0
+X0.to.l1v24 = X1
+l2n0.to.l1v25 = X0
+X0.to.l1v25 = X1
+l2n0.to.l1v26 = X0
+X0.to.l1v26 = X1
+l2n0.to.l1v27 = X0
+X0.to.l1v27 = X1
+l1v0.to.l2n4 = s0
+l1v1.to.l2n4 = s0
+l1v2.to.l2n4 = s0
+l1v3.to.l2n4 = s0
+l1s0.to.l2n4 = s0
+l2n0.to.l1s6 = X0
+X0.to.l1s6 = X1
+s0.to.l2n4 = s1
+;--------connecting s0 internodes to s7 internodes
+l2n0.to.l1v28 = X0
+X0.to.l1v28 = X1
+l2n0.to.l1v29 = X0
+X0.to.l1v29 = X1
+l2n0.to.l1v30 = X0
+X0.to.l1v30 = X1
+l2n0.to.l1v31 = X0
+X0.to.l1v31 = X1
+l1v0.to.l2n5 = s0
+l1v1.to.l2n5 = s0
+l1v2.to.l2n5 = s0
+l1v3.to.l2n5 = s0
+l1s0.to.l2n5 = s0
+l2n0.to.l1s7 = X0
+X0.to.l1s7 = X1
+s0.to.l2n5 = s1
+;-----switch s1 inter-connections
+l1v4.to.l2n1 = s1 
+l2n1.to.l1v4 = X1 
+l1v5.to.l2n1 = s1 
+l2n1.to.l1v5 = X1 
+l1v6.to.l2n1 = s1 
+l2n1.to.l1v6 = X1 
+l1v7.to.l2n1 = s1 
+l2n1.to.l1v7 = X1 
+l2n1.to.l1s1 = X1 
+l1s1.to.l2n1 = s1 
+;--------connecting s1 internodes to s0 internodes
+l2n1.to.l1v0 = X1
+X1.to.l1v0 = X0
+l2n1.to.l1v1 = X1
+X1.to.l1v1 = X0
+l2n1.to.l1v2 = X1
+X1.to.l1v2 = X0
+l2n1.to.l1v3 = X1
+X1.to.l1v3 = X0
+l1v4.to.l2n0 = s1
+l1v5.to.l2n0 = s1
+l1v6.to.l2n0 = s1
+l1v7.to.l2n0 = s1
+l1s1.to.l2n0 = s1
+l2n1.to.l1s0 = X1
+X1.to.l1s0 = X0
+s1.to.l2n0 = s0
+;--------connecting s1 internodes to s1 internodes
+;--------connecting s1 internodes to s2 internodes
+l2n1.to.l1v8 = X1
+X1.to.l1v8 = X2
+l2n1.to.l1v9 = X1
+X1.to.l1v9 = X2
+l2n1.to.l1v10 = X1
+X1.to.l1v10 = X2
+l2n1.to.l1v11 = X1
+X1.to.l1v11 = X2
+l2n1.to.l1s2 = X1
+X1.to.l1s2 = X2
+;--------connecting s1 internodes to s3 internodes
+l2n1.to.l1v12 = X1
+X1.to.l1v12 = X2
+l2n1.to.l1v13 = X1
+X1.to.l1v13 = X2
+l2n1.to.l1v14 = X1
+X1.to.l1v14 = X2
+l2n1.to.l1v15 = X1
+X1.to.l1v15 = X2
+l1v4.to.l2n2 = s1
+l1v5.to.l2n2 = s1
+l1v6.to.l2n2 = s1
+l1v7.to.l2n2 = s1
+l1s1.to.l2n2 = s1
+l2n1.to.l1s3 = X1
+X1.to.l1s3 = X2
+s1.to.l2n2 = s2
+;--------connecting s1 internodes to s4 internodes
+l2n1.to.l1v16 = X1
+X1.to.l1v16 = X0
+l2n1.to.l1v17 = X1
+X1.to.l1v17 = X0
+l2n1.to.l1v18 = X1
+X1.to.l1v18 = X0
+l2n1.to.l1v19 = X1
+X1.to.l1v19 = X0
+l1v4.to.l2n3 = s1
+l1v5.to.l2n3 = s1
+l1v6.to.l2n3 = s1
+l1v7.to.l2n3 = s1
+l1s1.to.l2n3 = s1
+l2n1.to.l1s4 = X1
+X1.to.l1s4 = X0
+s1.to.l2n3 = s0
+;--------connecting s1 internodes to s5 internodes
+l2n1.to.l1v20 = X1
+X1.to.l1v20 = X5
+l2n1.to.l1v21 = X1
+X1.to.l1v21 = X5
+l2n1.to.l1v22 = X1
+X1.to.l1v22 = X5
+l2n1.to.l1v23 = X1
+X1.to.l1v23 = X5
+l2n1.to.l1s5 = X1
+X1.to.l1s5 = X5
+;--------connecting s1 internodes to s6 internodes
+l2n1.to.l1v24 = X1
+X1.to.l1v24 = X2
+l2n1.to.l1v25 = X1
+X1.to.l1v25 = X2
+l2n1.to.l1v26 = X1
+X1.to.l1v26 = X2
+l2n1.to.l1v27 = X1
+X1.to.l1v27 = X2
+l1v4.to.l2n4 = s1
+l1v5.to.l2n4 = s1
+l1v6.to.l2n4 = s1
+l1v7.to.l2n4 = s1
+l1s1.to.l2n4 = s1
+l2n1.to.l1s6 = X1
+X1.to.l1s6 = X2
+s1.to.l2n4 = s2
+;--------connecting s1 internodes to s7 internodes
+l2n1.to.l1v28 = X1
+X1.to.l1v28 = X2
+l2n1.to.l1v29 = X1
+X1.to.l1v29 = X2
+l2n1.to.l1v30 = X1
+X1.to.l1v30 = X2
+l2n1.to.l1v31 = X1
+X1.to.l1v31 = X2
+l1v4.to.l2n5 = s1
+l1v5.to.l2n5 = s1
+l1v6.to.l2n5 = s1
+l1v7.to.l2n5 = s1
+l1s1.to.l2n5 = s1
+l2n1.to.l1s7 = X1
+X1.to.l1s7 = X2
+s1.to.l2n5 = s2
+;-----switch s2 inter-connections
+;--------connecting s2 internodes to s0 internodes
+X2.to.l1v0 = X1
+X2.to.l1v1 = X1
+X2.to.l1v2 = X1
+X2.to.l1v3 = X1
+l1v8.to.l2n0 = s2
+l1v9.to.l2n0 = s2
+l1v10.to.l2n0 = s2
+l1v11.to.l2n0 = s2
+l1s2.to.l2n0 = s2
+X2.to.l1s0 = X1
+s2.to.l2n0 = s1
+;--------connecting s2 internodes to s1 internodes
+X2.to.l1v4 = X1
+X2.to.l1v5 = X1
+X2.to.l1v6 = X1
+X2.to.l1v7 = X1
+l1v8.to.l2n1 = s2
+l1v9.to.l2n1 = s2
+l1v10.to.l2n1 = s2
+l1v11.to.l2n1 = s2
+l1s2.to.l2n1 = s2
+X2.to.l1s1 = X1
+s2.to.l2n1 = s1
+;--------connecting s2 internodes to s2 internodes
+;--------connecting s2 internodes to s3 internodes
+X2.to.l1v12 = X3
+X2.to.l1v13 = X3
+X2.to.l1v14 = X3
+X2.to.l1v15 = X3
+l1v8.to.l2n2 = s2
+l1v9.to.l2n2 = s2
+l1v10.to.l2n2 = s2
+l1v11.to.l2n2 = s2
+l1s2.to.l2n2 = s2
+X2.to.l1s3 = X3
+s2.to.l2n2 = s3
+;--------connecting s2 internodes to s4 internodes
+X2.to.l1v16 = X1
+X2.to.l1v17 = X1
+X2.to.l1v18 = X1
+X2.to.l1v19 = X1
+l1v8.to.l2n3 = s2
+l1v9.to.l2n3 = s2
+l1v10.to.l2n3 = s2
+l1v11.to.l2n3 = s2
+l1s2.to.l2n3 = s2
+X2.to.l1s4 = X1
+s2.to.l2n3 = s1
+;--------connecting s2 internodes to s5 internodes
+X2.to.l1v20 = X1
+X2.to.l1v21 = X1
+X2.to.l1v22 = X1
+X2.to.l1v23 = X1
+X2.to.l1s5 = X1
+;--------connecting s2 internodes to s6 internodes
+X2.to.l1v24 = X6
+X2.to.l1v25 = X6
+X2.to.l1v26 = X6
+X2.to.l1v27 = X6
+l1v8.to.l2n4 = s2
+l1v9.to.l2n4 = s2
+l1v10.to.l2n4 = s2
+l1v11.to.l2n4 = s2
+l1s2.to.l2n4 = s2
+X2.to.l1s6 = X6
+s2.to.l2n4 = s6
+;--------connecting s2 internodes to s7 internodes
+X2.to.l1v28 = X3
+X2.to.l1v29 = X3
+X2.to.l1v30 = X3
+X2.to.l1v31 = X3
+l1v8.to.l2n5 = s2
+l1v9.to.l2n5 = s2
+l1v10.to.l2n5 = s2
+l1v11.to.l2n5 = s2
+l1s2.to.l2n5 = s2
+X2.to.l1s7 = X3
+s2.to.l2n5 = s3
+;-----switch s3 inter-connections
+l1v12.to.l2n2 = s3 
+l2n2.to.l1v12 = X3 
+l1v13.to.l2n2 = s3 
+l2n2.to.l1v13 = X3 
+l1v14.to.l2n2 = s3 
+l2n2.to.l1v14 = X3 
+l1v15.to.l2n2 = s3 
+l2n2.to.l1v15 = X3 
+l2n2.to.l1s3 = X3 
+l1s3.to.l2n2 = s3 
+;--------connecting s3 internodes to s0 internodes
+l2n2.to.l1v0 = X3
+X3.to.l1v0 = X2
+l2n2.to.l1v1 = X3
+X3.to.l1v1 = X2
+l2n2.to.l1v2 = X3
+X3.to.l1v2 = X2
+l2n2.to.l1v3 = X3
+X3.to.l1v3 = X2
+l1v12.to.l2n0 = s3
+l1v13.to.l2n0 = s3
+l1v14.to.l2n0 = s3
+l1v15.to.l2n0 = s3
+l1s3.to.l2n0 = s3
+l2n2.to.l1s0 = X3
+X3.to.l1s0 = X2
+s3.to.l2n0 = s2
+;--------connecting s3 internodes to s1 internodes
+l2n2.to.l1v4 = X3
+X3.to.l1v4 = X2
+l2n2.to.l1v5 = X3
+X3.to.l1v5 = X2
+l2n2.to.l1v6 = X3
+X3.to.l1v6 = X2
+l2n2.to.l1v7 = X3
+X3.to.l1v7 = X2
+l1v12.to.l2n1 = s3
+l1v13.to.l2n1 = s3
+l1v14.to.l2n1 = s3
+l1v15.to.l2n1 = s3
+l1s3.to.l2n1 = s3
+l2n2.to.l1s1 = X3
+X3.to.l1s1 = X2
+s3.to.l2n1 = s2
+;--------connecting s3 internodes to s2 internodes
+l2n2.to.l1v8 = X3
+X3.to.l1v8 = X2
+l2n2.to.l1v9 = X3
+X3.to.l1v9 = X2
+l2n2.to.l1v10 = X3
+X3.to.l1v10 = X2
+l2n2.to.l1v11 = X3
+X3.to.l1v11 = X2
+l2n2.to.l1s2 = X3
+X3.to.l1s2 = X2
+;--------connecting s3 internodes to s3 internodes
+;--------connecting s3 internodes to s4 internodes
+l2n2.to.l1v16 = X3
+X3.to.l1v16 = X2
+l2n2.to.l1v17 = X3
+X3.to.l1v17 = X2
+l2n2.to.l1v18 = X3
+X3.to.l1v18 = X2
+l2n2.to.l1v19 = X3
+X3.to.l1v19 = X2
+l1v12.to.l2n3 = s3
+l1v13.to.l2n3 = s3
+l1v14.to.l2n3 = s3
+l1v15.to.l2n3 = s3
+l1s3.to.l2n3 = s3
+l2n2.to.l1s4 = X3
+X3.to.l1s4 = X2
+s3.to.l2n3 = s2
+;--------connecting s3 internodes to s5 internodes
+l2n2.to.l1v20 = X3
+X3.to.l1v20 = X2
+l2n2.to.l1v21 = X3
+X3.to.l1v21 = X2
+l2n2.to.l1v22 = X3
+X3.to.l1v22 = X2
+l2n2.to.l1v23 = X3
+X3.to.l1v23 = X2
+l2n2.to.l1s5 = X3
+X3.to.l1s5 = X2
+;--------connecting s3 internodes to s6 internodes
+l2n2.to.l1v24 = X3
+X3.to.l1v24 = X2
+l2n2.to.l1v25 = X3
+X3.to.l1v25 = X2
+l2n2.to.l1v26 = X3
+X3.to.l1v26 = X2
+l2n2.to.l1v27 = X3
+X3.to.l1v27 = X2
+l1v12.to.l2n4 = s3
+l1v13.to.l2n4 = s3
+l1v14.to.l2n4 = s3
+l1v15.to.l2n4 = s3
+l1s3.to.l2n4 = s3
+l2n2.to.l1s6 = X3
+X3.to.l1s6 = X2
+s3.to.l2n4 = s2
+;--------connecting s3 internodes to s7 internodes
+l2n2.to.l1v28 = X3
+X3.to.l1v28 = X7
+l2n2.to.l1v29 = X3
+X3.to.l1v29 = X7
+l2n2.to.l1v30 = X3
+X3.to.l1v30 = X7
+l2n2.to.l1v31 = X3
+X3.to.l1v31 = X7
+l1v12.to.l2n5 = s3
+l1v13.to.l2n5 = s3
+l1v14.to.l2n5 = s3
+l1v15.to.l2n5 = s3
+l1s3.to.l2n5 = s3
+l2n2.to.l1s7 = X3
+X3.to.l1s7 = X7
+s3.to.l2n5 = s7
+;-----switch s4 inter-connections
+l1v16.to.l2n3 = s4 
+l2n3.to.l1v16 = X4 
+l1v17.to.l2n3 = s4 
+l2n3.to.l1v17 = X4 
+l1v18.to.l2n3 = s4 
+l2n3.to.l1v18 = X4 
+l1v19.to.l2n3 = s4 
+l2n3.to.l1v19 = X4 
+l2n3.to.l1s4 = X4 
+l1s4.to.l2n3 = s4 
+;--------connecting s4 internodes to s0 internodes
+l2n3.to.l1v0 = X4
+X4.to.l1v0 = X0
+l2n3.to.l1v1 = X4
+X4.to.l1v1 = X0
+l2n3.to.l1v2 = X4
+X4.to.l1v2 = X0
+l2n3.to.l1v3 = X4
+X4.to.l1v3 = X0
+l1v16.to.l2n0 = s4
+l1v17.to.l2n0 = s4
+l1v18.to.l2n0 = s4
+l1v19.to.l2n0 = s4
+l1s4.to.l2n0 = s4
+l2n3.to.l1s0 = X4
+X4.to.l1s0 = X0
+s4.to.l2n0 = s0
+;--------connecting s4 internodes to s1 internodes
+l2n3.to.l1v4 = X4
+X4.to.l1v4 = X5
+l2n3.to.l1v5 = X4
+X4.to.l1v5 = X5
+l2n3.to.l1v6 = X4
+X4.to.l1v6 = X5
+l2n3.to.l1v7 = X4
+X4.to.l1v7 = X5
+l1v16.to.l2n1 = s4
+l1v17.to.l2n1 = s4
+l1v18.to.l2n1 = s4
+l1v19.to.l2n1 = s4
+l1s4.to.l2n1 = s4
+l2n3.to.l1s1 = X4
+X4.to.l1s1 = X5
+s4.to.l2n1 = s5
+;--------connecting s4 internodes to s2 internodes
+l2n3.to.l1v8 = X4
+X4.to.l1v8 = X5
+l2n3.to.l1v9 = X4
+X4.to.l1v9 = X5
+l2n3.to.l1v10 = X4
+X4.to.l1v10 = X5
+l2n3.to.l1v11 = X4
+X4.to.l1v11 = X5
+l2n3.to.l1s2 = X4
+X4.to.l1s2 = X5
+;--------connecting s4 internodes to s3 internodes
+l2n3.to.l1v12 = X4
+X4.to.l1v12 = X5
+l2n3.to.l1v13 = X4
+X4.to.l1v13 = X5
+l2n3.to.l1v14 = X4
+X4.to.l1v14 = X5
+l2n3.to.l1v15 = X4
+X4.to.l1v15 = X5
+l1v16.to.l2n2 = s4
+l1v17.to.l2n2 = s4
+l1v18.to.l2n2 = s4
+l1v19.to.l2n2 = s4
+l1s4.to.l2n2 = s4
+l2n3.to.l1s3 = X4
+X4.to.l1s3 = X5
+s4.to.l2n2 = s5
+;--------connecting s4 internodes to s4 internodes
+;--------connecting s4 internodes to s5 internodes
+l2n3.to.l1v20 = X4
+X4.to.l1v20 = X5
+l2n3.to.l1v21 = X4
+X4.to.l1v21 = X5
+l2n3.to.l1v22 = X4
+X4.to.l1v22 = X5
+l2n3.to.l1v23 = X4
+X4.to.l1v23 = X5
+l2n3.to.l1s5 = X4
+X4.to.l1s5 = X5
+;--------connecting s4 internodes to s6 internodes
+l2n3.to.l1v24 = X4
+X4.to.l1v24 = X5
+l2n3.to.l1v25 = X4
+X4.to.l1v25 = X5
+l2n3.to.l1v26 = X4
+X4.to.l1v26 = X5
+l2n3.to.l1v27 = X4
+X4.to.l1v27 = X5
+l1v16.to.l2n4 = s4
+l1v17.to.l2n4 = s4
+l1v18.to.l2n4 = s4
+l1v19.to.l2n4 = s4
+l1s4.to.l2n4 = s4
+l2n3.to.l1s6 = X4
+X4.to.l1s6 = X5
+s4.to.l2n4 = s5
+;--------connecting s4 internodes to s7 internodes
+l2n3.to.l1v28 = X4
+X4.to.l1v28 = X5
+l2n3.to.l1v29 = X4
+X4.to.l1v29 = X5
+l2n3.to.l1v30 = X4
+X4.to.l1v30 = X5
+l2n3.to.l1v31 = X4
+X4.to.l1v31 = X5
+l1v16.to.l2n5 = s4
+l1v17.to.l2n5 = s4
+l1v18.to.l2n5 = s4
+l1v19.to.l2n5 = s4
+l1s4.to.l2n5 = s4
+l2n3.to.l1s7 = X4
+X4.to.l1s7 = X5
+s4.to.l2n5 = s5
+;-----switch s5 inter-connections
+;--------connecting s5 internodes to s0 internodes
+X5.to.l1v0 = X4
+X5.to.l1v1 = X4
+X5.to.l1v2 = X4
+X5.to.l1v3 = X4
+l1v20.to.l2n0 = s5
+l1v21.to.l2n0 = s5
+l1v22.to.l2n0 = s5
+l1v23.to.l2n0 = s5
+l1s5.to.l2n0 = s5
+X5.to.l1s0 = X4
+s5.to.l2n0 = s4
+;--------connecting s5 internodes to s1 internodes
+X5.to.l1v4 = X1
+X5.to.l1v5 = X1
+X5.to.l1v6 = X1
+X5.to.l1v7 = X1
+l1v20.to.l2n1 = s5
+l1v21.to.l2n1 = s5
+l1v22.to.l2n1 = s5
+l1v23.to.l2n1 = s5
+l1s5.to.l2n1 = s5
+X5.to.l1s1 = X1
+s5.to.l2n1 = s1
+;--------connecting s5 internodes to s2 internodes
+X5.to.l1v8 = X6
+X5.to.l1v9 = X6
+X5.to.l1v10 = X6
+X5.to.l1v11 = X6
+X5.to.l1s2 = X6
+;--------connecting s5 internodes to s3 internodes
+X5.to.l1v12 = X6
+X5.to.l1v13 = X6
+X5.to.l1v14 = X6
+X5.to.l1v15 = X6
+l1v20.to.l2n2 = s5
+l1v21.to.l2n2 = s5
+l1v22.to.l2n2 = s5
+l1v23.to.l2n2 = s5
+l1s5.to.l2n2 = s5
+X5.to.l1s3 = X6
+s5.to.l2n2 = s6
+;--------connecting s5 internodes to s4 internodes
+X5.to.l1v16 = X4
+X5.to.l1v17 = X4
+X5.to.l1v18 = X4
+X5.to.l1v19 = X4
+l1v20.to.l2n3 = s5
+l1v21.to.l2n3 = s5
+l1v22.to.l2n3 = s5
+l1v23.to.l2n3 = s5
+l1s5.to.l2n3 = s5
+X5.to.l1s4 = X4
+s5.to.l2n3 = s4
+;--------connecting s5 internodes to s5 internodes
+;--------connecting s5 internodes to s6 internodes
+X5.to.l1v24 = X6
+X5.to.l1v25 = X6
+X5.to.l1v26 = X6
+X5.to.l1v27 = X6
+l1v20.to.l2n4 = s5
+l1v21.to.l2n4 = s5
+l1v22.to.l2n4 = s5
+l1v23.to.l2n4 = s5
+l1s5.to.l2n4 = s5
+X5.to.l1s6 = X6
+s5.to.l2n4 = s6
+;--------connecting s5 internodes to s7 internodes
+X5.to.l1v28 = X6
+X5.to.l1v29 = X6
+X5.to.l1v30 = X6
+X5.to.l1v31 = X6
+l1v20.to.l2n5 = s5
+l1v21.to.l2n5 = s5
+l1v22.to.l2n5 = s5
+l1v23.to.l2n5 = s5
+l1s5.to.l2n5 = s5
+X5.to.l1s7 = X6
+s5.to.l2n5 = s6
+;-----switch s6 inter-connections
+l1v24.to.l2n4 = s6 
+l2n4.to.l1v24 = X6 
+l1v25.to.l2n4 = s6 
+l2n4.to.l1v25 = X6 
+l1v26.to.l2n4 = s6 
+l2n4.to.l1v26 = X6 
+l1v27.to.l2n4 = s6 
+l2n4.to.l1v27 = X6 
+l2n4.to.l1s6 = X6 
+l1s6.to.l2n4 = s6 
+;--------connecting s6 internodes to s0 internodes
+l2n4.to.l1v0 = X6
+X6.to.l1v0 = X5
+l2n4.to.l1v1 = X6
+X6.to.l1v1 = X5
+l2n4.to.l1v2 = X6
+X6.to.l1v2 = X5
+l2n4.to.l1v3 = X6
+X6.to.l1v3 = X5
+l1v24.to.l2n0 = s6
+l1v25.to.l2n0 = s6
+l1v26.to.l2n0 = s6
+l1v27.to.l2n0 = s6
+l1s6.to.l2n0 = s6
+l2n4.to.l1s0 = X6
+X6.to.l1s0 = X5
+s6.to.l2n0 = s5
+;--------connecting s6 internodes to s1 internodes
+l2n4.to.l1v4 = X6
+X6.to.l1v4 = X5
+l2n4.to.l1v5 = X6
+X6.to.l1v5 = X5
+l2n4.to.l1v6 = X6
+X6.to.l1v6 = X5
+l2n4.to.l1v7 = X6
+X6.to.l1v7 = X5
+l1v24.to.l2n1 = s6
+l1v25.to.l2n1 = s6
+l1v26.to.l2n1 = s6
+l1v27.to.l2n1 = s6
+l1s6.to.l2n1 = s6
+l2n4.to.l1s1 = X6
+X6.to.l1s1 = X5
+s6.to.l2n1 = s5
+;--------connecting s6 internodes to s2 internodes
+l2n4.to.l1v8 = X6
+X6.to.l1v8 = X2
+l2n4.to.l1v9 = X6
+X6.to.l1v9 = X2
+l2n4.to.l1v10 = X6
+X6.to.l1v10 = X2
+l2n4.to.l1v11 = X6
+X6.to.l1v11 = X2
+l2n4.to.l1s2 = X6
+X6.to.l1s2 = X2
+;--------connecting s6 internodes to s3 internodes
+l2n4.to.l1v12 = X6
+X6.to.l1v12 = X7
+l2n4.to.l1v13 = X6
+X6.to.l1v13 = X7
+l2n4.to.l1v14 = X6
+X6.to.l1v14 = X7
+l2n4.to.l1v15 = X6
+X6.to.l1v15 = X7
+l1v24.to.l2n2 = s6
+l1v25.to.l2n2 = s6
+l1v26.to.l2n2 = s6
+l1v27.to.l2n2 = s6
+l1s6.to.l2n2 = s6
+l2n4.to.l1s3 = X6
+X6.to.l1s3 = X7
+s6.to.l2n2 = s7
+;--------connecting s6 internodes to s4 internodes
+l2n4.to.l1v16 = X6
+X6.to.l1v16 = X5
+l2n4.to.l1v17 = X6
+X6.to.l1v17 = X5
+l2n4.to.l1v18 = X6
+X6.to.l1v18 = X5
+l2n4.to.l1v19 = X6
+X6.to.l1v19 = X5
+l1v24.to.l2n3 = s6
+l1v25.to.l2n3 = s6
+l1v26.to.l2n3 = s6
+l1v27.to.l2n3 = s6
+l1s6.to.l2n3 = s6
+l2n4.to.l1s4 = X6
+X6.to.l1s4 = X5
+s6.to.l2n3 = s5
+;--------connecting s6 internodes to s5 internodes
+l2n4.to.l1v20 = X6
+X6.to.l1v20 = X5
+l2n4.to.l1v21 = X6
+X6.to.l1v21 = X5
+l2n4.to.l1v22 = X6
+X6.to.l1v22 = X5
+l2n4.to.l1v23 = X6
+X6.to.l1v23 = X5
+l2n4.to.l1s5 = X6
+X6.to.l1s5 = X5
+;--------connecting s6 internodes to s6 internodes
+;--------connecting s6 internodes to s7 internodes
+l2n4.to.l1v28 = X6
+X6.to.l1v28 = X7
+l2n4.to.l1v29 = X6
+X6.to.l1v29 = X7
+l2n4.to.l1v30 = X6
+X6.to.l1v30 = X7
+l2n4.to.l1v31 = X6
+X6.to.l1v31 = X7
+l1v24.to.l2n5 = s6
+l1v25.to.l2n5 = s6
+l1v26.to.l2n5 = s6
+l1v27.to.l2n5 = s6
+l1s6.to.l2n5 = s6
+l2n4.to.l1s7 = X6
+X6.to.l1s7 = X7
+s6.to.l2n5 = s7
+;-----switch s7 inter-connections
+l1v28.to.l2n5 = s7 
+l2n5.to.l1v28 = X7 
+l1v29.to.l2n5 = s7 
+l2n5.to.l1v29 = X7 
+l1v30.to.l2n5 = s7 
+l2n5.to.l1v30 = X7 
+l1v31.to.l2n5 = s7 
+l2n5.to.l1v31 = X7 
+l2n5.to.l1s7 = X7 
+l1s7.to.l2n5 = s7 
+;--------connecting s7 internodes to s0 internodes
+l2n5.to.l1v0 = X7
+X7.to.l1v0 = X6
+l2n5.to.l1v1 = X7
+X7.to.l1v1 = X6
+l2n5.to.l1v2 = X7
+X7.to.l1v2 = X6
+l2n5.to.l1v3 = X7
+X7.to.l1v3 = X6
+l1v28.to.l2n0 = s7
+l1v29.to.l2n0 = s7
+l1v30.to.l2n0 = s7
+l1v31.to.l2n0 = s7
+l1s7.to.l2n0 = s7
+l2n5.to.l1s0 = X7
+X7.to.l1s0 = X6
+s7.to.l2n0 = s6
+;--------connecting s7 internodes to s1 internodes
+l2n5.to.l1v4 = X7
+X7.to.l1v4 = X6
+l2n5.to.l1v5 = X7
+X7.to.l1v5 = X6
+l2n5.to.l1v6 = X7
+X7.to.l1v6 = X6
+l2n5.to.l1v7 = X7
+X7.to.l1v7 = X6
+l1v28.to.l2n1 = s7
+l1v29.to.l2n1 = s7
+l1v30.to.l2n1 = s7
+l1v31.to.l2n1 = s7
+l1s7.to.l2n1 = s7
+l2n5.to.l1s1 = X7
+X7.to.l1s1 = X6
+s7.to.l2n1 = s6
+;--------connecting s7 internodes to s2 internodes
+l2n5.to.l1v8 = X7
+X7.to.l1v8 = X6
+l2n5.to.l1v9 = X7
+X7.to.l1v9 = X6
+l2n5.to.l1v10 = X7
+X7.to.l1v10 = X6
+l2n5.to.l1v11 = X7
+X7.to.l1v11 = X6
+l2n5.to.l1s2 = X7
+X7.to.l1s2 = X6
+;--------connecting s7 internodes to s3 internodes
+l2n5.to.l1v12 = X7
+X7.to.l1v12 = X3
+l2n5.to.l1v13 = X7
+X7.to.l1v13 = X3
+l2n5.to.l1v14 = X7
+X7.to.l1v14 = X3
+l2n5.to.l1v15 = X7
+X7.to.l1v15 = X3
+l1v28.to.l2n2 = s7
+l1v29.to.l2n2 = s7
+l1v30.to.l2n2 = s7
+l1v31.to.l2n2 = s7
+l1s7.to.l2n2 = s7
+l2n5.to.l1s3 = X7
+X7.to.l1s3 = X3
+s7.to.l2n2 = s3
+;--------connecting s7 internodes to s4 internodes
+l2n5.to.l1v16 = X7
+X7.to.l1v16 = X6
+l2n5.to.l1v17 = X7
+X7.to.l1v17 = X6
+l2n5.to.l1v18 = X7
+X7.to.l1v18 = X6
+l2n5.to.l1v19 = X7
+X7.to.l1v19 = X6
+l1v28.to.l2n3 = s7
+l1v29.to.l2n3 = s7
+l1v30.to.l2n3 = s7
+l1v31.to.l2n3 = s7
+l1s7.to.l2n3 = s7
+l2n5.to.l1s4 = X7
+X7.to.l1s4 = X6
+s7.to.l2n3 = s6
+;--------connecting s7 internodes to s5 internodes
+l2n5.to.l1v20 = X7
+X7.to.l1v20 = X6
+l2n5.to.l1v21 = X7
+X7.to.l1v21 = X6
+l2n5.to.l1v22 = X7
+X7.to.l1v22 = X6
+l2n5.to.l1v23 = X7
+X7.to.l1v23 = X6
+l2n5.to.l1s5 = X7
+X7.to.l1s5 = X6
+;--------connecting s7 internodes to s6 internodes
+l2n5.to.l1v24 = X7
+X7.to.l1v24 = X6
+l2n5.to.l1v25 = X7
+X7.to.l1v25 = X6
+l2n5.to.l1v26 = X7
+X7.to.l1v26 = X6
+l2n5.to.l1v27 = X7
+X7.to.l1v27 = X6
+l1v28.to.l2n4 = s7
+l1v29.to.l2n4 = s7
+l1v30.to.l2n4 = s7
+l1v31.to.l2n4 = s7
+l1s7.to.l2n4 = s7
+l2n5.to.l1s6 = X7
+X7.to.l1s6 = X6
+s7.to.l2n4 = s6
+;--------connecting s7 internodes to s7 internodes

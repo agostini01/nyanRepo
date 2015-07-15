@@ -1,0 +1,9 @@
+Example for testing the write-through.
+
+It is still unfinished. For long latencies, it would stall while it doesn't have any blocking mechanisms. The stall is probably due to high latency 
+in writes to lower caches.
+
+Make sure the Peer is off  (Peer is not tested), and
+General WritePolicy is set to Write-Through
+
+../../../bin/m2s --si-sim detailed --mem-config mem-si-wt --net-config net-CmeshX2-si --si-config si-config --ctx-config ctx-config --net-visual vis.net --net-routes routing.txt --net-report report.net

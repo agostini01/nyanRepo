@@ -1,0 +1,4 @@
+[ Context 0 ]
+Exe = out
+Args = --load matrix_mul.bin
+Stdout = stdout

@@ -1,0 +1,6 @@
+########################################################################################
+To Run simulation, modify the following for your binary:
+
+../../../bin/m2s --si-sim detailed --mem-config mem-si --net-config net-doubleSwitch-si --si-config si-config --ctx-config ctx-config --trace trace.gz --net-visual visual
+
+../../network/graphplot si-net-l1-l2_visual out.eps

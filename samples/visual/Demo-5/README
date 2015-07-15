@@ -1,0 +1,5 @@
+########################################################################################
+To Run simulation, modify the following for your binary:
+
+../../../bin/m2s --si-sim detailed --mem-config mem-si --net-config net-mesh-si --si-config si-config --ctx-config ctx-config --net-snapshot 100 
+

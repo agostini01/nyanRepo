@@ -1,0 +1,116 @@
+;--------------------------------------------Network
+[Network.si-net-l1-l2]
+DefaultInputBufferSize = 528
+DefaultOutputBufferSize = 528
+DefaultBandwidth = 8
+DefaultPacketSize = 8
+
+;--------------------------------------------------Nodes
+[Network.si-net-l1-l2.Node.l1v0]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l1v1]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l1v2]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l1v3]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l1s0]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l2n0]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l2n1]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l2n2]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l2n3]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l2n4]
+Type = EndNode
+
+[Network.si-net-l1-l2.Node.l2n5]
+Type = EndNode
+
+;---------------------------------------------------Switches
+[Network.si-net-l1-l2.Node.s0]
+Type = Switch
+Bandwidth = 8
+
+;-----------------------------------------------------Links
+[Network.si-net-l1-l2.Link.l1v0-s0]
+Type = Bidirectional
+Source = l1v0
+Dest = s0
+VC = 1
+
+[Network.si-net-l1-l2.Link.l1v1-s0]
+Type = Bidirectional
+Source = l1v1
+Dest = s0
+VC = 1
+
+[Network.si-net-l1-l2.Link.l1v2-s0]
+Type = Bidirectional
+Source = l1v2
+Dest = s0
+VC = 1
+
+[Network.si-net-l1-l2.Link.l1v3-s0]
+Type = Bidirectional
+Source = l1v3
+Dest = s0
+VC = 1
+
+[Network.si-net-l1-l2.Link.l1s0-s0]
+Type = Bidirectional
+Source = l1s0
+Dest = s0
+VC = 1
+
+;-------------------------------------------------L2 Links
+
+[Network.si-net-l1-l2.Link.l2n0-s0]
+Type = Bidirectional
+Source = l2n0
+Dest = s0
+VC = 1
+
+[Network.si-net-l1-l2.Link.l2n1-s0]
+Type = Bidirectional
+Source = l2n1
+Dest = s0
+VC = 1
+
+[Network.si-net-l1-l2.Link.l2n2-s0]
+Type = Bidirectional
+Source = l2n2
+Dest = s0
+VC = 1
+
+[Network.si-net-l1-l2.Link.l2n3-s0]
+Type = Bidirectional
+Source = l2n3
+Dest = s0
+VC = 1
+
+[Network.si-net-l1-l2.Link.l2n4-s0]
+Type = Bidirectional
+Source = l2n4
+Dest = s0
+VC = 1
+
+[Network.si-net-l1-l2.Link.l2n5-s0]
+Type = Bidirectional
+Source = l2n5
+Dest = s0
+VC = 1
+
+

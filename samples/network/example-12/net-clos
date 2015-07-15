@@ -1,0 +1,147 @@
+[Network.mynet]
+DefaultInputBufferSize = 10
+DefaultOutputBufferSize = 20
+DefaultBandwidth = 2
+
+[Network.mynet.Node.N0]
+Type = EndNode
+
+[Network.mynet.Node.N1]
+Type = EndNode
+
+[Network.mynet.Node.N2]
+Type = EndNode
+
+[Network.mynet.Node.N3]
+Type = EndNode
+
+[Network.mynet.Node.N4]
+Type = EndNode
+
+[Network.mynet.Node.N5]
+Type = EndNode
+
+[Network.mynet.Node.N6]
+Type = EndNode
+
+[Network.mynet.Node.N7]
+Type = EndNode
+
+[Network.mynet.Node.S0]
+Type = Switch
+
+[Network.mynet.Node.S1]
+Type = Switch
+
+[Network.mynet.Node.S2]
+Type = Switch
+
+[Network.mynet.Node.S3]
+Type = Switch
+
+[Network.mynet.Node.B0]
+Type = Bus
+Lanes = 3
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; Links
+
+[Network.mynet.Link.n0-s0]
+Source = N0
+Dest = S0
+Type = Unidirectional
+
+[Network.mynet.Link.n1-s0]
+Source = N1
+Dest = S0
+Type = Unidirectional
+
+[Network.mynet.Link.n2-s0]
+Source = N2
+Dest = S0
+Type = Unidirectional
+
+[Network.mynet.Link.n3-s0]
+Source = N3
+Dest = S0
+Type = Unidirectional
+
+[Network.mynet.Link.n4-s1]
+Source = N4
+Dest = S1
+Type = Unidirectional
+
+[Network.mynet.Link.n5-s1]
+Source = N5
+Dest = S1
+Type = Unidirectional
+
+[Network.mynet.Link.n6-s1]
+Source = N6
+Dest = S1
+Type = Unidirectional
+
+[Network.mynet.Link.n7-s1]
+Source = N7
+Dest = S1
+Type = Unidirectional
+
+[Network.mynet.Link.s0-b0]
+Source = S0
+Dest = B0
+Type = Unidirectional
+
+[Network.mynet.Link.s1-b0]
+Source = S1
+Dest = B0
+Type = Unidirectional
+
+[Network.mynet.Link.B0-s2]
+Source = B0
+Dest = S2
+Type = Unidirectional
+
+[Network.mynet.Link.b0-s3]
+Source = B0
+Dest = S3
+Type = Unidirectional
+
+[Network.mynet.Link.s2-n0]
+Source = S2
+Dest = N0
+Type = Unidirectional
+
+[Network.mynet.Link.s2-n1]
+Source = S2
+Dest = N1
+Type = Unidirectional
+
+[Network.mynet.Link.s2-n2]
+Source = S2
+Dest = N2
+Type = Unidirectional
+
+[Network.mynet.Link.s2-n3]
+Source = S2
+Dest = N3
+Type = Unidirectional
+
+[Network.mynet.Link.s3-n4]
+Source = S3
+Dest = N4
+Type = Unidirectional
+
+[Network.mynet.Link.s3-n5]
+Source = S3
+Dest = N5
+Type = Unidirectional
+
+[Network.mynet.Link.s3-n6]
+Source = S3
+Dest = N6
+Type = Unidirectional
+
+[Network.mynet.Link.s3-n7]
+Source = S3
+Dest = N7
+Type = Unidirectional
+

@@ -1,0 +1,1 @@
+Run the short trace. Go to cycle 12, and close the app 
