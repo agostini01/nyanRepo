@@ -790,6 +790,8 @@ DEFINST(test_rm8_r8, 0x84, SKIP, SKIP, REG, SKIP, 0)
 DEFINST(test_rm16_r16, 0x85, SKIP, SKIP, REG, SKIP, X86InstPrefixOp)
 DEFINST(test_rm32_r32, 0x85, SKIP, SKIP, REG, SKIP, 0)
 
+DEFINST(tzcnt_r32_rm32, 0x0f, 0xbc, SKIP, REG, SKIP, X86InstPrefixRep)
+
 DEFINST(ucomisd_xmm_xmmm64, 0x0f, 0x2e, SKIP, REG, SKIP, X86InstPrefixOp)
 DEFINST(ucomiss_xmm_xmmm32, 0x0f, 0x2e, SKIP, REG, SKIP, 0)
 
