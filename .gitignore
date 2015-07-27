@@ -1,0 +1,40 @@
+# CPP compile files
+*.a
+*.o
+*.lo
+
+# Autotools
+.deps
+Makefile
+Makefile.in
+bin
+INSTALL
+aclocal.m4
+autom4te.cache
+compile
+config.guess
+config.log
+config.status
+config.sub
+configure
+depcomp
+install-sh
+lib
+libtool
+ltmain.sh
+m4
+missing
+ylwrap
+
+# M2C generated files
+m2c/frm2bin/lex.c
+m2c/frm2bin/parser.c
+m2c/frm2bin/parser.h
+
+m2c/si2bin/lex.c
+m2c/si2bin/parser.c
+m2c/si2bin/parser.h
+
+# vim temp file
+*.swp
+
