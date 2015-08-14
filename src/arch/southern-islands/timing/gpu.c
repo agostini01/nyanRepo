@@ -1267,7 +1267,9 @@ void SIGpuCreate(SIGpu *self)
 		compute_unit = si_compute_unit_create();
 		compute_unit->id = compute_unit_id;
 		self->compute_units[compute_unit_id] = compute_unit;
-		list_add(self->available_compute_units, compute_unit);
+		if (compute_unit_id) {
+			list_add(self->available_compute_units, compute_unit);
+		}
 	}
 
 	/* Virtual functions */
