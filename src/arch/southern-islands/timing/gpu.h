@@ -192,6 +192,8 @@ extern int si_gpu_lds_latency;
 extern int si_gpu_lds_block_size;
 extern int si_gpu_lds_num_ports;
 
+extern int si_gpu_idle_cu_id;
+
 #define SI_GPU_FOREACH_COMPUTE_UNIT(COMPUTE_UNIT_ID) \
 	for ((COMPUTE_UNIT_ID) = 0; (COMPUTE_UNIT_ID) < si_gpu_num_compute_units; (COMPUTE_UNIT_ID)++)
 

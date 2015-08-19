@@ -68,6 +68,8 @@ char *si_gpu_config_help =
 	"      Frequency for the Southern Islands GPU in MHz.\n"
 	"  NumComputeUnits = <num> (Default = 32)\n"
 	"      Number of compute units in the GPU.\n"
+	"  IdleCUId = <num> (Default = -1)\n"
+	"      Set a particular work-item to be kept idle.\n"
 	"\n"
 	"Section '[ ComputeUnit ]': parameters for the Compute Units.\n"
 	"\n"
@@ -408,7 +410,7 @@ int si_gpu_lds_latency = 2;
 int si_gpu_lds_block_size = 64;
 int si_gpu_lds_num_ports = 2;
 
-
+int si_gpu_idle_cu_id = -1;
 
 
 /*
@@ -463,6 +465,7 @@ void si_config_dump(FILE *f)
 	fprintf(f, "[ Config.Device ]\n");
 	fprintf(f, "Frequency = %d\n", si_gpu_frequency);
 	fprintf(f, "NumComputeUnits = %d\n", si_gpu_num_compute_units);
+	fprintf(f, "IdleCUId = %d\n", si_gpu_idle_cu_id);
 	fprintf(f, "\n");
 
 	/* Compute Unit */
@@ -622,6 +625,9 @@ void si_gpu_read_config(void)
 	if (si_gpu_num_compute_units < 1)
 		fatal("%s: invalid value for 'NumComputeUnits'.\n%s", 
 			si_gpu_config_file_name, err_note);
+
+	si_gpu_idle_cu_id = config_read_int(gpu_config, section,
+			"IdleCUId", si_gpu_idle_cu_id);
 
 	/* Compute Unit */
 	section = "ComputeUnit";
@@ -1267,7 +1273,7 @@ void SIGpuCreate(SIGpu *self)
 		compute_unit = si_compute_unit_create();
 		compute_unit->id = compute_unit_id;
 		self->compute_units[compute_unit_id] = compute_unit;
-		if (compute_unit_id) {
+		if (compute_unit_id == si_gpu_idle_cu_id) {
 			list_add(self->available_compute_units, compute_unit);
 		}
 	}
