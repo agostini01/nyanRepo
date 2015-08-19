@@ -116,11 +116,11 @@ void net_event_handler(int event, void *data)
 	struct net_stack_t *stack = data;
 
 	struct net_t *net = stack->net;
-	struct net_routing_table_t *routing_table = net->routing_table;
 	struct net_packet_t *pkt= stack->packet;
-
 	struct net_node_t *src_node = pkt->msg->src_node;
 	struct net_node_t *dst_node = pkt->msg->dst_node;
+	struct net_routing_table_t *routing_table = net->routing_table;
+
 
 	struct net_node_t *node = pkt->node;
 	struct net_buffer_t *buffer = pkt->buffer;
@@ -149,6 +149,7 @@ void net_event_handler(int event, void *data)
 			pkt->node = dst_node;
 			esim_schedule_event(EV_NET_RECEIVE, stack,
 				net->fixed_delay);
+			return;
 		}
 
 		/* Get output buffer */
