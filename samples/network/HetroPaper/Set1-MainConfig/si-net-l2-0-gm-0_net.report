@@ -1,0 +1,95 @@
+[ Network.si-net-l2-0-gm-0.General ]
+Transfers = 0
+AverageMessageSize = 0.00
+NetworkBandwdithDemand/AccumulatedMsgs = 0
+AverageLatency = 0.0000
+
+[ Network.si-net-l2-0-gm-0.Link.link_<l2n0.out_buf_0>_<Switch.in_buf_0> ]
+Config.Bandwidth = 264
+TransferredPackets = 0
+TransferredBytes = 0
+BusyCycles = 0
+BytesPerCycle = 0.0000
+Utilization = 0.0000
+
+[ Network.si-net-l2-0-gm-0.Link.link_<Switch.out_buf_0>_<l2n0.in_buf_0> ]
+Config.Bandwidth = 264
+TransferredPackets = 0
+TransferredBytes = 0
+BusyCycles = 0
+BytesPerCycle = 0.0000
+Utilization = 0.0000
+
+[ Network.si-net-l2-0-gm-0.Link.link_<si-gm-0.out_buf_0>_<Switch.in_buf_1> ]
+Config.Bandwidth = 264
+TransferredPackets = 0
+TransferredBytes = 0
+BusyCycles = 0
+BytesPerCycle = 0.0000
+Utilization = 0.0000
+
+[ Network.si-net-l2-0-gm-0.Link.link_<Switch.out_buf_1>_<si-gm-0.in_buf_0> ]
+Config.Bandwidth = 264
+TransferredPackets = 0
+TransferredBytes = 0
+BusyCycles = 0
+BytesPerCycle = 0.0000
+Utilization = 0.0000
+
+[ Network.si-net-l2-0-gm-0.Node.l2n0 ]
+SentPackets = 0
+SentBytes = 0
+SendRate = 0.0000
+ReceivedPackets = 0
+ReceivedBytes = 0
+ReceiveRate = 0.0000
+in_buf_0.Size = 528 
+in_buf_0.MessageOccupancy = 0.00
+in_buf_0.ByteOccupancy = 0.00
+in_buf_0.Utilization = 0.0000
+out_buf_0.Size = 528 
+out_buf_0.MessageOccupancy = 0.00
+out_buf_0.ByteOccupancy = 0.00
+out_buf_0.Utilization = 0.0000
+
+[ Network.si-net-l2-0-gm-0.Node.si-gm-0 ]
+SentPackets = 0
+SentBytes = 0
+SendRate = 0.0000
+ReceivedPackets = 0
+ReceivedBytes = 0
+ReceiveRate = 0.0000
+in_buf_0.Size = 528 
+in_buf_0.MessageOccupancy = 0.00
+in_buf_0.ByteOccupancy = 0.00
+in_buf_0.Utilization = 0.0000
+out_buf_0.Size = 528 
+out_buf_0.MessageOccupancy = 0.00
+out_buf_0.ByteOccupancy = 0.00
+out_buf_0.Utilization = 0.0000
+
+[ Network.si-net-l2-0-gm-0.Node.Switch ]
+Config.BandWidth = 264
+SentPackets = 0
+SentBytes = 0
+SendRate = 0.0000
+ReceivedPackets = 0
+ReceivedBytes = 0
+ReceiveRate = 0.0000
+in_buf_0.Size = 528 
+in_buf_0.MessageOccupancy = 0.00
+in_buf_0.ByteOccupancy = 0.00
+in_buf_0.Utilization = 0.0000
+in_buf_1.Size = 528 
+in_buf_1.MessageOccupancy = 0.00
+in_buf_1.ByteOccupancy = 0.00
+in_buf_1.Utilization = 0.0000
+out_buf_0.Size = 528 
+out_buf_0.MessageOccupancy = 0.00
+out_buf_0.ByteOccupancy = 0.00
+out_buf_0.Utilization = 0.0000
+out_buf_1.Size = 528 
+out_buf_1.MessageOccupancy = 0.00
+out_buf_1.ByteOccupancy = 0.00
+out_buf_1.Utilization = 0.0000
+

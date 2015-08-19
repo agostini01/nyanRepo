@@ -1,4 +1,4 @@
 [ Device ]
 NumComputeUnits = 33
-IdleCUId = 3
+IdleCUId = 32
 

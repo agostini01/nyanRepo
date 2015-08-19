@@ -26,7 +26,7 @@ Ports = 2
 [CacheGeometry si-geo-mm]
 Sets = 1024
 Assoc = 32
-BlockSize = 4096
+BlockSize = 64
 Latency = 50
 Policy = LRU
 Ports = 4
@@ -87,6 +87,13 @@ Geometry = si-geo-scalar-l1
 LowNetwork = si-net-l1-l2
 LowNetworkNode = l1s7
 LowModules = l2n0 l2n1 l2n2 l2n3 l2n4 l2n5
+
+[Module si-scalar-l1-8]
+Type = Cache
+Geometry = si-geo-scalar-l1
+LowNetwork = cpu-l1-l2
+LowModules = l2n6
+
 
 ;--------------------------------------------------Si Vector L1s
 [Module si-vector-l1-0]
@@ -313,6 +320,12 @@ LowNetwork = si-net-l1-l2
 LowNetworkNode = l1v31
 LowModules = l2n0 l2n1 l2n2 l2n3 l2n4 l2n5
 
+[Module si-vector-l1-32]
+Type = Cache
+Geometry = si-geo-vector-l1
+LowNetwork = cpu-l1-l2
+LowModules = l2n6
+
 ;-----------------------------------------------------------------------Si Compute Units 
 [Entry si-cu-0]
 Arch = SouthernIslands
@@ -506,6 +519,13 @@ ComputeUnit = 31
 DataModule = si-vector-l1-31
 ConstantDataModule = si-scalar-l1-7
 
+[Entry si-cu-32]
+Arch = SouthernIslands
+ComputeUnit = 32
+DataModule = si-vector-l1-32
+ConstantDataModule = si-scalar-l1-8
+
+
 ;---------------------------------------------------------------------------------L2 
 
 [Module l2n0]
@@ -562,12 +582,20 @@ LowNetwork = si-net-l2-5-gm-5
 LowModules = si-gm-5 
 AddressRange = ADDR DIV 64 MOD 6 EQ 5 
 
+[Module l2n6]
+Type = Cache 
+Geometry = si-geo-l2 
+HighNetwork = cpu-l1-l2 
+LowNetwork = si-net-mm-cpu
+LowModules = cpu-gm-0 cpu-gm-1 cpu-gm-2
+
+
 ;-----------------------------------------------------------------------------------------------GPU DRAM memory
 [Module si-gm-0]
 Type = Cache
 Geometry = si-geo-mm 
 HighNetwork = si-net-l2-0-gm-0 
-HighModules = l2n0
+;HighModules = l2n0
 LowNetwork = si-net-mm-cpu
 LowModules = cpu-gm-0
 AddressRange = ADDR DIV 64 MOD 6 EQ 0 
@@ -576,45 +604,45 @@ AddressRange = ADDR DIV 64 MOD 6 EQ 0
 Type = Cache
 Geometry = si-geo-mm 
 HighNetwork = si-net-l2-1-gm-1 
-HighModules = l2n1
+;HighModules = l2n1
 LowNetwork = si-net-mm-cpu
-LowModules = cpu-gm-1
+LowModules = cpu-gm-0 cpu-gm-1 cpu-gm-2
 AddressRange = ADDR DIV 64 MOD 6 EQ 1
 
 [Module si-gm-2]
 Type = Cache
 Geometry = si-geo-mm 
 HighNetwork = si-net-l2-2-gm-2
-HighModules = l2n2
+;HighModules = l2n2
 LowNetwork = si-net-mm-cpu
-LowModules = cpu-gm-2
+LowModules = cpu-gm-0 cpu-gm-1 cpu-gm-2
 AddressRange = ADDR DIV 64 MOD 6 EQ 2
 
 [Module si-gm-3]
 Type = Cache
 Geometry = si-geo-mm 
 HighNetwork = si-net-l2-3-gm-3
-HighModules = l2n3
+;HighModules = l2n3
 LowNetwork = si-net-mm-cpu
-LowModules = cpu-gm-0
+LowModules = cpu-gm-0 cpu-gm-1 cpu-gm-2
 AddressRange = ADDR DIV 64 MOD 6 EQ 3
 
 [Module si-gm-4]
 Type = Cache
 Geometry = si-geo-mm 
 HighNetwork = si-net-l2-4-gm-4
-HighModules = l2n4
+;HighModules = l2n4
 LowNetwork = si-net-mm-cpu
-LowModules = cpu-gm-1
+LowModules = cpu-gm-0 cpu-gm-1 cpu-gm-2
 AddressRange = ADDR DIV 64 MOD 6 EQ 4
 
 [Module si-gm-5]
 Type = Cache
 Geometry = si-geo-mm 
 HighNetwork = si-net-l2-5-gm-5
-HighModules = l2n5
+;HighModules = l2n5
 LowNetwork = si-net-mm-cpu
-LowModules = cpu-gm-5
+LowModules = cpu-gm-0 cpu-gm-1 cpu-gm-2
 AddressRange = ADDR DIV 64 MOD 6 EQ 5
 
 ;-------------------------------------------------------------------------CPU DRAMS
@@ -622,14 +650,14 @@ AddressRange = ADDR DIV 64 MOD 6 EQ 5
 [Module cpu-gm-0]
 Type = MainMemory 
 HighNetwork = si-net-mm-cpu
-BlockSize = 4096
+BlockSize = 64
 Latency = 100
 AddressRange = ADDR DIV 64 MOD 3 EQ 0
 
 [Module cpu-gm-1]
 Type = MainMemory 
 HighNetwork = si-net-mm-cpu
-BlockSize = 4096
+BlockSize = 64
 Latency = 100
 AddressRange = ADDR DIV 64 MOD 3 EQ 1
 
@@ -675,4 +703,16 @@ DefaultBandwidth = 264
 DefaultInputBufferSize = 528
 DefaultOutputBufferSize = 528
 DefaultBandwidth = 32
+
+[Network cpu-l1-l2]
+DefaultInputBufferSize = 528
+DefaultOutputBufferSize = 528
+DefaultBandwidth = 264
+
+[Network cpu-l2-dram]
+DefaultInputBufferSize = 528
+DefaultOutputBufferSize = 528
+DefaultBandwidth = 264
+
+
 
