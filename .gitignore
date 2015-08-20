@@ -38,3 +38,5 @@ m2c/si2bin/parser.h
 # vim temp file
 *.swp
 
+# report file
+*.report

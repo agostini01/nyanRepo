@@ -580,17 +580,17 @@ Type = Cache
 Geometry = si-geo-l2 
 HighNetwork = cpu-l1-l2 
 LowNetwork = si-net-mm-cpu
-LowModules = cpu-gm-0 cpu-gm-1 cpu-gm-2
+LowModules = cpu-gm-0
 
 
-;-----------------------------------------------------------------------------------------------GPU DRAM memory
+;-----------------------------------------------GPU DRAM memory
 [Module si-gm-0]
 Type = Cache
 Geometry = si-geo-mm 
 HighNetwork = si-net-l2-0-gm-0 
 ;HighModules = l2n0
 LowNetwork = si-net-mm-cpu
-LowModules = cpu-gm-0 cpu-gm-1 cpu-gm-2
+LowModules = cpu-gm-0
 AddressRange = ADDR DIV 64 MOD 6 EQ 0 
 
 [Module si-gm-1]
@@ -599,7 +599,7 @@ Geometry = si-geo-mm
 HighNetwork = si-net-l2-1-gm-1 
 ;HighModules = l2n1
 LowNetwork = si-net-mm-cpu
-LowModules = cpu-gm-0 cpu-gm-1 cpu-gm-2
+LowModules = cpu-gm-0
 AddressRange = ADDR DIV 64 MOD 6 EQ 1
 
 [Module si-gm-2]
@@ -608,7 +608,7 @@ Geometry = si-geo-mm
 HighNetwork = si-net-l2-2-gm-2
 ;HighModules = l2n2
 LowNetwork = si-net-mm-cpu
-LowModules = cpu-gm-0 cpu-gm-1 cpu-gm-2
+LowModules = cpu-gm-0
 AddressRange = ADDR DIV 64 MOD 6 EQ 2
 
 [Module si-gm-3]
@@ -617,7 +617,7 @@ Geometry = si-geo-mm
 HighNetwork = si-net-l2-3-gm-3
 ;HighModules = l2n3
 LowNetwork = si-net-mm-cpu
-LowModules = cpu-gm-0 cpu-gm-1 cpu-gm-2
+LowModules = cpu-gm-0
 AddressRange = ADDR DIV 64 MOD 6 EQ 3
 
 [Module si-gm-4]
@@ -626,7 +626,7 @@ Geometry = si-geo-mm
 HighNetwork = si-net-l2-4-gm-4
 ;HighModules = l2n4
 LowNetwork = si-net-mm-cpu
-LowModules = cpu-gm-0 cpu-gm-1 cpu-gm-2
+LowModules = cpu-gm-0
 AddressRange = ADDR DIV 64 MOD 6 EQ 4
 
 [Module si-gm-5]
@@ -635,7 +635,7 @@ Geometry = si-geo-mm
 HighNetwork = si-net-l2-5-gm-5
 ;HighModules = l2n5
 LowNetwork = si-net-mm-cpu
-LowModules = cpu-gm-0 cpu-gm-1 cpu-gm-2
+LowModules = cpu-gm-0
 AddressRange = ADDR DIV 64 MOD 6 EQ 5
 
 ;-------------------------------------------------------------------------CPU DRAMS
@@ -645,21 +645,7 @@ Type = MainMemory
 HighNetwork = si-net-mm-cpu
 BlockSize = 64
 Latency = 100
-AddressRange = ADDR DIV 64 MOD 3 EQ 0
-
-[Module cpu-gm-1]
-Type = MainMemory 
-HighNetwork = si-net-mm-cpu
-BlockSize = 64
-Latency = 100
-AddressRange = ADDR DIV 64 MOD 3 EQ 1
-
-[Module cpu-gm-2]
-Type = MainMemory 
-HighNetwork = si-net-mm-cpu
-BlockSize = 64
-Latency = 100
-AddressRange = ADDR DIV 64 MOD 3 EQ 2
+;AddressRange = ADDR DIV 64 MOD 3 EQ 0
 
 ;-------------------------------------------------------------------------Networks connecting memory controllers and global memory banks
 [Network si-net-l2-0-gm-0] 
