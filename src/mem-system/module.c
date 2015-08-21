@@ -63,7 +63,7 @@ struct mod_t *mod_create(char *name, enum mod_kind_t kind, int num_ports,
 	mod = xcalloc(1, sizeof(struct mod_t));
 	mod->name = xstrdup(name);
 	mod->kind = kind;
-	mod->data_latency = latency;
+	mod->latency = latency;
 
 	/* Ports */
 	mod->num_ports = num_ports;
@@ -79,6 +79,7 @@ struct mod_t *mod_create(char *name, enum mod_kind_t kind, int num_ports,
 	mod->log_block_size = log_base2(block_size);
 
 	mod->client_info_repos = repos_create(sizeof(struct mod_client_info_t), mod->name);
+
 	return mod;
 }
 
@@ -101,8 +102,6 @@ void mod_free(struct mod_t *mod)
 
 	free(mod->name);
 	free(mod);
-
-
 }
 
 
@@ -261,13 +260,12 @@ int mod_find_block(struct mod_t *mod, unsigned int addr, int *set_ptr,
 	PTR_ASSIGN(tag_ptr, tag);
 
 	/* Miss */
-	if (way == cache->assoc ||
-			cache->sets[set].blocks[way].state == cache_block_invalid)
+	if (way == cache->assoc)
 	{
-		/*
+	/*
 		PTR_ASSIGN(way_ptr, 0);
 		PTR_ASSIGN(state_ptr, 0);
-		 */
+	*/
 		return 0;
 	}
 
@@ -568,7 +566,7 @@ int mod_get_retry_latency(struct mod_t *mod)
 	/* DEV - To support a data latency of zero, we must ensure that at least
 	 * one of the following values is non-zero so that the modulo operation
 	 * will work.  Using two instead of one to avoid livelock situations. */
-	return random() % (mod->data_latency + 2);
+	return random() % (mod->latency + 2);
 }
 
 
@@ -722,29 +720,4 @@ struct mod_client_info_t *mod_client_info_create(struct mod_t *mod)
 void mod_client_info_free(struct mod_t *mod, struct mod_client_info_t *client_info)
 {
 	repos_free_object(mod->client_info_repos, client_info);
-}
-
-/* DEV - FLUSH lookup
- * Flush all blocks contained within 'page_list' from the main-memory modules
- * accessible by 'mod'. 'page_list' will be added to the stack structure 
- * and freed when the stack is freed */
-void mod_flush(struct mod_t *mod, unsigned int page, int *witness_ptr,
-		void (*callback_function)(void *), void *callback_data)
-{
-	struct mod_stack_t *stack;
-
-	/* Create module stack with new ID */
-	mod_stack_id++;
-	stack = mod_stack_create(mod_stack_id, mod, 0, ESIM_EV_NONE, NULL);
-
-	/* Initialize */
-	stack->flush_page = page;
-	stack->callback_function = callback_function;
-	stack->callback_data = callback_data;
-	stack->witness_ptr = witness_ptr;
-
-	/* Schedule */
-	esim_execute_event(EV_MOD_NMOESI_FLUSH, stack);
-
-	return;
 }

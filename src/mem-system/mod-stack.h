@@ -61,8 +61,6 @@ struct mod_stack_t
 	struct linked_list_t *event_queue;
 	void *event_queue_item;
 	struct mod_client_info_t *client_info;
-	void (*callback_function)(void *);
-	void *callback_data;
 
 	struct mod_t *mod;
 	struct mod_t *target_mod;
@@ -80,8 +78,6 @@ struct mod_stack_t
 	int src_set;
 	int src_way;
 	int src_tag;
-
-	unsigned int block_not_found;
 
 	enum mod_request_dir_t request_dir;
 	enum mod_message_type_t message;
@@ -102,23 +98,20 @@ struct mod_stack_t
 	struct mod_stack_t *bucket_list_prev;
 	struct mod_stack_t *bucket_list_next;
 
-	/* The page to flush for flush requests */
-	unsigned int flush_page;
-
 	/* Flags */
-	unsigned int hit : 1;
-	unsigned int err : 1;
-	unsigned int shared : 1;
-	unsigned int read : 1;
-	unsigned int write : 1;
-	unsigned int nc_write : 1;
-	unsigned int prefetch : 1;
-	unsigned int blocking : 1;
-	unsigned int writeback : 1;
-	unsigned int eviction : 1;
-	unsigned int retry : 1;
-	unsigned int coalesced : 1;
-	unsigned int port_locked : 1;
+	int hit : 1;
+	int err : 1;
+	int shared : 1;
+	int read : 1;
+	int write : 1;
+	int nc_write : 1;
+	int prefetch : 1;
+	int blocking : 1;
+	int writeback : 1;
+	int eviction : 1;
+	int retry : 1;
+	int coalesced : 1;
+	int port_locked : 1;
 
 	/* Message sent through interconnect */
 	struct net_msg_t *msg;

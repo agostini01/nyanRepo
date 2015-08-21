@@ -16,6 +16,8 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+#include <unistd.h>
+
 #include <arch/common/arch.h>
 #include <lib/esim/esim.h>
 #include <lib/esim/trace.h>
@@ -112,11 +114,7 @@ static char *mem_err_timing =
 		"\thas been specified, by no architecture is running a detailed simulation.\n"
 		"\tPlease specify at least one detailed simulation (e.g., with option\n"
 		"\t'--x86-sim detailed'.\n";
-/* static char *net_wrn_dump =
-                "\tThe requested information about some or all of system's network is placed\n"
-                "\tin one individual file for each network. A memory report file now \n"
-                "\tjust generates information about memory\n";
-*/
+
 void mem_system_init(void)
 {
 	int count;
@@ -157,10 +155,8 @@ void mem_system_init(void)
 	}
 
 	/* NMOESI memory event-driven simulation */
-
 	if (writepolicy == mem_writepolicy_writeback)
 	{
-
 		EV_MOD_NMOESI_LOAD = esim_register_event_with_name(mod_handler_nmoesi_load,
 				mem_domain_index, "mod_nmoesi_load");
 		EV_MOD_NMOESI_LOAD_LOCK = esim_register_event_with_name(mod_handler_nmoesi_load,
@@ -312,13 +308,7 @@ void mem_system_init(void)
 		EV_MOD_NMOESI_MESSAGE_FINISH = esim_register_event_with_name(mod_handler_nmoesi_message,
 				mem_domain_index, "mod_nmoesi_message_finish");
 
-
-		EV_MOD_NMOESI_FLUSH = esim_register_event_with_name(mod_handler_nmoesi_flush,
-				mem_domain_index, "mod_nmoesi_flush");
-		EV_MOD_NMOESI_FLUSH_FINISH = esim_register_event_with_name(mod_handler_nmoesi_flush,
-				mem_domain_index, "mod_nmoesi_flush_finish");
 	}
-
 	else if (writepolicy == mem_writepolicy_writethrough)
 	{
 		EV_MOD_NMOESI_LOAD_WT = esim_register_event_with_name(mod_handler_nmoesi_load_wt,
@@ -522,22 +512,6 @@ void mem_system_dump_report(void)
 
 	int i;
 
-	/* Network dump information warning */
-	// FIXME: This warning would stay for some time since
-	// lack of it would bring confusion to users.
-/*	if (list_count(mem_system->net_list) != 0)
-	{
-		if (*net_report_file_name || *net_route_file_name)
-		{
-			warning("Displacement in presenting requested output data.\n%s", net_wrn_dump);
-		}
-
-		if (!*net_report_file_name && *mem_report_file_name)
-		{
-		        warning("Please Use --net-report for report on all nets.\n%s", net_wrn_dump);
-		}
-	}
-*/
 	/* Open file */
 	f = file_open_for_write(mem_report_file_name);
 	if (!f)
@@ -574,112 +548,72 @@ void mem_system_dump_report(void)
 			fprintf(f, "Assoc = %d\n", cache->assoc);
 			fprintf(f, "Policy = %s\n", str_map_value(
 					&cache_policy_map, cache->policy));
+
 			fprintf(f, "WritePolicy = %s\n", str_map_value(
 					&cache_writepolicy_map, cache->writepolicy));
 		}
 		fprintf(f, "BlockSize = %d\n", mod->block_size);
-		fprintf(f, "Latency = %d\n", mod->data_latency);
+		fprintf(f, "Latency = %d\n", mod->latency);
 		fprintf(f, "Ports = %d\n", mod->num_ports);
 		fprintf(f, "\n");
 
 		/* Statistics */
-		long long hits = mod->read_hits + mod->write_hits + 
-				mod->nc_write_hits;
-		long long retry_hits = mod->retry_read_hits + 
-				mod->retry_write_hits + mod->retry_nc_write_hits;
-		long long misses = mod->read_misses + mod->write_misses + 
-				mod->nc_write_misses;
-		long long retry_misses = mod->retry_read_misses + 
-				mod->retry_write_misses + mod->retry_nc_write_misses;
-		long long total_hits = hits + retry_hits;
-		long long total_misses = misses + retry_misses;
 		fprintf(f, "Accesses = %lld\n", mod->accesses);
-		/*
-		assert(mod->accesses == hits + misses + 
-			mod->dir_entry_conflicts);
-		 */
-		fprintf(f, "Conflicts(Retries) = %lld\n", 
-				mod->dir_entry_conflicts);
 		fprintf(f, "CoalescedAccesses = %lld\n", mod->coalesced_reads + 
 				mod->coalesced_writes + mod->coalesced_nc_writes);
-		fprintf(f, "Hits = %lld\n", total_hits);
-		fprintf(f, "Misses = %lld\n", total_misses);
-		fprintf(f, "HitRatio = %.4g\n", (total_hits + total_misses) ?
-				(double)total_hits/(total_hits + total_misses) : 0.0);
+		fprintf(f, "Hits = %lld\n", mod->hits);
+		fprintf(f, "Misses = %lld\n", mod->accesses - mod->hits);
+		fprintf(f, "HitRatio = %.4g\n", mod->accesses ?
+				(double) mod->hits / mod->accesses : 0.0);
 		fprintf(f, "Evictions = %lld\n", mod->evictions);
-		fprintf(f, "Retries = %lld\n", mod->retry_accesses);
-		/*
-		assert(mod->retry_accesses == (retry_hits + retry_misses +
-			mod->retry_dir_entry_conflicts));
-		 */
+		fprintf(f, "Retries = %lld\n", mod->read_retries + mod->write_retries + 
+				mod->nc_write_retries);
 		fprintf(f, "\n");
 		fprintf(f, "Reads = %lld\n", mod->reads);
-		assert(mod->reads == mod->read_hits + mod->read_misses);
-		fprintf(f, "ReadHits = %lld\n", mod->read_hits);
-		fprintf(f, "ReadMisses = %lld\n", mod->read_misses);
-		fprintf(f, "RetryReads = %lld\n", mod->retry_reads);
-		/*
-		assert(mod->retry_reads == mod->retry_read_hits + 
-			mod->retry_read_misses);
-		 */
-		fprintf(f, "RetryReadHits = %lld\n", mod->retry_read_hits);
-		fprintf(f, "RetryReadMisses = %lld\n", mod->retry_read_misses);
 		fprintf(f, "CoalescedReads = %lld\n", mod->coalesced_reads);
+		fprintf(f, "ReadRetries = %lld\n", mod->read_retries);
+		fprintf(f, "BlockingReads = %lld\n", mod->blocking_reads);
+		fprintf(f, "NonBlockingReads = %lld\n", mod->non_blocking_reads);
+		fprintf(f, "ReadHits = %lld\n", mod->read_hits);
+		fprintf(f, "ReadMisses = %lld\n", mod->reads - mod->read_hits);
 		fprintf(f, "\n");
 		fprintf(f, "Writes = %lld\n", mod->writes);
-		//assert(mod->writes == mod->write_hits + mod->write_misses);
-		fprintf(f, "WriteHits = %lld\n", mod->write_hits);
-		fprintf(f, "WriteMisses = %lld\n", mod->write_misses);
-		fprintf(f, "RetryWrites = %lld\n", mod->retry_writes);
-		/*
-		assert(mod->retry_writes == mod->retry_write_hits + 
-			mod->retry_write_misses);
-		 */
-		fprintf(f, "RetryWriteHits = %lld\n", mod->retry_write_hits);
-		fprintf(f, "RetryWriteMisses = %lld\n", 
-				mod->retry_write_misses);
 		fprintf(f, "CoalescedWrites = %lld\n", mod->coalesced_writes);
+		fprintf(f, "WriteRetries = %lld\n", mod->write_retries);
+		fprintf(f, "BlockingWrites = %lld\n", mod->blocking_writes);
+		fprintf(f, "NonBlockingWrites = %lld\n", mod->non_blocking_writes);
+		fprintf(f, "WriteHits = %lld\n", mod->write_hits);
+		fprintf(f, "WriteMisses = %lld\n", mod->writes - mod->write_hits);
 		fprintf(f, "\n");
 		fprintf(f, "NCWrites = %lld\n", mod->nc_writes);
-		/*
-		assert(mod->nc_writes == mod->nc_write_hits + 
-			mod->nc_write_misses);
-		 */
+		fprintf(f, "CoalescedNCWrites = %lld\n", mod->coalesced_nc_writes);
+		fprintf(f, "NCWriteRetries = %lld\n", mod->nc_write_retries);
+		fprintf(f, "NCBlockingWrites = %lld\n", mod->blocking_nc_writes);
+		fprintf(f, "NCNonBlockingWrites = %lld\n", mod->non_blocking_nc_writes);
 		fprintf(f, "NCWriteHits = %lld\n", mod->nc_write_hits);
-		fprintf(f, "NCWriteMisses = %lld\n", mod->nc_write_misses);
-		fprintf(f, "RetryNCWrites = %lld\n", mod->retry_nc_writes);
-		/*
-		assert(mod->retry_nc_writes == mod->retry_nc_write_hits + 
-			mod->retry_nc_write_misses);
-		 */
-		fprintf(f, "RetryNCWriteHits = %lld\n", 
-				mod->retry_nc_write_hits);
-		fprintf(f, "RetryNCWriteMisses = %lld\n", 
-				mod->retry_nc_write_misses);
-		fprintf(f, "CoalescedNCWrites = %lld\n", 
-				mod->coalesced_nc_writes);
-		fprintf(f, "\n");
+		fprintf(f, "NCWriteMisses = %lld\n", mod->nc_writes - mod->nc_write_hits);
 		fprintf(f, "Prefetches = %lld\n", mod->prefetches);
 		fprintf(f, "PrefetchAborts = %lld\n", mod->prefetch_aborts);
-		fprintf(f, "UselessPrefetches = %lld\n", 
-				mod->useless_prefetches);
+		fprintf(f, "UselessPrefetches = %lld\n", mod->useless_prefetches);
 		fprintf(f, "\n");
-		fprintf(f, "ReadProbes = %lld\n", mod->read_probes);
-		fprintf(f, "RetryReadProbes = %lld\n", mod->retry_read_probes);
-		fprintf(f, "WriteProbes = %lld\n", mod->write_probes);
-		fprintf(f, "RetryWriteProbes = %lld\n", 
-				mod->retry_write_probes);
-		fprintf(f, "\n");
-		fprintf(f, "ConflictInvalidations = %lld\n", 
-				mod->conflict_invalidations);
-		fprintf(f, "HLCEvictions = %lld\n", mod->hlc_evictions);
-		/*
-		fprintf(f, "\n");
-		fprintf(f, "DirectoryAccesses = %lld\n", mod->dir_accesses);
-		fprintf(f, "DataAccesses = %lld\n", mod->data_accesses);
-		 */
+		fprintf(f, "NoRetryAccesses = %lld\n", mod->no_retry_accesses);
+		fprintf(f, "NoRetryHits = %lld\n", mod->no_retry_hits);
+		fprintf(f, "NoRetryMisses = %lld\n", mod->no_retry_accesses - mod->no_retry_hits);
+		fprintf(f, "NoRetryHitRatio = %.4g\n", mod->no_retry_accesses ?
+				(double) mod->no_retry_hits / mod->no_retry_accesses : 0.0);
+		fprintf(f, "NoRetryReads = %lld\n", mod->no_retry_reads);
+		fprintf(f, "NoRetryReadHits = %lld\n", mod->no_retry_read_hits);
+		fprintf(f, "NoRetryReadMisses = %lld\n", (mod->no_retry_reads -
+				mod->no_retry_read_hits));
+		fprintf(f, "NoRetryWrites = %lld\n", mod->no_retry_writes);
+		fprintf(f, "NoRetryWriteHits = %lld\n", mod->no_retry_write_hits);
+		fprintf(f, "NoRetryWriteMisses = %lld\n", mod->no_retry_writes
+				- mod->no_retry_write_hits);
+		fprintf(f, "NoRetryNCWrites = %lld\n", mod->no_retry_nc_writes);
+		fprintf(f, "NoRetryNCWriteHits = %lld\n", mod->no_retry_nc_write_hits);
+		fprintf(f, "NoRetryNCWriteMisses = %lld\n", mod->no_retry_nc_writes
+				- mod->no_retry_nc_write_hits);
 		fprintf(f, "\n\n");
-
 	}
 
 	/* Done */

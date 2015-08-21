@@ -342,8 +342,6 @@ static void mem_config_read_general(struct config_t *config)
 				mem_config_file_name, mem_err_config_note);
 
 	/* Peer transfers */
-	/* FIXME Disabling this option for now.  Potentially removing it
-	 * entirely.  See description in mod-stack.c */
 	mem_peer_transfers = config_read_bool(config, section, 
 			"PeerTransfers", 1);
 
@@ -652,7 +650,7 @@ static struct mod_t *mem_config_read_cache(struct config_t *config,
 	block_size = config_read_int(config, buf, "BlockSize", 256);
 	latency = config_read_int(config, buf, "Latency", 1);
 	/* Directory Latency is set to 0 is recent dev. Why? */
-	dir_latency = config_read_int(config, buf, "DirectoryLatency", 0);
+	dir_latency = config_read_int(config, buf, "DirectoryLatency", 1);
 	policy_str = config_read_string(config, buf, "Policy", "LRU");
 	writepolicy_str = config_read_string(config, buf, "WritePolicy",
 			"WriteBack");
@@ -698,7 +696,9 @@ static struct mod_t *mem_config_read_cache(struct config_t *config,
 		fatal("%s: cache %s: block size must be power of two and "
 				"at least 4.\n%s", mem_config_file_name, mod_name,
 				mem_err_config_note);
-	if (dir_latency < 0)
+	/* FIXME directory latency has was turned zero - back to 1 
+	but figure out why? */
+	if (dir_latency < 1)
 		fatal("%s: cache %s: invalid value for variable "
 				"'DirectoryLatency'.\n%s", mem_config_file_name,
 				mod_name, mem_err_config_note);
@@ -805,15 +805,16 @@ static struct mod_t *mem_config_read_main_memory(struct config_t *config,
 	block_size = config_read_int(config, section, "BlockSize", 64);
 	latency = config_read_int(config, section, "Latency", 1);
 	num_ports = config_read_int(config, section, "Ports", 2);
-	/* Dev - Directory Size and association increased. why? */
+	/* Dev - Directory Size and association increased from 1024 and 8. why? */
 	dir_size = config_read_int(config, section, "DirectorySize", 131072);
 	dir_assoc = config_read_int(config, section, "DirectoryAssoc", 16);
 
 	/* Check parameters */
 	if (block_size < 1 || (block_size & (block_size - 1)))
 		fatal("%s: %s: block size must be power of two.\n%s",
-			mem_config_file_name, mod_name, mem_err_config_note);
-	if (latency < 0)
+				mem_config_file_name, mod_name, mem_err_config_note);
+	/* FIXME latency back to 1 from Dana's 0. Why did he do zero? */
+	if (latency < 1)
 		fatal("%s: %s: invalid value for variable 'Latency'.\n%s",
 				mem_config_file_name, mod_name, mem_err_config_note);
 	if (num_ports < 1)
@@ -1719,7 +1720,7 @@ void mem_config_read(void)
 	/* Check for disjoint memory hierarchies for different architectures. */
 	/* DEV - FIXME We don't know if device is fused until runtime, so we can't
 	 * check this in advance */
-	if (0)
+	if (!si_gpu_fused_device)
 		arch_for_each(mem_config_check_disjoint, NULL);
 
 	/* Compute sub-block sizes, based on high modules. This function also

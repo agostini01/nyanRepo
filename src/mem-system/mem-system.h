@@ -59,8 +59,6 @@ extern int mem_debug_category;
 #define mem_tracing() trace_status(mem_trace_category)
 #define mem_trace(...) trace(mem_trace_category, __VA_ARGS__)
 #define mem_trace_header(...) trace_header(mem_trace_category, __VA_ARGS__)
-
-#define mem_heatmap(...) mem_
 extern int mem_trace_category;
 
 

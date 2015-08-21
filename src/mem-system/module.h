@@ -88,7 +88,7 @@ struct mod_t
 	char *name;
 	int block_size;
 	int log_block_size;
-	int data_latency;
+	int latency;
 	int dir_latency;
 	int mshr_size;
 
@@ -193,63 +193,52 @@ struct mod_t
 	 * memory hierarchy, the field is used to check this restriction. */
 	struct arch_t *arch;
 
+	/* MSHR record */
+	struct mod_mshr_record_t* mshr_record;
+
 	/* Statistics */
 	long long accesses;
-	long long retry_accesses;
+	long long hits;
 
-	long long evictions;
-
-	long long dir_entry_conflicts;
-	long long retry_dir_entry_conflicts;
-
-	long long conflict_invalidations;
-
-	/* Statistics for up-down accesses */
 	long long reads;
-	long long read_hits;
-	long long read_misses;
 	long long coalesced_reads;
+	long long effective_reads;
+	long long effective_read_hits;
 	long long writes;
-	long long write_hits;
-	long long write_misses;
 	long long coalesced_writes;
+	long long effective_writes;
+	long long effective_write_hits;
 	long long nc_writes;
-	long long nc_write_hits;
-	long long nc_write_misses;
 	long long coalesced_nc_writes;
+	long long effective_nc_writes;
+	long long effective_nc_write_hits;
 	long long prefetches;
 	long long prefetch_aborts;
 	long long useless_prefetches;
-	long long retry_reads;
-	long long retry_read_hits;
-	long long retry_read_misses;
-	long long retry_writes;
-	long long retry_write_hits;
-	long long retry_write_misses;
-	long long retry_nc_writes;
-	long long retry_nc_write_hits;
-	long long retry_nc_write_misses;
-	long long retry_prefetches;
+	long long evictions;
 
-	/* Statistics for down-up accesses */
-	long long read_probes;
-	long long write_probes;
-	long long retry_read_probes;
-	long long retry_write_probes;
+	long long blocking_reads;
+	long long non_blocking_reads;
+	long long read_hits;
+	long long blocking_writes;
+	long long non_blocking_writes;
+	long long write_hits;
+	long long blocking_nc_writes;
+	long long non_blocking_nc_writes;
+	long long nc_write_hits;
 
-	/* Statistics for other coherence traffic */
-	long long hlc_evictions;
+	long long read_retries;
+	long long write_retries;
+	long long nc_write_retries;
 
-	/* DEV - FIXME Update the local memory protocol and remove these */
-	long long effective_reads;
-	long long effective_writes;
-
-	/* Statistics that are possibly power related */
-	long long dir_accesses;
-	long long data_accesses;
-
-	/* MSHR snapshot structure */
-	struct mod_mshr_record_t* mshr_record;
+	long long no_retry_accesses;
+	long long no_retry_hits;
+	long long no_retry_reads;
+	long long no_retry_read_hits;
+	long long no_retry_writes;
+	long long no_retry_write_hits;
+	long long no_retry_nc_writes;
+	long long no_retry_nc_write_hits;
 };
 
 struct mod_t *mod_create(char *name, enum mod_kind_t kind, int num_ports,
@@ -263,9 +252,6 @@ long long mod_access(struct mod_t *mod, enum mod_access_kind_t access_kind,
 	unsigned int addr, int *witness_ptr, struct linked_list_t *event_queue,
 	void *event_queue_item, struct mod_client_info_t *client_info);
 int mod_can_access(struct mod_t *mod, unsigned int addr);
-
-void mod_flush(struct mod_t *mod, unsigned int page, int *witness_ptr,
-	void (*callback_function)(void *), void *callback_data);
 
 int mod_find_block(struct mod_t *mod, unsigned int addr, int *set_ptr, int *way_ptr, 
 	int *tag_ptr, int *state_ptr);

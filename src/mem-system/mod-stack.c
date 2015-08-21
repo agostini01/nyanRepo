@@ -62,16 +62,6 @@ void mod_stack_return(struct mod_stack_t *stack)
 	/* Wake up dependent accesses */
 	mod_stack_wakeup_stack(stack);
 
-	/* Execute the callback if one was provided */
-	/* FIXME When FIND_AND_LOCK fails, mod_stack_return is called,
-	 * which invokes this callback.  The callback should only be
-	 * invoked upon successful completion.  For now, just inlined 
-	 * callback call into nmoesi-protocol.c where needed */
-	/*
-	if (stack->callback_function)
-		stack->callback_function(stack->callback_data);
-	*/
-
 	/* Free */
 	free(stack);
 	esim_schedule_event(ret_event, ret_stack, 0);
@@ -189,15 +179,8 @@ struct mod_t *mod_stack_set_peer(struct mod_t *peer, int state)
 {
 	struct mod_t *ret = NULL;
 
-	/* FIXME I'm disabling peer transfers because we now allow caches
-	 * to discard blocks without synchronizing with their lower-level
-	 * caches.  If we allowed peer transfers, a lower-level cache could
-	 * potentially ask a higher-level cache to transfer data that it
-	 * doesn't have */
-	/*
 	if (state == cache_block_owned || mem_peer_transfers)
 		ret = peer;	
-	*/
 
 	return ret;
 }

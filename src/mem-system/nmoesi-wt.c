@@ -112,110 +112,6 @@ int EV_MOD_NMOESI_MESSAGE_REPLY_WT;
 int EV_MOD_NMOESI_MESSAGE_FINISH_WT;
 
 
-static void update_mod_stats(struct mod_t *mod, const struct mod_stack_t *stack)
-{
-	/* Record access type.  I purposefully chose to record both hits and
-	 * misses separately here so that we can sanity check them against
-	 * the total number of accesses. */
-	if (stack->request_dir == mod_request_up_down)
-	{
-		if (stack->read)
-		{
-			mod->reads++;
-			if (stack->retry)
-				mod->retry_reads++;
-
-			if (stack->hit)
-			{
-				mod->read_hits++;
-				if (stack->retry)
-					mod->retry_read_hits++;
-			}
-			else
-			{
-				mod->read_misses++;
-				if (stack->retry)
-					mod->retry_read_misses++;
-			}
-
-		}
-		else if (stack->nc_write)  /* Must go after read */
-		{
-			mod->nc_writes++;
-			if (stack->retry)
-				mod->retry_nc_writes++;
-
-			if (stack->hit)
-			{
-				mod->nc_write_hits++;
-				if (stack->retry)
-					mod->retry_nc_write_hits++;
-			}
-			else
-			{
-				mod->nc_write_misses++;
-				if (stack->retry)
-					mod->retry_nc_write_misses++;
-			}
-		}
-		else if (stack->write)
-		{
-			mod->writes++;
-			if (stack->retry)
-				mod->retry_writes++;
-
-			if (stack->hit)
-			{
-				mod->write_hits++;
-				if (stack->retry)
-					mod->retry_write_hits++;
-			}
-			else
-			{
-				mod->write_misses++;
-				if (stack->retry)
-					mod->retry_write_misses++;
-			}
-		}
-		else if (stack->prefetch)
-		{
-			mod->prefetches++;
-			if (stack->retry)
-				mod->retry_prefetches++;
-		}
-		else
-		{
-			fatal("Invalid memory operation type");
-		}
-	}
-	else if (stack->request_dir == mod_request_down_up)
-	{
-		assert(stack->hit);
-
-		if (stack->write)
-		{
-			mod->write_probes++;
-			if (stack->retry)
-				mod->retry_write_probes++;
-		}
-		else if (stack->read)
-		{
-			mod->read_probes++;
-			if (stack->retry)
-				mod->retry_read_probes++;
-		}
-		else
-		{
-			fatal("Invalid memory operation type");
-		}
-	}
-	else
-	{
-		mod->hlc_evictions++;
-	}
-
-}
-
 
 /* NMOESI Protocol */
 
@@ -314,6 +210,7 @@ void mod_handler_nmoesi_load_wt(int event, void *data)
 		/* Error locking */
 		if (stack->err)
 		{
+			mod->read_retries++;
 			retry_lat = mod_get_retry_latency(mod);
 			mem_debug("    lock error, retrying in %d cycles\n", retry_lat);
 			stack->retry = 1;
@@ -360,6 +257,7 @@ void mod_handler_nmoesi_load_wt(int event, void *data)
 		/* Error on read request. Unlock block and retry load. */
 		if (stack->err)
 		{
+			mod->read_retries++;
 			retry_lat = mod_get_retry_latency(mod);
 			dir_entry_unlock(mod->dir, stack->set, stack->way);
 			mem_debug("    lock error, retrying in %d cycles\n", retry_lat);
@@ -390,7 +288,7 @@ void mod_handler_nmoesi_load_wt(int event, void *data)
 
 		/* Impose the access latency before continuing */
 		esim_schedule_event(EV_MOD_NMOESI_LOAD_FINISH_WT, stack,
-				mod->data_latency);
+				mod->latency);
 		return;
 	}
 
@@ -522,6 +420,7 @@ void mod_handler_nmoesi_store_wt(int event, void *data)
 		/* Error locking */
 		if (stack->err)
 		{
+			mod->write_retries++;
 			retry_lat = mod_get_retry_latency(mod);
 			mem_debug("    lock error, retrying in %d cycles\n", retry_lat);
 			stack->retry = 1;
@@ -569,6 +468,7 @@ void mod_handler_nmoesi_store_wt(int event, void *data)
 		/* Error in write request, unlock block and retry store. */
 		if (stack->err)
 		{
+			mod->write_retries++;
 			retry_lat = mod_get_retry_latency(mod);
 			dir_entry_unlock(mod->dir, stack->set, stack->way);
 			mem_debug("    lock error, retrying in %d cycles\n", retry_lat);
@@ -583,9 +483,8 @@ void mod_handler_nmoesi_store_wt(int event, void *data)
 		dir_entry_unlock(mod->dir, stack->set, stack->way);
 
 		/* Impose the access latency before continuing */
-		mod->data_accesses++;
 		esim_schedule_event(EV_MOD_NMOESI_STORE_FINISH_WT, stack,
-				mod->data_latency);
+				mod->latency);
 		return;
 	}
 
@@ -747,6 +646,7 @@ void mod_handler_nmoesi_nc_store_wt(int event, void *data)
 		/* Error locking */
 		if (stack->err)
 		{
+			mod->nc_write_retries++;
 			retry_lat = mod_get_retry_latency(mod);
 			mem_debug("    lock error, retrying in %d cycles\n", retry_lat);
 			stack->retry = 1;
@@ -861,7 +761,7 @@ void mod_handler_nmoesi_nc_store_wt(int event, void *data)
 			/* Unlock directory entry */
 			dir_entry_unlock(mod->dir, stack->set, stack->way);
 			esim_schedule_event(EV_MOD_NMOESI_NC_STORE_MERGE_WT, stack,
-					mod->data_latency);
+					mod->latency);
 			return;
 		}
 		/* Impose the access latency before continuing */
@@ -950,12 +850,6 @@ void mod_handler_nmoesi_find_and_lock_read_wt(int event, void *data)
 		mem_trace("mem.access name=\"A-%lld\" state=\"%s:find_and_lock_port\"\n",
 				stack->id, mod->name);
 
-		/* Statistics */
-		mod->accesses++;
-		if (stack->retry)
-			mod->retry_accesses++;
-
-
 		/* Set parent stack flag expressing that port has already been locked.
 		 * This flag is checked by new writes to find out if it is already too
 		 * late to coalesce. */
@@ -967,29 +861,23 @@ void mod_handler_nmoesi_find_and_lock_read_wt(int event, void *data)
 
 		/* Debug */
 		if (stack->hit)
-			/*			mem_debug("    %lld 0x%x %s hit: set=%d, way=%d, state=%s\n", stack->id,
+			mem_debug("    %lld 0x%x %s hit: set=%d, way=%d, state=%s\n", stack->id,
 					stack->tag, mod->name, stack->set, stack->way,
 					str_map_value(&cache_block_state_map, stack->state));
 
-		 Statistics
+		/* Statistics */
 		mod->accesses++;
 		if (stack->hit)
 			mod->hits++;
 
-		if (stack->read)*/
+		if (stack->read)
 		{
-			/*	mod->reads++;
+			mod->reads++;
 			mod->effective_reads++;
 			stack->blocking ? mod->blocking_reads++ : mod->non_blocking_reads++;
 			if (stack->hit)
-				mod->read_hits++;*/
-			assert(stack->state);
-			mem_debug("    %lld 0x%x %s hit: set=%d, way=%d, "
-					"state=%s\n", stack->id, stack->tag, mod->name,
-					stack->set, stack->way, str_map_value(
-							&cache_block_state_map, stack->state));
+				mod->read_hits++;
 		}
-		/*
 		else if (stack->prefetch)
 		{
 			mod->prefetches++;
@@ -1008,39 +896,62 @@ void mod_handler_nmoesi_find_and_lock_read_wt(int event, void *data)
 			mod->effective_writes++;
 			stack->blocking ? mod->blocking_writes++ : mod->non_blocking_writes++;
 
-			// Increment witness variable when port is locked
+			/* Increment witness variable when port is locked */
 			if (stack->witness_ptr)
 			{
 				(*stack->witness_ptr)++;
 				stack->witness_ptr = NULL;
-			} */
-
-		/* If a store access hits in the cache, we can be sure
-		 * that the it will complete and can allow processing to
-		 * continue by incrementing the witness pointer.  Misses
-		 * cannot do this without violating consistency, so their
-		 * witness pointer is updated in the write request logic. */
-		if (stack->write && stack->hit && stack->witness_ptr)
-			(*stack->witness_ptr)++;
-
-		/*		if (stack->hit)
-		{
-			 If the request is down-up and the block was not
-		 * found, it must be because it was previously
-		 * evicted.  We must stop here because going any
-		 * further would result in a new space being allocated
-		 * for it.
-			if (stack->request_dir == mod_request_down_up)
-			{
-				mem_debug("        %lld block not found",
-						stack->id);
-				ret->block_not_found = 1;
-				mod_unlock_port(mod, port, stack);
-				ret->port_locked = 0;
-				mod_stack_return(stack);
-				return;
 			}
-		 */
+
+			if (stack->hit)
+				mod->write_hits++;
+		}
+		else if (stack->message)
+		{
+			/* FIXME */
+		}
+		else 
+		{
+			fatal("Unknown memory operation type");
+		}
+
+		if (!stack->retry)
+		{
+			mod->no_retry_accesses++;
+			if (stack->hit)
+				mod->no_retry_hits++;
+
+			if (stack->read)
+			{
+				mod->no_retry_reads++;
+				if (stack->hit)
+					mod->no_retry_read_hits++;
+			}
+			else if (stack->nc_write)  /* Must go after read */
+			{
+				mod->no_retry_nc_writes++;
+				if (stack->hit)
+					mod->no_retry_nc_write_hits++;
+			}
+			else if (stack->write)
+			{
+				mod->no_retry_writes++;
+				if (stack->hit)
+					mod->no_retry_write_hits++;
+			}
+			else if (stack->prefetch)
+			{
+				/* No retries currently for prefetches */
+			}
+			else if (stack->message)
+			{
+				/* FIXME */
+			}
+			else 
+			{
+				fatal("Unknown memory operation type");
+			}
+		}
 
 		if (!stack->hit)
 		{
@@ -1063,11 +974,6 @@ void mod_handler_nmoesi_find_and_lock_read_wt(int event, void *data)
 			mod_unlock_port(mod, port, stack);
 			ret->port_locked = 0;
 			mod_stack_return(stack);
-
-			/* Statistics */
-			mod->dir_entry_conflicts++;
-			if (stack->retry)
-				mod->retry_dir_entry_conflicts++;
 			return;
 		}
 
@@ -1081,11 +987,6 @@ void mod_handler_nmoesi_find_and_lock_read_wt(int event, void *data)
 					stack->id, stack->tag, mod->name, stack->set, stack->way, dir_lock->stack_id);
 			mod_unlock_port(mod, port, stack);
 			ret->port_locked = 0;
-
-			/* Statistics */
-			mod->dir_entry_conflicts++;
-			if (stack->retry)
-				mod->retry_dir_entry_conflicts++;
 			return;
 		}
 
@@ -1101,8 +1002,6 @@ void mod_handler_nmoesi_find_and_lock_read_wt(int event, void *data)
 					str_map_value(&cache_block_state_map, stack->state));
 		}
 
-		/* Statistics */
-		update_mod_stats(mod, stack);
 
 		/* Entry is locked. Record the transient tag so that a subsequent lookup
 		 * detects that the block is being brought.
@@ -1432,7 +1331,6 @@ void mod_handler_nmoesi_read_request_wt(int event, void *data)
 		 * that comes from a read request into the next cache level.
 		 * Also set the tag of the block. */
 		cache_set_block(target_mod->cache, stack->set, stack->way, stack->tag,
-				//				stack->shared ? cache_block_shared : cache_block_exclusive);
 				cache_block_exclusive);
 		esim_schedule_event(EV_MOD_NMOESI_READ_REQUEST_UPDOWN_FINISH_WT, stack, 0);
 		return;
@@ -1527,7 +1425,7 @@ void mod_handler_nmoesi_read_request_wt(int event, void *data)
 		 */
 		dir_entry_unlock(dir, stack->set, stack->way);
 
-		int latency = stack->reply == reply_ack_data_sent_to_peer ? 0 : target_mod->data_latency;
+		int latency = stack->reply == reply_ack_data_sent_to_peer ? 0 : target_mod->latency;
 		esim_schedule_event(EV_MOD_NMOESI_READ_REQUEST_REPLY_WT, stack, latency);
 		return;
 	}
@@ -1780,7 +1678,7 @@ void mod_handler_nmoesi_read_request_wt(int event, void *data)
 
 		dir_entry_unlock(target_mod->dir, stack->set, stack->way);
 
-		int latency = stack->reply == reply_ack_data_sent_to_peer ? 0 : target_mod->data_latency;
+		int latency = stack->reply == reply_ack_data_sent_to_peer ? 0 : target_mod->latency;
 		esim_schedule_event(EV_MOD_NMOESI_READ_REQUEST_REPLY_WT, stack, latency);
 		return;
 	}
@@ -2017,7 +1915,7 @@ void mod_handler_nmoesi_write_data_wt(int event, void *data)
 			/* Unlock directory entry */
 			dir_entry_unlock(target_mod->dir, stack->set, stack->way);
 			esim_schedule_event(EV_MOD_NMOESI_WRITE_DATA_DONE_WT, stack,
-					target_mod->data_latency);
+					target_mod->latency);
 			return;
 		}
 		/* Impose the access latency before continuing */
@@ -2343,7 +2241,7 @@ void mod_handler_nmoesi_write_request_wt(int event, void *data)
 			dir_entry_unlock(target_mod->dir, stack->set, stack->way);
 		}
 
-		int latency = stack->reply == reply_ack_data_sent_to_peer ? 0 : target_mod->data_latency;
+		int latency = stack->reply == reply_ack_data_sent_to_peer ? 0 : target_mod->latency;
 		esim_schedule_event(EV_MOD_NMOESI_WRITE_REQUEST_REPLY_WT, stack, latency);
 		return;
 	}
@@ -2424,7 +2322,7 @@ void mod_handler_nmoesi_write_request_wt(int event, void *data)
 		cache_set_block(target_mod->cache, stack->set, stack->way, 0, cache_block_invalid);
 		dir_entry_unlock(target_mod->dir, stack->set, stack->way);
 
-		int latency = ret->reply == reply_ack_data_sent_to_peer ? 0 : target_mod->data_latency;
+		int latency = ret->reply == reply_ack_data_sent_to_peer ? 0 : target_mod->latency;
 		esim_schedule_event(EV_MOD_NMOESI_WRITE_REQUEST_REPLY_WT, stack, latency);
 		return;
 	}
@@ -2740,11 +2638,6 @@ void mod_handler_nmoesi_find_and_lock_write_wt(int event, void *data)
 				stack->addr, mod->name);
 		mem_trace("mem.access name=\"A-%lld\" state=\"%s:find_and_lock_port\"\n",
 				stack->id, mod->name);
-
-		/* Statistics */
-		mod->accesses++;
-		if (stack->retry)
-			mod->retry_accesses++;
 
 		/* Set parent stack flag expressing that port has already been locked.
 		 * This flag is checked by new writes to find out if it is already too
