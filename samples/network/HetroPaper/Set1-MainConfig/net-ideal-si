@@ -1,3 +1,76 @@
+[Network.si-net-mm-cpu]
+DefaultInputBufferSize = 528
+DefaultOutputBufferSize = 528
+DefaultBandwidth = 32
+DefaultPacketSize = 0
+
+[Network.si-net-mm-cpu.Node.si-gm-0]
+Type = EndNode
+
+[Network.si-net-mm-cpu.Node.si-gm-1]
+Type = EndNode
+
+[Network.si-net-mm-cpu.Node.si-gm-2]
+Type = EndNode
+
+[Network.si-net-mm-cpu.Node.si-gm-3]
+Type = EndNode
+
+[Network.si-net-mm-cpu.Node.si-gm-4]
+Type = EndNode
+
+[Network.si-net-mm-cpu.Node.si-gm-5]
+Type = EndNode
+
+[Network.si-net-mm-cpu.Node.cpu-l2]
+Type = EndNode
+
+[Network.si-net-mm-cpu.Node.cpu-gm-0]
+Type = EndNode
+
+[Network.si-net-mm-cpu.Node.bus]
+Type = bus
+
+[Network.si-net-mm-cpu.Link.si-gm-0-bus]
+Type = Bidirectional
+Dest = si-gm-0
+Source = bus
+
+[Network.si-net-mm-cpu.Link.si-gm-1-bus]
+Type = Bidirectional
+Dest = si-gm-1
+Source = bus
+
+[Network.si-net-mm-cpu.Link.si-gm-2-bus]
+Type = Bidirectional
+Dest = si-gm-2
+Source = bus
+
+[Network.si-net-mm-cpu.Link.si-gm-3-bus]
+Type = Bidirectional
+Dest = si-gm-3
+Source = bus
+
+[Network.si-net-mm-cpu.Link.si-gm-4-bus]
+Type = Bidirectional
+Dest = si-gm-4
+Source = bus
+
+[Network.si-net-mm-cpu.Link.si-gm-5-bus]
+Type = Bidirectional
+Dest = si-gm-5
+Source = bus
+
+[Network.si-net-mm-cpu.Link.cpu-l2-bus]
+Type = Bidirectional
+Dest = cpu-l2
+Source = bus
+
+[Network.si-net-mm-cpu.Link.cpu-gm-0]
+Type = Bidirectional
+Dest = cpu-gm-0
+Source = bus
+
 ;--------------------------------------------Network
 [Network.si-net-l1-l2]
 DefaultInputBufferSize = 720

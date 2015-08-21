@@ -15,47 +15,41 @@ Platform 0 : Multi2Sim
 
 Selected Platform Vendor : Multi2Sim
 Device 0 : Multi2Sim Southern Islands GPU Model
-Executing kernel for 1 iterations
+Executing kernel for 5 iterations
 -------------------------------------------
-warning: Southern Islands GPU simulation stalled.
-	The Southern Islands GPU has not completed execution of any in-flight
-	instruction for 1M cycles. Most likely, this means that a
-	deadlock condition occurred in the management of some modeled
-	structure (network, memory system, pipeline queues, etc.).
-
 
 ;
 ; Simulation Statistics Summary
 ;
 
 [ General ]
-RealTime = 290.12 [s]
-SimEnd = Stall
-SimTime = 22005349.00 [ns]
+RealTime = 0.54 [s]
+SimEnd = ContextsFinished
+SimTime = 115944.00 [ns]
 Frequency = 1000 [MHz]
-Cycles = 22005350
+Cycles = 115945
 
 [ SouthernIslands ]
 RealTime = 0.00 [s]
-Instructions = 28520
+Instructions = 9212
 InstructionsPerSecond = 0
-NDRangeCount = 1
-WorkGroupCount = 256
-BranchInstructions = 997
-LDSInstructions = 0
-ScalarALUInstructions = 8113
-ScalarMemInstructions = 8193
-VectorALUInstructions = 10190
-VectorMemInstructions = 1027
-SimTime = 22005348.39 [ns]
+NDRangeCount = 7
+WorkGroupCount = 7
+BranchInstructions = 0
+LDSInstructions = 1792
+ScalarALUInstructions = 343
+ScalarMemInstructions = 42
+VectorALUInstructions = 6923
+VectorMemInstructions = 112
+SimTime = 115943.74 [ns]
 Frequency = 925 [MHz]
-Cycles = 20356474
+Cycles = 107256
 CyclesPerSecond = 0
 
 [ x86 ]
-RealTime = 240.37 [s]
-Instructions = 1948466578
-InstructionsPerSecond = 8106262
+RealTime = 0.48 [s]
+Instructions = 3032597
+InstructionsPerSecond = 6371015
 Contexts = 2
-Memory = 163246080
+Memory = 29196288
 
