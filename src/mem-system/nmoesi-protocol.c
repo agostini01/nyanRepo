@@ -1064,7 +1064,6 @@ void mod_handler_nmoesi_find_and_lock(int event, void *data)
 		/* Debug */
 		if (stack->hit)
 		{
-			assert(stack->state);
 			mem_debug("    %lld 0x%x %s hit: set=%d, way=%d, state=%s\n", stack->id,
 				stack->tag, mod->name, stack->set, stack->way,
 				str_map_value(&cache_block_state_map, stack->state));
