@@ -1,0 +1,3 @@
+[ Context 0 ]
+Exe = AESEncryptDecrypt_dynamic
+Args = --load AESEncryptDecrypt_Kernels.bin -q -x input128.bmp
