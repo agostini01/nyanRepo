@@ -27,7 +27,7 @@ Ports = 2
 Sets = 1024
 Assoc = 32
 BlockSize = 64
-Latency = 50
+Latency = 30
 Policy = LRU
 Ports = 4
 
