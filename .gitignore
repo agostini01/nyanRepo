@@ -40,3 +40,5 @@ m2c/si2bin/parser.h
 
 # report file
 *.report
+
+nohup.out

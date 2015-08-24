@@ -1,0 +1,3 @@
+[ Context 0 ]
+Exe = ScanLargeArrays_dynamic
+Args = --load ScanLargeArrays_Kernels.bin -q -x 1048576

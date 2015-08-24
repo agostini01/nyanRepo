@@ -1,6 +1,61 @@
 
 ; Multi2Sim 4.2 - A Simulation Framework for CPU-GPU Heterogeneous Computing
 ; Please use command 'm2s --help' for a list of command-line options.
-; Simulation alpha-numeric ID: uC2Di
+; Simulation alpha-numeric ID: VOUIT
 
-fatal: ../Kim-8-4CU-SI//si-config: cannot open configuration file
+warning: path '/opt/hsa/lib/tls/libm2s-opencl.so.1' has been redirected to
+	path '/home/yifan/Documents/hpca2015/nyanRepo/lib/.libs/libm2s-opencl.so' while loading runtime 'OpenCL'.
+	The dynamic linker of your application seems to be accessing a
+	runtime library. A copy of this runtime library has been found
+	in '$(TOPDIR)/lib/.libs', while running Multi2Sim from its
+	build tree root. As a safer and portable option, please link
+	your guest program statically with the corresponding runtime.
+
+Platform 0 : Multi2Sim
+
+Selected Platform Vendor : Multi2Sim
+Device 0 : Multi2Sim Southern Islands GPU Model
+Executing kernel for 1 iterations
+-------------------------------------------
+warning: Southern Islands GPU simulation stalled.
+	The Southern Islands GPU has not completed execution of any in-flight
+	instruction for 1M cycles. Most likely, this means that a
+	deadlock condition occurred in the management of some modeled
+	structure (network, memory system, pipeline queues, etc.).
+
+
+;
+; Simulation Statistics Summary
+;
+
+[ General ]
+RealTime = 3981.20 [s]
+SimEnd = Stall
+SimTime = 21627500.00 [ns]
+Frequency = 1000 [MHz]
+Cycles = 21627501
+
+[ SouthernIslands ]
+RealTime = 0.00 [s]
+Instructions = 59392
+InstructionsPerSecond = 0
+NDRangeCount = 1
+WorkGroupCount = 1024
+BranchInstructions = 0
+LDSInstructions = 1024
+ScalarALUInstructions = 15360
+ScalarMemInstructions = 12288
+VectorALUInstructions = 27648
+VectorMemInstructions = 3072
+SimTime = 21627499.98 [ns]
+Frequency = 925 [MHz]
+Cycles = 20006938
+CyclesPerSecond = 0
+
+[ x86 ]
+RealTime = 3.75 [s]
+Instructions = 4355654
+InstructionsPerSecond = 1162314
+Contexts = 2
+Memory = 33509376
+

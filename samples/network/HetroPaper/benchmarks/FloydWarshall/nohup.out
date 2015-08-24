@@ -1,6 +1,55 @@
 
 ; Multi2Sim 4.2 - A Simulation Framework for CPU-GPU Heterogeneous Computing
 ; Please use command 'm2s --help' for a list of command-line options.
-; Simulation alpha-numeric ID: Cv2u9
+; Simulation alpha-numeric ID: VOPBg
 
-fatal: ../Kim-8-4CU-SI/si-config: cannot open configuration file
+warning: path '/opt/hsa/lib/tls/libm2s-opencl.so.1' has been redirected to
+	path '/home/yifan/Documents/hpca2015/nyanRepo/lib/.libs/libm2s-opencl.so' while loading runtime 'OpenCL'.
+	The dynamic linker of your application seems to be accessing a
+	runtime library. A copy of this runtime library has been found
+	in '$(TOPDIR)/lib/.libs', while running Multi2Sim from its
+	build tree root. As a safer and portable option, please link
+	your guest program statically with the corresponding runtime.
+
+Platform 0 : Multi2Sim
+
+Selected Platform Vendor : Multi2Sim
+Device 0 : Multi2Sim Southern Islands GPU Model
+Executing kernel for 1 iterations
+-------------------------------------------
+
+;
+; Simulation Statistics Summary
+;
+
+[ General ]
+RealTime = 1032.91 [s]
+SimEnd = ContextsFinished
+SimTime = 1712160.00 [ns]
+Frequency = 1000 [MHz]
+Cycles = 1712161
+
+[ SouthernIslands ]
+RealTime = 0.00 [s]
+Instructions = 1434344
+InstructionsPerSecond = 0
+NDRangeCount = 128
+WorkGroupCount = 16384
+BranchInstructions = 32768
+LDSInstructions = 0
+ScalarALUInstructions = 529352
+ScalarMemInstructions = 215524
+VectorALUInstructions = 417196
+VectorMemInstructions = 239504
+SimTime = 1712159.15 [ns]
+Frequency = 925 [MHz]
+Cycles = 1583866
+CyclesPerSecond = 0
+
+[ x86 ]
+RealTime = 6.91 [s]
+Instructions = 6323676
+InstructionsPerSecond = 915388
+Contexts = 2
+Memory = 30695424
+

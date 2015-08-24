@@ -1,3 +1,0 @@
-[ Context 0 ]
-Exe = MatrixMultiplication
-Args = -x 1024 -y 1024 -z 1024 --load MatrixMultiplication_Kernels_si.bin -q

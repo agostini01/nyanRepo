@@ -1,0 +1,3 @@
+[ Context 0 ]
+Exe = PrefixSum_dynamic
+Args = --load PrefixSum_Kernels.bin -q -x 1048576
