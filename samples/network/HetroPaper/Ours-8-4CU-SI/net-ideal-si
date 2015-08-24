@@ -157,22 +157,6 @@ Type = Bidirectional
 Source = l2n7
 Dest = s7
 
-
-[Network.kim-bus.Link.bus-s0]
-Type = Bidirectional
-Source = bus
-Dest = s0
-
-[Network.kim-bus.Link.bus-s1]
-Type = Bidirectional
-Source = bus
-Dest = s1
-
-[Network.kim-bus.Link.bus-s2]
-Type = Bidirectional
-Source = bus
-Dest = s2
-
 ;-------------------------------Network si-net-mm-cpu
 [Network.si-net-mm-cpu]
 DefaultInputBufferSize = 528

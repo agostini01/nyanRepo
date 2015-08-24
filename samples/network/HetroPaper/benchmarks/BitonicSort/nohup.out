@@ -17,3 +17,229 @@ Selected Platform Vendor : Multi2Sim
 Device 0 : Multi2Sim Southern Islands GPU Model
 Executing kernel for 1 iterations
 -------------------------------------------
+
+; Multi2Sim 4.2 - A Simulation Framework for CPU-GPU Heterogeneous Computing
+; Please use command 'm2s --help' for a list of command-line options.
+; Simulation alpha-numeric ID: inHGN
+
+fatal: 2: cannot open file
+
+; Multi2Sim 4.2 - A Simulation Framework for CPU-GPU Heterogeneous Computing
+; Please use command 'm2s --help' for a list of command-line options.
+; Simulation alpha-numeric ID: neGS4
+
+warning: path '/opt/hsa/lib/tls/libm2s-opencl.so.1' has been redirected to
+	path '/home/yifan/Documents/hpca2015/nyanRepo/lib/.libs/libm2s-opencl.so' while loading runtime 'OpenCL'.
+	The dynamic linker of your application seems to be accessing a
+	runtime library. A copy of this runtime library has been found
+	in '$(TOPDIR)/lib/.libs', while running Multi2Sim from its
+	build tree root. As a safer and portable option, please link
+	your guest program statically with the corresponding runtime.
+
+Platform 0 : Multi2Sim
+
+Selected Platform Vendor : Multi2Sim
+Device 0 : Multi2Sim Southern Islands GPU Model
+Executing kernel for 1 iterations
+-------------------------------------------
+
+;
+; Simulation Statistics Summary
+;
+
+[ General ]
+RealTime = 861.60 [s]
+SimEnd = ContextsFinished
+SimTime = 6208434.00 [ns]
+Frequency = 1000 [MHz]
+Cycles = 6208435
+
+[ SouthernIslands ]
+RealTime = 0.00 [s]
+Instructions = 1267200
+InstructionsPerSecond = 0
+NDRangeCount = 55
+WorkGroupCount = 28160
+BranchInstructions = 0
+LDSInstructions = 0
+ScalarALUInstructions = 309760
+ScalarMemInstructions = 168960
+VectorALUInstructions = 675840
+VectorMemInstructions = 112640
+SimTime = 6206073.97 [ns]
+Frequency = 925 [MHz]
+Cycles = 5741049
+CyclesPerSecond = 0
+
+[ x86 ]
+RealTime = 0.79 [s]
+Instructions = 3194863
+InstructionsPerSecond = 4045359
+Contexts = 2
+Memory = 29556736
+
+
+; Multi2Sim 4.2 - A Simulation Framework for CPU-GPU Heterogeneous Computing
+; Please use command 'm2s --help' for a list of command-line options.
+; Simulation alpha-numeric ID: Ww5Kt
+
+warning: path '/opt/hsa/lib/tls/libm2s-opencl.so.1' has been redirected to
+	path '/home/yifan/Documents/hpca2015/nyanRepo/lib/.libs/libm2s-opencl.so' while loading runtime 'OpenCL'.
+	The dynamic linker of your application seems to be accessing a
+	runtime library. A copy of this runtime library has been found
+	in '$(TOPDIR)/lib/.libs', while running Multi2Sim from its
+	build tree root. As a safer and portable option, please link
+	your guest program statically with the corresponding runtime.
+
+Platform 0 : Multi2Sim
+
+Selected Platform Vendor : Multi2Sim
+Device 0 : Multi2Sim Southern Islands GPU Model
+Executing kernel for 1 iterations
+-------------------------------------------
+
+;
+; Simulation Statistics Summary
+;
+
+[ General ]
+RealTime = 1458.88 [s]
+SimEnd = ContextsFinished
+SimTime = 14254310.00 [ns]
+Frequency = 1000 [MHz]
+Cycles = 14254311
+
+[ SouthernIslands ]
+RealTime = 0.00 [s]
+Instructions = 1267200
+InstructionsPerSecond = 0
+NDRangeCount = 55
+WorkGroupCount = 28160
+BranchInstructions = 0
+LDSInstructions = 0
+ScalarALUInstructions = 309760
+ScalarMemInstructions = 168960
+VectorALUInstructions = 675840
+VectorMemInstructions = 112640
+SimTime = 14249446.89 [ns]
+Frequency = 925 [MHz]
+Cycles = 13181727
+CyclesPerSecond = 0
+
+[ x86 ]
+RealTime = 0.88 [s]
+Instructions = 3194849
+InstructionsPerSecond = 3641646
+Contexts = 2
+Memory = 29556736
+
+
+; Multi2Sim 4.2 - A Simulation Framework for CPU-GPU Heterogeneous Computing
+; Please use command 'm2s --help' for a list of command-line options.
+; Simulation alpha-numeric ID: Yvl5o
+
+warning: path '/opt/hsa/lib/tls/libm2s-opencl.so.1' has been redirected to
+	path '/home/yifan/Documents/hpca2015/nyanRepo/lib/.libs/libm2s-opencl.so' while loading runtime 'OpenCL'.
+	The dynamic linker of your application seems to be accessing a
+	runtime library. A copy of this runtime library has been found
+	in '$(TOPDIR)/lib/.libs', while running Multi2Sim from its
+	build tree root. As a safer and portable option, please link
+	your guest program statically with the corresponding runtime.
+
+Platform 0 : Multi2Sim
+
+Selected Platform Vendor : Multi2Sim
+Device 0 : Multi2Sim Southern Islands GPU Model
+Executing kernel for 1 iterations
+-------------------------------------------
+
+;
+; Simulation Statistics Summary
+;
+
+[ General ]
+RealTime = 791.48 [s]
+SimEnd = ContextsFinished
+SimTime = 6208434.00 [ns]
+Frequency = 1000 [MHz]
+Cycles = 6208435
+
+[ SouthernIslands ]
+RealTime = 0.00 [s]
+Instructions = 1267200
+InstructionsPerSecond = 0
+NDRangeCount = 55
+WorkGroupCount = 28160
+BranchInstructions = 0
+LDSInstructions = 0
+ScalarALUInstructions = 309760
+ScalarMemInstructions = 168960
+VectorALUInstructions = 675840
+VectorMemInstructions = 112640
+SimTime = 6206073.97 [ns]
+Frequency = 925 [MHz]
+Cycles = 5741049
+CyclesPerSecond = 0
+
+[ x86 ]
+RealTime = 0.75 [s]
+Instructions = 3194641
+InstructionsPerSecond = 4269175
+Contexts = 2
+Memory = 29556736
+
+
+; Multi2Sim 4.2 - A Simulation Framework for CPU-GPU Heterogeneous Computing
+; Please use command 'm2s --help' for a list of command-line options.
+; Simulation alpha-numeric ID: djVBU
+
+warning: path '/opt/hsa/lib/tls/libm2s-opencl.so.1' has been redirected to
+	path '/home/yifan/Documents/hpca2015/nyanRepo/lib/.libs/libm2s-opencl.so' while loading runtime 'OpenCL'.
+	The dynamic linker of your application seems to be accessing a
+	runtime library. A copy of this runtime library has been found
+	in '$(TOPDIR)/lib/.libs', while running Multi2Sim from its
+	build tree root. As a safer and portable option, please link
+	your guest program statically with the corresponding runtime.
+
+Platform 0 : Multi2Sim
+
+Selected Platform Vendor : Multi2Sim
+Device 0 : Multi2Sim Southern Islands GPU Model
+Executing kernel for 1 iterations
+-------------------------------------------
+
+;
+; Simulation Statistics Summary
+;
+
+[ General ]
+RealTime = 1140.97 [s]
+SimEnd = ContextsFinished
+SimTime = 14254310.00 [ns]
+Frequency = 1000 [MHz]
+Cycles = 14254311
+
+[ SouthernIslands ]
+RealTime = 0.00 [s]
+Instructions = 1267200
+InstructionsPerSecond = 0
+NDRangeCount = 55
+WorkGroupCount = 28160
+BranchInstructions = 0
+LDSInstructions = 0
+ScalarALUInstructions = 309760
+ScalarMemInstructions = 168960
+VectorALUInstructions = 675840
+VectorMemInstructions = 112640
+SimTime = 14249446.89 [ns]
+Frequency = 925 [MHz]
+Cycles = 13181727
+CyclesPerSecond = 0
+
+[ x86 ]
+RealTime = 0.71 [s]
+Instructions = 3194906
+InstructionsPerSecond = 4482525
+Contexts = 2
+Memory = 29556736
+

@@ -24,7 +24,7 @@ Policy = LRU
 Ports = 2
 
 [CacheGeometry si-geo-mm]
-Sets = 1024
+Sets = 32768
 Assoc = 32
 BlockSize = 64
 Latency = 30
@@ -528,7 +528,7 @@ HighNetwork = si-net-l1-l2
 HighNetworkNode = l2n0
 LowNetwork = kim-bus
 LowNetworkNode = l2n0
-LowModules = si-gm-0 si-gm-1 si-gm-2 si-gm-3 si-gm-4 si-gm-5 si-gm-6 si-gm-7
+LowModules = si-gm-0
 ;AddressRange = ADDR DIV 64 MOD 6 EQ 0 
 
 [Module l2n1]
@@ -538,7 +538,7 @@ HighNetwork = si-net-l1-l2
 HighNetworkNode = l2n1 
 LowNetwork = kim-bus
 LowNetworkNode = l2n1
-LowModules = si-gm-0 si-gm-1 si-gm-2 si-gm-3 si-gm-4 si-gm-5 si-gm-6 si-gm-7
+LowModules = si-gm-1
 ;AddressRange = ADDR DIV 64 MOD 6 EQ 1 
 	
 [Module l2n2]
@@ -548,7 +548,7 @@ HighNetwork = si-net-l1-l2
 HighNetworkNode = l2n2
 LowNetwork = kim-bus
 LowNetworkNode = l2n2
-LowModules = si-gm-0 si-gm-1 si-gm-2 si-gm-3 si-gm-4 si-gm-5 si-gm-6 si-gm-7
+LowModules = si-gm-2
 ;AddressRange = ADDR DIV 64 MOD 6 EQ 2 
 
 [Module l2n3]
@@ -558,7 +558,7 @@ HighNetwork = si-net-l1-l2
 HighNetworkNode = l2n3
 LowNetwork = kim-bus
 LowNetworkNode = l2n3
-LowModules = si-gm-0 si-gm-1 si-gm-2 si-gm-3 si-gm-4 si-gm-5 si-gm-6 si-gm-7
+LowModules = si-gm-3
 ;AddressRange = ADDR DIV 64 MOD 6 EQ 3 
 
 [Module l2n4]
@@ -568,7 +568,7 @@ HighNetwork = si-net-l1-l2
 HighNetworkNode = l2n4
 LowNetwork = kim-bus
 LowNetworkNode = l2n4
-LowModules = si-gm-0 si-gm-1 si-gm-2 si-gm-3 si-gm-4 si-gm-5 si-gm-6 si-gm-7
+LowModules = si-gm-4
 ;AddressRange = ADDR DIV 64 MOD 6 EQ 4 
 
 [Module l2n5]
@@ -578,7 +578,7 @@ HighNetwork = si-net-l1-l2
 HighNetworkNode = l2n5
 LowNetwork = kim-bus
 LowNetworkNode = l2n5
-LowModules = si-gm-0 si-gm-1 si-gm-2 si-gm-3 si-gm-4 si-gm-5 si-gm-6 si-gm-7
+LowModules = si-gm-5
 ;AddressRange = ADDR DIV 64 MOD 6 EQ 5 
 
 [Module l2n6]
@@ -588,7 +588,7 @@ HighNetwork = si-net-l1-l2
 HighNetworkNode = l2n6
 LowNetwork = kim-bus
 LowNetworkNode = l2n6
-LowModules = si-gm-0 si-gm-1 si-gm-2 si-gm-3 si-gm-4 si-gm-5 si-gm-6 si-gm-7
+LowModules = si-gm-6
 ;AddressRange = ADDR DIV 64 MOD 6 EQ 5 
 
 [Module l2n7]
@@ -598,7 +598,7 @@ HighNetwork = si-net-l1-l2
 HighNetworkNode = l2n7
 LowNetwork = kim-bus
 LowNetworkNode = l2n7
-LowModules = si-gm-0 si-gm-1 si-gm-2 si-gm-3 si-gm-4 si-gm-5 si-gm-6 si-gm-7
+LowModules = si-gm-7
 ;AddressRange = ADDR DIV 64 MOD 6 EQ 5 
 
 
