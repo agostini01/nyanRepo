@@ -1,6 +1,6 @@
 [Network.si-net-mm-cpu]
-DefaultInputBufferSize = 528
-DefaultOutputBufferSize = 528
+DefaultInputBufferSize = 5280000
+DefaultOutputBufferSize = 5280000
 DefaultBandwidth = 32
 DefaultPacketSize = 0
 

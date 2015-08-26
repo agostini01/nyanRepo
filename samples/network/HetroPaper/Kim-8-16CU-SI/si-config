@@ -1,0 +1,4 @@
+[ Device ]
+NumComputeUnits = 128
+;IdleCUId = 128
+

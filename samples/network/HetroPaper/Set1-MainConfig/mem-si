@@ -26,7 +26,7 @@ Ports = 2
 [CacheGeometry si-geo-mm]
 Sets = 1024
 Assoc = 32
-BlockSize = 64
+BlockSize = 1024
 Latency = 30
 Policy = LRU
 Ports = 4
@@ -528,7 +528,7 @@ HighNetwork = si-net-l1-l2
 HighNetworkNode = l2n0
 LowNetwork = si-net-l2-0-gm-0 
 LowModules = si-gm-0 
-AddressRange = ADDR DIV 64 MOD 6 EQ 0 
+AddressRange = ADDR DIV 1024 MOD 6 EQ 0 
 
 [Module l2n1]
 Type = Cache 
@@ -537,7 +537,7 @@ HighNetwork = si-net-l1-l2
 HighNetworkNode = l2n1 
 LowNetwork = si-net-l2-1-gm-1 
 LowModules = si-gm-1 
-AddressRange = ADDR DIV 64 MOD 6 EQ 1 
+AddressRange = ADDR DIV 1024 MOD 6 EQ 1 
 	
 [Module l2n2]
 Type = Cache 
@@ -546,7 +546,7 @@ HighNetwork = si-net-l1-l2
 HighNetworkNode = l2n2
 LowNetwork = si-net-l2-2-gm-2 
 LowModules = si-gm-2 
-AddressRange = ADDR DIV 64 MOD 6 EQ 2 
+AddressRange = ADDR DIV 1024 MOD 6 EQ 2 
 
 [Module l2n3]
 Type = Cache 
@@ -555,7 +555,7 @@ HighNetwork = si-net-l1-l2
 HighNetworkNode = l2n3
 LowNetwork = si-net-l2-3-gm-3 
 LowModules = si-gm-3 
-AddressRange = ADDR DIV 64 MOD 6 EQ 3 
+AddressRange = ADDR DIV 1024 MOD 6 EQ 3 
 
 [Module l2n4]
 Type = Cache 
@@ -564,7 +564,7 @@ HighNetwork = si-net-l1-l2
 HighNetworkNode = l2n4
 LowNetwork = si-net-l2-4-gm-4 
 LowModules = si-gm-4 
-AddressRange = ADDR DIV 64 MOD 6 EQ 4 
+AddressRange = ADDR DIV 1024 MOD 6 EQ 4 
 
 [Module l2n5]
 Type = Cache 
@@ -573,7 +573,7 @@ HighNetwork = si-net-l1-l2
 HighNetworkNode = l2n5
 LowNetwork = si-net-l2-5-gm-5 
 LowModules = si-gm-5 
-AddressRange = ADDR DIV 64 MOD 6 EQ 5 
+AddressRange = ADDR DIV 1024 MOD 6 EQ 5 
 
 [Module cpu-l2]
 Type = Cache 
@@ -592,7 +592,7 @@ HighNetwork = si-net-l2-0-gm-0
 LowNetwork = si-net-mm-cpu
 LowNetworkNode = si-gm-0
 LowModules = cpu-gm-0
-AddressRange = ADDR DIV 64 MOD 6 EQ 0 
+AddressRange = ADDR DIV 1024 MOD 6 EQ 0 
 
 [Module si-gm-1]
 Type = Cache
@@ -601,7 +601,7 @@ HighNetwork = si-net-l2-1-gm-1
 LowNetwork = si-net-mm-cpu
 LowNetworkNode = si-gm-1
 LowModules = cpu-gm-0
-AddressRange = ADDR DIV 64 MOD 6 EQ 1
+AddressRange = ADDR DIV 1024 MOD 6 EQ 1
 
 [Module si-gm-2]
 Type = Cache
@@ -610,7 +610,7 @@ HighNetwork = si-net-l2-2-gm-2
 LowNetwork = si-net-mm-cpu
 LowNetworkNode = si-gm-2
 LowModules = cpu-gm-0
-AddressRange = ADDR DIV 64 MOD 6 EQ 2
+AddressRange = ADDR DIV 1024 MOD 6 EQ 2
 
 [Module si-gm-3]
 Type = Cache
@@ -620,7 +620,7 @@ HighNetwork = si-net-l2-3-gm-3
 LowNetwork = si-net-mm-cpu
 LowNetworkNode = si-gm-3
 LowModules = cpu-gm-0
-AddressRange = ADDR DIV 64 MOD 6 EQ 3
+AddressRange = ADDR DIV 1024 MOD 6 EQ 3
 
 [Module si-gm-4]
 Type = Cache
@@ -630,7 +630,7 @@ HighNetwork = si-net-l2-4-gm-4
 LowNetwork = si-net-mm-cpu
 LowNetworkNode = si-gm-4
 LowModules = cpu-gm-0
-AddressRange = ADDR DIV 64 MOD 6 EQ 4
+AddressRange = ADDR DIV 1024 MOD 6 EQ 4
 
 [Module si-gm-5]
 Type = Cache
@@ -640,7 +640,7 @@ HighNetwork = si-net-l2-5-gm-5
 LowNetwork = si-net-mm-cpu
 LowNetworkNode = si-gm-5
 LowModules = cpu-gm-0
-AddressRange = ADDR DIV 64 MOD 6 EQ 5
+AddressRange = ADDR DIV 1024 MOD 6 EQ 5
 
 ;-------------------------------------------------------------------------CPU DRAMS
 
@@ -648,49 +648,49 @@ AddressRange = ADDR DIV 64 MOD 6 EQ 5
 Type = MainMemory 
 HighNetwork = si-net-mm-cpu
 HighNetworkNode = cpu-gm-0
-BlockSize = 64
+BlockSize = 1024
 Latency = 100
 ;AddressRange = ADDR DIV 64 MOD 3 EQ 0
 
 ;-------------------------------------------------------------------------Networks connecting memory controllers and global memory banks
 [Network si-net-l2-0-gm-0] 
-DefaultInputBufferSize = 528
-DefaultOutputBufferSize = 528
+DefaultInputBufferSize = 52800
+DefaultOutputBufferSize = 52800
 DefaultBandwidth = 264
 
 [Network si-net-l2-1-gm-1]
-DefaultInputBufferSize = 528
-DefaultOutputBufferSize = 528
+DefaultInputBufferSize = 52800
+DefaultOutputBufferSize = 52800
 DefaultBandwidth = 264
 
 [Network si-net-l2-2-gm-2]
-DefaultInputBufferSize = 528
-DefaultOutputBufferSize = 528
+DefaultInputBufferSize = 52800
+DefaultOutputBufferSize = 52800
 DefaultBandwidth = 264
 
 [Network si-net-l2-3-gm-3]
-DefaultInputBufferSize = 528
-DefaultOutputBufferSize = 528
+DefaultInputBufferSize = 52800
+DefaultOutputBufferSize = 52800
 DefaultBandwidth = 264
 
 [Network si-net-l2-4-gm-4]
-DefaultInputBufferSize = 528
-DefaultOutputBufferSize = 528
+DefaultInputBufferSize = 52800
+DefaultOutputBufferSize = 52800
 DefaultBandwidth = 264
 
 [Network si-net-l2-5-gm-5]
-DefaultInputBufferSize = 528
-DefaultOutputBufferSize = 528
+DefaultInputBufferSize = 52800
+DefaultOutputBufferSize = 52800
 DefaultBandwidth = 264
 
 [Network cpu-l1-l2]
-DefaultInputBufferSize = 528
-DefaultOutputBufferSize = 528
+DefaultInputBufferSize = 52800
+DefaultOutputBufferSize = 52800
 DefaultBandwidth = 264
 
 [Network cpu-l2-dram]
-DefaultInputBufferSize = 528
-DefaultOutputBufferSize = 528
+DefaultInputBufferSize = 52800
+DefaultOutputBufferSize = 52800
 DefaultBandwidth = 264
 
 

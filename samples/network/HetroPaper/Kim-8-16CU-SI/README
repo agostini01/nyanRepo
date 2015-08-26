@@ -1,0 +1,1 @@
+../../../../bin/m2s --ctx-config ctx-config --si-config si-config --mem-config mem-si --net-config net-ideal-si --si-sim detailed 

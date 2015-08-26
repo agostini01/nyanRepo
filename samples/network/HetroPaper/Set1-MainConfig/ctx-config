@@ -1,0 +1,3 @@
+[ Context 0 ]
+Exe = FFT_dynamic
+Args = --load FFT_Kernels.bin -q -i 5

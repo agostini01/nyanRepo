@@ -1,3 +1,3 @@
 [ Context 0 ]
 Exe = SimpleConvolution_dynamic
-Args = --load SimpleConvolution_Kernels.bin -q -x 512 -y 512 -m 128
+Args = --load SimpleConvolution_Kernels.bin -q -x 256 -y 256 -m 32

@@ -23,7 +23,7 @@ Latency = 10
 Policy = LRU
 Ports = 2
 
-[CacheGeometry si-geo-mm] ; 64M size
+[CacheGeometry si-geo-mm]
 Sets = 32768
 Assoc = 32
 BlockSize = 64
