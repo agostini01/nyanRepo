@@ -721,3 +721,16 @@ void mod_client_info_free(struct mod_t *mod, struct mod_client_info_t *client_in
 {
 	repos_free_object(mod->client_info_repos, client_info);
 }
+
+int preload(int preload_factor)
+{
+	int preload = 0;
+	if (preload_factor == 0)
+		fatal("Mistake in the preload\n");
+	else
+		preload = (rand() % 100 < preload_factor);
+
+	assert((preload >=0) && (preload <=1));
+	return preload;
+}
+

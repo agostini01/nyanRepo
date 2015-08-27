@@ -625,6 +625,7 @@ static struct mod_t *mem_config_read_cache(struct config_t *config,
 	int prefetcher_ghb_size;
 	int prefetcher_it_size;
 	int prefetcher_lookup_depth;
+	int preload_factor;
 
 	char *net_name;
 	char *net_node_name;
@@ -666,6 +667,8 @@ static struct mod_t *mem_config_read_cache(struct config_t *config,
 			"PrefetcherITSize", 64);
 	prefetcher_lookup_depth = config_read_int(config, buf, 
 			"PrefetcherLookupDepth", 2);
+	preload_factor = config_read_int(config, buf,
+			"Preload", 0);
 
 	/* Checks */
 	policy = str_map_string_case(&cache_policy_map, policy_str);
@@ -727,6 +730,11 @@ static struct mod_t *mem_config_read_cache(struct config_t *config,
 		}
 	}
 
+	if ((preload_factor < 0) || (preload_factor > 100))
+		fatal("%s: preload cannot be more than 100\n", 
+			mem_config_file_name);
+		
+
 	/* Create module */
 	mod = mod_create(mod_name, mod_kind_cache, num_ports,
 			block_size, latency);
@@ -737,6 +745,7 @@ static struct mod_t *mem_config_read_cache(struct config_t *config,
 	mod->dir_num_sets = num_sets;
 	mod->dir_size = num_sets * assoc;
 	mod->dir_latency = dir_latency;
+	mod->preload_factor = preload_factor;
 
 	/* High network */
 	net_name = config_read_string(config, section, "HighNetwork", "");

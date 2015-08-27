@@ -239,6 +239,9 @@ struct mod_t
 	long long no_retry_write_hits;
 	long long no_retry_nc_writes;
 	long long no_retry_nc_write_hits;
+
+	/* Prefload factor */
+	int preload_factor;
 };
 
 struct mod_t *mod_create(char *name, enum mod_kind_t kind, int num_ports,
@@ -287,5 +290,6 @@ void mod_coalesce(struct mod_t *mod, struct mod_stack_t *master_stack,
 struct mod_client_info_t *mod_client_info_create(struct mod_t *mod);
 void mod_client_info_free(struct mod_t *mod, struct mod_client_info_t *client_info);
 
+int preload(int preload_factor);
 #endif
 
