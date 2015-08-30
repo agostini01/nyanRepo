@@ -1,3 +1,3 @@
 [ Context 0 ]
 Exe = EigenValue_dynamic
-Args = --load EigenValue_Kernels.bin -q -x 1024
+Args = --load EigenValue_Kernels.bin -q -x 8192

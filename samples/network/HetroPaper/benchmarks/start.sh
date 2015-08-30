@@ -1,10 +1,6 @@
 #!/bin/bash
 
 SUBDIRS="
-AESEncryptDecrypt
-BinarySearch
-BinomialOption
-BitonicSort
 BlackScholes
 BoxFilter
 DCT
@@ -45,8 +41,8 @@ do
 	echo "launching "$dir
 	cd $dir
 	nohup ../../../../../bin/m2s --ctx-config ctx-config \
-		--si-sim detailed --si-config ../$1si-config \
-		--mem-config ../$1mem-si --net-config ../$1net-ideal-si \
+		--si-sim detailed --si-config ../$1si-config.ini \
+		--mem-config ../$1mem-si.ini --net-config ../$1net-si.ini \
 		--net-report $2net.report \
 		--mem-report $2mem.report \
 		>$2nohup.out 2>&1 &

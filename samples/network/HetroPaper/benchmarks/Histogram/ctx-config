@@ -1,3 +1,3 @@
 [ Context 0 ]
 Exe = Histogram_dynamic
-Args = --load Histogram_Kernels.bin -q -x 2048 -y 2048
+Args = --load Histogram_Kernels.bin -q -x 1024 -y 1024
