@@ -2,7 +2,6 @@
 
 SUBDIRS="
 BlackScholes
-BoxFilter
 DCT
 DwtHaar1D
 EigenValue
@@ -23,14 +22,14 @@ SimpleConvolution
 SobelFilter
 "
 
-MAX_JOBS=8
+MAX_JOBS=2
 
 for dir in $SUBDIRS
 do
 	while : ; 
 	do
 		num_m2s=$(ps -e | grep m2s | wc -l)
-		if [ "$num_m2s" -le "$MAX_JOBS" ]
+		if [ "$num_m2s" -lt "$MAX_JOBS" ]
 		then
 			break
 		else
@@ -45,7 +44,7 @@ do
 		--mem-config ../$1mem-si.ini --net-config ../$1net-si.ini \
 		--net-report $2net.report \
 		--mem-report $2mem.report \
-		>$2nohup.out 2>&1 &
+    >$2nohup.out 2>&1 &
 	cd ..
 done
 
