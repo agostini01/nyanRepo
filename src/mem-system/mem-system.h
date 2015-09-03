@@ -66,6 +66,7 @@ extern int mem_trace_category;
 extern int mem_frequency;
 extern int mem_peer_transfers;
 extern int mem_multinet;
+extern int mem_shared_net;
 extern enum mem_writepolicy_t writepolicy;
 
 /* Frequency and frequency domain */

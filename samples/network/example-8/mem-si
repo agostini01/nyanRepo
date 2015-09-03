@@ -1,3 +1,6 @@
+[General]
+SharedNetwork = On
+
 ;--------------------------------------------Geometeries
 [CacheGeometry si-geo-vector-l1]
 Sets = 64
@@ -505,7 +508,8 @@ Type = Cache
 Geometry = si-geo-l2 
 HighNetwork = si-net-l1-l2 
 HighNetworkNode = l2n0
-LowNetwork = si-net-l2-0-gm-0 
+LowNetwork = si-net-l1-l2
+LowNetworkNode = l3n0 
 LowModules = si-gm-0 
 AddressRange = ADDR DIV 64 MOD 6 EQ 0 
 
@@ -557,7 +561,8 @@ AddressRange = ADDR DIV 64 MOD 6 EQ 5
 ;-----------------------------------------------------------------------------------------------Global memory
 [Module si-gm-0]
 Type = MainMemory 
-HighNetwork = si-net-l2-0-gm-0 
+HighNetwork = si-net-l1-l2 
+HighNetworkNode = gm0
 BlockSize = 64
 Latency = 100
 AddressRange = ADDR DIV 64 MOD 6 EQ 0 
@@ -597,12 +602,7 @@ BlockSize = 64
 Latency = 100
 AddressRange = ADDR DIV 64 MOD 6 EQ 5 
 
-;-------------------------------------------------------------------------Networks connecting memory controllers and global memory banks
-[Network si-net-l2-0-gm-0] 
-DefaultInputBufferSize = 528
-DefaultOutputBufferSize = 528
-DefaultBandwidth = 2641
-
+;------------Networks connecting memory controllers and global memory banks
 [Network si-net-l2-1-gm-1]
 DefaultInputBufferSize = 528
 DefaultOutputBufferSize = 528

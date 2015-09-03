@@ -48,6 +48,7 @@ int mem_debug_category;
 int mem_trace_category;
 int mem_peer_transfers;
 int mem_multinet;
+int mem_shared_net;
 enum mem_writepolicy_t writepolicy;
 
 /* Frequency domain, as returned by function 'esim_new_domain'. */

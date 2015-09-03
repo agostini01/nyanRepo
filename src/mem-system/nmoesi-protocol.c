@@ -1922,6 +1922,14 @@ void mod_handler_nmoesi_read_request(int event, void *data)
 				/* Get owner mod */
 				node = list_get(target_mod->high_net->node_list, 
 						dir_entry->owner);
+
+				/* Owner is the mod but it is upper level */
+				/* Owner is always set by the lown_net_node->index)
+				so the following seems redundant, and also dangerous
+				if ((mem_shared_net) && 
+					(dir_entry->owner == mod->high_net_node->index))
+					continue;
+*/
 				assert(node->kind == net_node_end);
 				owner = node->user_data;
 				assert(owner);
@@ -3100,6 +3108,14 @@ void mod_handler_nmoesi_invalidate(int event, void *data)
 					continue;
 
 				node = list_get(mod->high_net->node_list, i);
+
+				/* In case we are sharing a network:
+				 * a) we have to make sure the node we are getting 
+				 * is in fact a node of the upper level */
+				if ((mem_shared_net) && (mod->high_net == mod->low_net) &&
+					(node == mod->low_net_node))
+					continue;
+ 
 				sharer = node->user_data;
 				if (sharer == stack->except_mod)
 					continue;

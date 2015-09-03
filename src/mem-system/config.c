@@ -349,6 +349,9 @@ static void mem_config_read_general(struct config_t *config)
 	mem_multinet = config_read_bool(config, section,
 			"MultiNetwork", 0);
 
+	/* Shared-Net */
+	mem_shared_net = config_read_bool(config, section, "SharedNetwork", 0);
+
 	/* Memory write policy */
 	writepolicy_str = config_read_string(config, section, "GeneralWritePolicy",
 				"WriteBack");
@@ -533,8 +536,9 @@ static void mem_config_insert_module_in_network(struct config_t *config,
 				net_node_name, mem_err_config_note);
 
 	/* Network should not have this module already */
-	if (net_get_node_by_user_data(net, mod))
-		fatal("%s: network %s: module '%s' is already present.\n%s",
+	if ((!mem_shared_net) && (net_get_node_by_user_data(net, mod)))
+		fatal("%s: network %s: module '%s' is already present, or "
+			"SharedNetwork is not On.\n%s",
 				mem_config_file_name, net->name,
 				mod->name, mem_err_config_note);
 
