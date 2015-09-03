@@ -1,3 +1,5 @@
+#!/usr/bin/python
+
 class Config:
 
   def __init__(self):
@@ -27,8 +29,8 @@ class Config:
 
     self.gmBlockSize = 64;
     self.gmAssoc = 32;
-    self.gmSize = 2 ** 29;
-    self.gmLatency = 30;
+    self.gmSize = 2 ** 25;
+    self.gmLatency = 29
 
 
 class MemoryConfigGenerator:
@@ -39,6 +41,9 @@ class MemoryConfigGenerator:
 
   def generateGeometry(self):
     l1vSets = config.l1vSize / config.l1vAssoc / config.l1vBlockSize
+    self.configFile.write(
+        ("[General]\n"
+         "Frequency = 1200\n"))
     self.configFile.write(
         ("\n[CacheGeometry si-geo-vector-l1]\n"
          "Sets = " + str(l1vSets) + "\n"
@@ -194,10 +199,12 @@ class NetworkConfigGenerator:
   def generateL1L2(self):
     # Network global configuration
     self.configFile.write("\n[Network." + config.l1L2NetworkName + "]\n") 
-    self.configFile.write("DefaultInputBufferSize = 4096\n") 
-    self.configFile.write("DefaultOutputBufferSize = 4096\n") 
+    self.configFile.write("DefaultInputBufferSize = 409600\n") 
+    self.configFile.write("DefaultOutputBufferSize = 409600\n") 
     self.configFile.write("DefaultBandwidth = 32\n") 
     self.configFile.write("DefaultPacketSize = 4\n") 
+    self.configFile.write("NetFixDelay = 1\n") 
+    self.configFile.write("Frequency = 1000\n")
 
     # All l1 vector
     numL1V = config.numGpu * config.numCuPerGpu
@@ -253,10 +260,11 @@ class NetworkConfigGenerator:
   def generateL2GmKim(self):
     # Network global configuration
     self.configFile.write("\n[Network." + config.l2GmNetworkName + "]\n") 
-    self.configFile.write("DefaultInputBufferSize = 4096\n") 
-    self.configFile.write("DefaultOutputBufferSize = 4096\n") 
+    self.configFile.write("DefaultInputBufferSize = 409600\n") 
+    self.configFile.write("DefaultOutputBufferSize = 409600\n") 
     self.configFile.write("DefaultBandwidth = 32\n") 
     self.configFile.write("DefaultPacketSize = 4\n") 
+    self.configFile.write("Frequency = 1000\n")
 
     # L2 caches
     numL2 = config.numGpu * config.numL2PerGpu
@@ -275,8 +283,8 @@ class NetworkConfigGenerator:
     self.configFile.write(("\n[Network." + config.l2GmNetworkName 
         + ".Node.bus]\n"
         "Type = Bus\n"
-        "Bandwidth = 2\n"
-        "Lanes = 16"));
+        "Bandwidth = 12\n"
+        "Lanes = 1"));
 
     # Switch per device
     for i in range(0, config.numGpu):
@@ -297,7 +305,7 @@ class NetworkConfigGenerator:
           + ".Node.GDDR5bus" + str(l2Id) + "]\n"
           "Type = Bus\n"
           "Bandwidth = 38\n"
-          "Lanes = 2\n"))
+          "Lanes = 1\n"))
         self.configFile.write((
           "\n[Network." + config.l2GmNetworkName
           + ".Link.gm" + str(l2Id) + "-GDDR5bus" + str(l2Id) + "]\n"
