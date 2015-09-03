@@ -1385,7 +1385,7 @@ void mod_handler_nmoesi_evict(int event, void *data)
 		// XXX Dana, if state is invalid (happens during invalidate?)
 		// just skip to FINISH also?
 		/* Just set the block to invalid if there is no data to
-		 * return, and let the protocol deal with catching up later 
+		 * return, and let the protocol deal with catching up later */ 
 		if (mod->kind == mod_kind_cache &&
 				(stack->state == cache_block_shared ||
 						stack->state == cache_block_exclusive))
@@ -1397,7 +1397,7 @@ void mod_handler_nmoesi_evict(int event, void *data)
 					stack, 0);
 			return;
 		}
-*/
+
 		/* Continue */
 		esim_schedule_event(EV_MOD_NMOESI_EVICT_ACTION, stack, 0);
 		return;
