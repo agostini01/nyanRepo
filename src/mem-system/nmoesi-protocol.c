@@ -1386,7 +1386,7 @@ void mod_handler_nmoesi_evict(int event, void *data)
 		// just skip to FINISH also?
 		/* Just set the block to invalid if there is no data to
 		 * return, and let the protocol deal with catching up later */ 
-		if (mod->kind == mod_kind_cache &&
+/*		if (mod->kind == mod_kind_cache &&
 				(stack->state == cache_block_shared ||
 						stack->state == cache_block_exclusive))
 		{
@@ -1397,7 +1397,7 @@ void mod_handler_nmoesi_evict(int event, void *data)
 					stack, 0);
 			return;
 		}
-
+*/
 		/* Continue */
 		esim_schedule_event(EV_MOD_NMOESI_EVICT_ACTION, stack, 0);
 		return;
@@ -2124,8 +2124,11 @@ void mod_handler_nmoesi_read_request(int event, void *data)
 
 		/* Check: state must not be invalid or shared.
 		 * By default, only one pending request.
-		 * Response depends on state */
-		assert(stack->state != cache_block_invalid);
+		 * Response depends on state. 
+		 * FIXME Since during invalidate we considered this as an
+		 * down-up write, we have to comply by allowing an invalid 
+		 * write. (extra cost -- no harm) */
+//		assert(stack->state != cache_block_invalid);
 		assert(stack->state != cache_block_shared);
 		assert(stack->state != cache_block_noncoherent);
 		stack->pending = 1;
