@@ -223,7 +223,7 @@ void si_vector_mem_mem(struct si_vector_mem_unit_t *vector_mem)
 
 		/* Set the access type */
 		if (uop->vector_mem_write && !uop->glc)
-			access_kind = mod_access_store;
+			access_kind = mod_access_nc_store;
 		else if (uop->vector_mem_write && uop->glc)
 			access_kind = mod_access_store;
 		else if (uop->vector_mem_read)

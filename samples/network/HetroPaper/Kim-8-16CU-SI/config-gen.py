@@ -199,8 +199,8 @@ class NetworkConfigGenerator:
   def generateL1L2(self):
     # Network global configuration
     self.configFile.write("\n[Network." + config.l1L2NetworkName + "]\n") 
-    self.configFile.write("DefaultInputBufferSize = 409600\n") 
-    self.configFile.write("DefaultOutputBufferSize = 409600\n") 
+    self.configFile.write("DefaultInputBufferSize = 4096000\n") 
+    self.configFile.write("DefaultOutputBufferSize = 4096000\n") 
     self.configFile.write("DefaultBandwidth = 32\n") 
     self.configFile.write("DefaultPacketSize = 4\n") 
     self.configFile.write("NetFixDelay = 1\n") 
@@ -260,8 +260,8 @@ class NetworkConfigGenerator:
   def generateL2GmKim(self):
     # Network global configuration
     self.configFile.write("\n[Network." + config.l2GmNetworkName + "]\n") 
-    self.configFile.write("DefaultInputBufferSize = 409600\n") 
-    self.configFile.write("DefaultOutputBufferSize = 409600\n") 
+    self.configFile.write("DefaultInputBufferSize = 4096000\n") 
+    self.configFile.write("DefaultOutputBufferSize = 4096000\n") 
     self.configFile.write("DefaultBandwidth = 32\n") 
     self.configFile.write("DefaultPacketSize = 4\n") 
     self.configFile.write("Frequency = 1000\n")
