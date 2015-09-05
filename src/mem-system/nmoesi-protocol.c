@@ -1444,6 +1444,8 @@ void mod_handler_nmoesi_evict(int event, void *data)
 		else 
 		{
 			/* FIXME Dana's changes would avoid this */
+			/* This is not a problem. It is more information, 
+			 * which means more traffic */
 			// assert(0); 
 			msg_size = 8;
 			stack->reply = reply_ack;
@@ -1478,14 +1480,14 @@ void mod_handler_nmoesi_evict(int event, void *data)
 
 	if (event == EV_MOD_NMOESI_EVICT_RECEIVE)
 	{
-		mem_debug("  %lld %lld 0x%x %s evict receive\n", esim_time, 
-				stack->id, stack->tag, target_mod->name);
+		mem_debug("  %lld %lld 0x%x %s evict receive (state = %s) \n", esim_time, 
+				stack->id, stack->tag, target_mod->name, 
+				 str_map_value(&cache_block_state_map, stack->state));
 		mem_trace("mem.access name=\"A-%lld\" state=\"%s:evict_receive\"\n",
 				stack->id, target_mod->name);
 
 		/* Receive message */
-		net_receive(target_mod->high_net, target_mod->high_net_node, 
-				stack->msg);
+		net_receive(target_mod->high_net, target_mod->high_net_node, stack->msg);
 
 		/* Find and lock */
 		if (stack->state == cache_block_noncoherent)
@@ -1511,8 +1513,9 @@ void mod_handler_nmoesi_evict(int event, void *data)
 
 	if (event == EV_MOD_NMOESI_EVICT_PROCESS)
 	{
-		mem_debug("  %lld %lld 0x%x %s evict process\n", esim_time, 
-				stack->id, stack->tag, target_mod->name);
+		mem_debug("  %lld %lld 0x%x %s evict process (state = %s) \n", esim_time, 
+				stack->id, stack->tag, target_mod->name,
+				str_map_value(&cache_block_state_map, stack->state));
 		mem_trace("mem.access name=\"A-%lld\" state=\"%s:evict_process\"\n",
 				stack->id, target_mod->name);
 
@@ -1544,8 +1547,9 @@ void mod_handler_nmoesi_evict(int event, void *data)
 			}
 			else
 			{
-				fatal("%s: Invalid cache block state 1: %d\n", 
-						__FUNCTION__, stack->state);
+				fatal("%s: Invalid cache block state 1: %s\n", 
+						__FUNCTION__, 
+						str_map_value(&cache_block_state_map, stack->state));
 			}
 		}
 		else 
@@ -2124,11 +2128,8 @@ void mod_handler_nmoesi_read_request(int event, void *data)
 
 		/* Check: state must not be invalid or shared.
 		 * By default, only one pending request.
-		 * Response depends on state. 
-		 * FIXME Since during invalidate we considered this as an
-		 * down-up write, we have to comply by allowing an invalid 
-		 * write. (extra cost -- no harm) */
-//		assert(stack->state != cache_block_invalid);
+		 * Response depends on state. */
+		assert(stack->state != cache_block_invalid);
 		assert(stack->state != cache_block_shared);
 		assert(stack->state != cache_block_noncoherent);
 		stack->pending = 1;
@@ -2796,8 +2797,9 @@ void mod_handler_nmoesi_write_request(int event, void *data)
 
 	if (event == EV_MOD_NMOESI_WRITE_REQUEST_DOWNUP)
 	{
-		mem_debug("  %lld %lld 0x%x %s write request downup\n", 
-				esim_time, stack->id, stack->tag, target_mod->name);
+		mem_debug("  %lld %lld 0x%x %s write request downup (state = %s)\n", 
+				esim_time, stack->id, stack->tag, target_mod->name,
+				str_map_value(&cache_block_state_map, stack->state));
 		mem_trace("mem.access name=\"A-%lld\" state=\"%s:write_request_downup\"\n",
 				stack->id, target_mod->name);
 
@@ -3117,7 +3119,9 @@ void mod_handler_nmoesi_invalidate(int event, void *data)
 				 * is in fact a node of the upper level */
 				if ((mem_shared_net) && (mod->high_net == mod->low_net) &&
 					(node == mod->low_net_node))
+				{
 					continue;
+				}
  
 				sharer = node->user_data;
 				if (sharer == stack->except_mod)
@@ -3146,8 +3150,10 @@ void mod_handler_nmoesi_invalidate(int event, void *data)
 
 	if (event == EV_MOD_NMOESI_INVALIDATE_FINISH)
 	{
-		mem_debug("  %lld %lld 0x%x %s invalidate finish\n", esim_time, stack->id,
-				stack->tag, mod->name);
+		mem_debug("  %lld %lld 0x%x %s invalidate finish pending = %d -- (state = %s) \n", 
+				esim_time, stack->id,stack->tag, mod->name,
+				stack->pending - 1,
+				str_map_value(&cache_block_state_map, stack->state));
 		mem_trace("mem.access name=\"A-%lld\" state=\"%s:invalidate_finish\"\n",
 				stack->id, mod->name);
 
@@ -3155,8 +3161,19 @@ void mod_handler_nmoesi_invalidate(int event, void *data)
 		 * be sure that the directory entry is always locked if we
 		 * allow this to happen */
 		if (stack->reply == reply_ack_data)
-			cache_set_block(mod->cache, stack->set, stack->way, stack->tag,
+		{
+			if (stack->state == cache_block_noncoherent)
+			{
+				cache_set_block(mod->cache, stack->set, stack->way, stack->tag,
+					cache_block_noncoherent);
+			}
+			else if ((stack->state == cache_block_modified) ||
+				(stack->state == cache_block_owned))
+			{
+				cache_set_block(mod->cache, stack->set, stack->way, stack->tag,
 					cache_block_modified);
+			}
+		}
 
 		/* Ignore while pending */
 		assert(stack->pending > 0);
