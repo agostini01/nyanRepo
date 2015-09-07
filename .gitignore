@@ -42,3 +42,4 @@ m2c/si2bin/parser.h
 *.report
 
 *.out
+*.debug
