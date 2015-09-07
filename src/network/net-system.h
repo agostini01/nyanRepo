@@ -58,6 +58,7 @@ extern long long net_max_cycles;
 extern double net_injection_rate;
 extern int net_msg_size;
 extern int net_snap_period;
+extern int net_ignore_buffer_busy;
 
 /* Frequency and frequency domain */
 extern int net_frequency;

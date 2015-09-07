@@ -117,6 +117,9 @@ int net_snap_period = 0;                /* Network Snapshot Period */
 int net_frequency = 1000;
 int net_domain_index;
 
+/* Ignore the buffer busy status */
+int net_ignore_buffer_busy = 0;
+
 
 
 /* 

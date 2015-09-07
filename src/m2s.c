@@ -556,6 +556,11 @@ static char *m2s_help =
 		"      File for graphically representing the interconnection network. This file \n"
 		"      is an input for a supplementary tool called 'graphplot' which is located \n"
 		"      in samples/network folder in multi2sim trunk.\n"
+    "\n"
+		"  --net-ignore-buffer-busy\n"
+		"      Runs a network simulation but allowing buffer to send and received data \n"
+    "      to and from different links.\n"
+
 		"\n"
 		"  --net-sim <network>\n"
 		"      Runs a network simulation using synthetic traffic, where <network> is the\n"
@@ -1393,6 +1398,14 @@ static void m2s_read_command_line(int *argc_ptr, char **argv)
 			net_injection_rate = atof(argv[argi]);
 			continue;
 		}
+
+    /* Injection rate for network simulation */
+		if (!strcmp(argv[argi], "--net-ignore-buffer-busy"))
+		{
+      net_ignore_buffer_busy = 1;
+			continue;
+		}
+
 
 		/* Dumping Routes */
 		if (!strcmp(argv[argi], "--net-routes"))

@@ -216,8 +216,7 @@ void net_event_handler(int event, void *data)
 			return;
 		}
 
-    /*
-		if (buffer->read_busy >= cycle)
+		if (!net_ignore_buffer_busy && buffer->read_busy >= cycle)
 		{
 			esim_schedule_event(event, stack,
 					buffer->read_busy - cycle + 1);
@@ -231,7 +230,6 @@ void net_event_handler(int event, void *data)
 					pkt->session_id);
 			return;
 		}
-    */
 
 		/* If link is busy, wait */
 		if (buffer->kind == net_buffer_link)
@@ -301,8 +299,7 @@ void net_event_handler(int event, void *data)
 			/* If destination input buffer is busy, wait */
 			assert(buffer == link->src_buffer);
 			input_buffer = link->dst_buffer;
-      /*
-			if (input_buffer->write_busy >= cycle)
+			if (!net_ignore_buffer_busy && input_buffer->write_busy >= cycle)
 			{
 				net_debug("msg "
 						"a=\"stall\" "
@@ -325,7 +322,6 @@ void net_event_handler(int event, void *data)
 						input_buffer->write_busy - cycle + 1);
 				return;
 			}
-      */
 
 			/* If destination input buffer is full, wait */
 			if (pkt->size > input_buffer->size)
@@ -420,8 +416,7 @@ void net_event_handler(int event, void *data)
 						pkt->node->name,entry->next_node->name);
 
 			/* 1. Check the destination buffer is busy or not */
-      /*
-			if (input_buffer->write_busy >= cycle)
+			if (!net_ignore_buffer_busy &&  input_buffer->write_busy >= cycle)
 			{
 				esim_schedule_event(event, stack,
 						input_buffer->write_busy - cycle + 1);
@@ -446,7 +441,6 @@ void net_event_handler(int event, void *data)
 
 				return;
 			}
-      */
 
 			/* 2. Check the destination buffer is full or not */
 			if (pkt->size > input_buffer->size)
@@ -522,10 +516,12 @@ void net_event_handler(int event, void *data)
 			/* Wire delay is introduced when the packet is on transit */
 			lat = bus->fix_delay + ((pkt->size - 1) / bus->bandwidth + 1) ;
 			assert(lat > 0);
-			//buffer->read_busy = cycle + lat - 1;
+      if (!net_ignore_buffer_busy) {
+			  buffer->read_busy = cycle + lat - 1;
+			  input_buffer->write_busy = cycle + lat - 1 ;
+      }
 			bus->busy = cycle + lat - 1;
 			bus->sched_when = cycle + lat - 1;
-			//input_buffer->write_busy = cycle + lat - 1 ;
 
 			/* Transfer message to next input buffer */
 			assert(pkt->busy < cycle);
