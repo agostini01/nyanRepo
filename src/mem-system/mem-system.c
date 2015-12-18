@@ -614,7 +614,24 @@ void mem_system_dump_report(void)
 		fprintf(f, "NoRetryNCWriteHits = %lld\n", mod->no_retry_nc_write_hits);
 		fprintf(f, "NoRetryNCWriteMisses = %lld\n", mod->no_retry_nc_writes
 				- mod->no_retry_nc_write_hits);
+		fprintf(f, "\n");
+
+		// dumping the state of cache-blocks
+		int cache_states[6] = {0,0,0,0,0,0};
+		for ( int set = 0; set < mod->cache->num_sets; set++)
+			for (int way = 0; way < mod->cache->assoc; way++)
+			{
+				int state = 0;
+				cache_get_block(mod->cache, set, way, 
+					NULL, &state);
+				cache_states[state]++;
+			}
+		for (int block_state = 0; block_state < 6; block_state++)
+			fprintf(f, "STATE_%s = %d \n", 
+				str_map_value(&cache_block_state_map, block_state),
+				cache_states[block_state]);
 		fprintf(f, "\n\n");
+		
 	}
 
 	/* Done */
