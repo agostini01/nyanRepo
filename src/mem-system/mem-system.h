@@ -68,6 +68,7 @@ extern int mem_peer_transfers;
 extern int mem_multinet;
 extern int mem_shared_net;
 extern enum mem_writepolicy_t writepolicy;
+extern int mem_final_flush;
 
 /* Frequency and frequency domain */
 extern int mem_domain_index;
@@ -87,6 +88,7 @@ struct mem_system_snapshot_t *main_snapshot;
 
 
 void mem_system_init(void);
+int mem_system_final_flush(void);
 void mem_system_done(void);
 
 void mem_system_dump_report(void);

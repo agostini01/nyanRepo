@@ -345,6 +345,9 @@ static void mem_config_read_general(struct config_t *config)
 	mem_peer_transfers = config_read_bool(config, section, 
 			"PeerTransfers", 1);
 
+	/* Final Flush */
+	mem_final_flush = config_read_bool(config, section, "FinalFlush",
+				0);
 	/* Multi-Net */
 	mem_multinet = config_read_bool(config, section,
 			"MultiNetwork", 0);

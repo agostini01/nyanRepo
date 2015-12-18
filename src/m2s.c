@@ -2159,6 +2159,13 @@ int main(int argc, char **argv)
 	if (esim_finish != esim_finish_stall)
 		esim_process_all_events();
 
+	/* representation of a final flush system call. We schedule
+	 * another event for the flush, and make the esim to process
+	 * all the events (flush related) */
+	// FIXME: we might encounter an stall 
+	if (esim_finish && mem_system_final_flush())
+		esim_process_all_events();
+	
 	/* Dump statistics summary */
 	m2s_dump_summary(stderr);
 

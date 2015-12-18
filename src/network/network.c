@@ -182,6 +182,7 @@ void net_dump_report(struct net_t *net, FILE *f)
 	fprintf(f, "NetworkBandwdithDemand/AccumulatedMsgs = %lld\n",net->offered_bandwidth );
 	fprintf(f, "AverageLatency = %.4f\n", net->transfers ?
 			(double) net->lat_acc / net->transfers : 0.0);
+	fprintf(f, "Cycles = %lld\n", esim_domain_cycle(net_domain_index));
 	fprintf(f, "\n");
 
 	/* Links */

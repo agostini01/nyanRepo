@@ -734,3 +734,17 @@ int preload(int preload_factor)
 	return preload;
 }
 
+void mod_flush(struct mod_t *mod)
+{
+	// Create an stack with a new ID
+	struct mod_stack_t *stack;
+	mod_stack_id++;
+	stack = mod_stack_create(mod_stack_id, mod, 0, ESIM_EV_NONE, NULL);
+
+	// Initialize the stack
+
+	// Schedule
+	esim_schedule_event(EV_MOD_NMOESI_FLUSH, stack, 0);
+
+	return;
+}
