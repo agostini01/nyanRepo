@@ -291,5 +291,8 @@ struct mod_client_info_t *mod_client_info_create(struct mod_t *mod);
 void mod_client_info_free(struct mod_t *mod, struct mod_client_info_t *client_info);
 
 int preload(int preload_factor);
+
+/* The mod is the vector cache of the first compute unit */
+void mod_flush(struct mod_t *mod);
 #endif
 

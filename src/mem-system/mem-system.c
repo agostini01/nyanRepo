@@ -47,6 +47,7 @@
 int mem_debug_category;
 int mem_trace_category;
 int mem_peer_transfers;
+int mem_final_flush;
 int mem_multinet;
 int mem_shared_net;
 enum mem_writepolicy_t writepolicy;
@@ -308,6 +309,11 @@ void mem_system_init(void)
 				mem_domain_index, "mod_nmoesi_message_reply");
 		EV_MOD_NMOESI_MESSAGE_FINISH = esim_register_event_with_name(mod_handler_nmoesi_message,
 				mem_domain_index, "mod_nmoesi_message_finish");
+
+		EV_MOD_NMOESI_FLUSH = esim_register_event_with_name(mod_handler_nmoesi_flush,
+				mem_domain_index, "mod_nmoesi_flush");
+		EV_MOD_NMOESI_FLUSH_FINISH = esim_register_event_with_name(mod_handler_nmoesi_flush,
+				mem_domain_index, "mod_nmoesi_flush_finish");
 
 	}
 	else if (writepolicy == mem_writepolicy_writethrough)
@@ -614,7 +620,24 @@ void mem_system_dump_report(void)
 		fprintf(f, "NoRetryNCWriteHits = %lld\n", mod->no_retry_nc_write_hits);
 		fprintf(f, "NoRetryNCWriteMisses = %lld\n", mod->no_retry_nc_writes
 				- mod->no_retry_nc_write_hits);
+		fprintf(f, "\n");
+
+		// dumping the state of cache-blocks
+		int cache_states[6] = {0,0,0,0,0,0};
+		for ( int set = 0; set < mod->dir_num_sets; set++)
+			for (int way = 0; way < mod->dir_assoc; way++)
+			{
+				int state = 0;
+				cache_get_block(mod->cache, set, way, 
+					NULL, &state);
+				cache_states[state]++;
+			}
+		for (int block_state = 0; block_state < 6; block_state++)
+			fprintf(f, "STATE_%s = %d \n", 
+				str_map_value(&cache_block_state_map, block_state),
+				cache_states[block_state]);
 		fprintf(f, "\n\n");
+		
 	}
 
 	/* Done */
@@ -657,4 +680,28 @@ struct net_t *mem_system_get_net(char *net_name)
 
 	/* Not found */
 	return NULL;
+}
+
+int mem_system_final_flush()
+{
+	if (!mem_final_flush)
+		return 0;
+
+	// Select one cache in the highest level 
+	// and start the flush
+	struct mod_t *mod;
+	for (int i = 0; i < list_count(mem_system->mod_list); i++)
+	{
+		mod = list_get(mem_system->mod_list, i);
+		if (mod->high_net != NULL)
+			continue;
+		else
+		{
+			mod_flush(mod);
+			break;
+		}
+	}
+
+	// return 1 which means we are doing the final flush
+	return 1;
 }

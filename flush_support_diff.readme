@@ -1,0 +1,1189 @@
+Index: runtime/opencl/si-device.c
+===================================================================
+--- runtime/opencl/si-device.c	(revision 2172)
++++ runtime/opencl/si-device.c	(working copy)
+@@ -137,8 +137,6 @@
+ 	/* Call-back functions for ND-Range */
+ 	parent->arch_ndrange_create_func = (opencl_arch_ndrange_create_func_t)
+ 		opencl_si_ndrange_create;
+-	parent->arch_ndrange_free_func = (opencl_arch_ndrange_free_func_t) 
+-		opencl_si_ndrange_free;
+ 	parent->arch_ndrange_init_func = (opencl_arch_ndrange_init_func_t) 
+ 		opencl_si_ndrange_init;
+ 	parent->arch_ndrange_run_func = (opencl_arch_ndrange_run_func_t) 
+@@ -146,6 +144,10 @@
+ 	parent->arch_ndrange_run_partial_func = 
+ 		(opencl_arch_ndrange_run_partial_func_t) 
+ 		opencl_si_ndrange_run_partial;
++	parent->arch_ndrange_finish_func = (opencl_arch_ndrange_finish_func_t)
++		opencl_si_ndrange_finish;
++	parent->arch_ndrange_free_func = (opencl_arch_ndrange_free_func_t) 
++		opencl_si_ndrange_free;
+ 	parent->arch_device_preferred_workgroups_func = 
+ 		(opencl_arch_device_preferred_workgroups_func_t)
+ 		opencl_si_device_preferred_workgroups;
+Index: runtime/opencl/x86-kernel.c
+===================================================================
+--- runtime/opencl/x86-kernel.c	(revision 2172)
++++ runtime/opencl/x86-kernel.c	(working copy)
+@@ -272,7 +272,6 @@
+ 	return kernel;
+ }
+ 
+-
+ void opencl_x86_kernel_free(struct opencl_x86_kernel_t *kernel)
+ {
+ 	opencl_debug("[%s] freeing x86 kernel", __FUNCTION__);
+@@ -418,6 +417,11 @@
+ 	ndrange->exec = exec;
+ }
+ 
++void opencl_x86_ndrange_finish(struct opencl_x86_ndrange_t *ndrange)
++{
++
++}
++
+ /* Finalize an ND-Range */
+ void opencl_x86_ndrange_free(struct opencl_x86_ndrange_t *ndrange)
+ {
+@@ -473,6 +477,8 @@
+ 	opencl_x86_ndrange_run_partial(ndrange, group_start, 
+ 		ndrange->group_count);
+ 
++	opencl_x86_ndrange_finish(ndrange);
++
+ 	opencl_x86_ndrange_free(ndrange);
+ }
+ 
+Index: runtime/opencl/device.h
+===================================================================
+--- runtime/opencl/device.h	(revision 2172)
++++ runtime/opencl/device.h	(working copy)
+@@ -106,6 +106,7 @@
+ 	opencl_arch_ndrange_init_func_t arch_ndrange_init_func;
+ 	opencl_arch_ndrange_run_func_t arch_ndrange_run_func;
+ 	opencl_arch_ndrange_run_partial_func_t arch_ndrange_run_partial_func;
++	opencl_arch_ndrange_free_func_t arch_ndrange_finish_func;
+ 	opencl_arch_ndrange_free_func_t arch_ndrange_free_func;
+ 	
+ 	/* Architecture-specific device of type 'opencl_XXX_device_t'.
+Index: runtime/opencl/union-kernel.c
+===================================================================
+--- runtime/opencl/union-kernel.c	(revision 2172)
++++ runtime/opencl/union-kernel.c	(working copy)
+@@ -109,7 +109,9 @@
+ 	pthread_mutex_unlock(info->lock);
+ 
+ 	opencl_debug("[%s] calling nd-range finish", __FUNCTION__);
+-	/* Initialize architecture-specific ND-Range */
++	info->device->arch_ndrange_finish_func(arch_ndrange);
++
++	opencl_debug("[%s] calling nd-range free", __FUNCTION__);
+ 	info->device->arch_ndrange_free_func(arch_ndrange);
+ 
+ 	free(group_offset);
+@@ -358,9 +360,18 @@
+ 
+ void opencl_union_ndrange_init(struct opencl_union_ndrange_t *ndrange)
+ {
++	/* Each architecture-specific nd-range is initialized
++	 * within the run function */
+ 	opencl_debug("[%s] empty", __FUNCTION__);
+ }
+ 
++void opencl_union_ndrange_finish(struct opencl_union_ndrange_t *ndrange)
++{
++	/* Each architecture-specific nd-range is finished 
++	 * within the run function */
++	opencl_debug("[%s] empty", __FUNCTION__);
++}
++
+ void opencl_union_ndrange_free(struct opencl_union_ndrange_t *ndrange)
+ {
+ 	assert(ndrange);
+Index: runtime/opencl/x86-kernel.h
+===================================================================
+--- runtime/opencl/x86-kernel.h	(revision 2172)
++++ runtime/opencl/x86-kernel.h	(working copy)
+@@ -181,6 +181,9 @@
+ 		unsigned int *global_work_size, unsigned int *local_work_size,
+ 		unsigned int fused);
+ 
++void opencl_x86_ndrange_finish(
++		struct opencl_x86_ndrange_t *ndrange);
++
+ void opencl_x86_ndrange_free(
+ 		struct opencl_x86_ndrange_t *ndrange);
+ 
+Index: runtime/opencl/union-kernel.h
+===================================================================
+--- runtime/opencl/union-kernel.h	(revision 2172)
++++ runtime/opencl/union-kernel.h	(working copy)
+@@ -62,6 +62,9 @@
+ 	unsigned int *global_work_size, unsigned int *local_work_size, 
+ 	unsigned int fused);
+ 
++void opencl_union_ndrange_finish(
++	struct opencl_union_ndrange_t *ndrange);
++
+ void opencl_union_ndrange_free(
+ 	struct opencl_union_ndrange_t *ndrange);
+ 
+Index: runtime/opencl/opencl.h
+===================================================================
+--- runtime/opencl/opencl.h	(revision 2172)
++++ runtime/opencl/opencl.h	(working copy)
+@@ -232,6 +232,9 @@
+ typedef void (*opencl_arch_ndrange_run_partial_func_t)(void *ndrange, 
+ 		unsigned int *work_group_start, unsigned int *work_group_count);
+ 
++/* Finish an ND-Range (blocking call) */
++typedef void (*opencl_arch_ndrange_finish_func_t)(void *ndrange);
++
+ /* Free an ND-Range */
+ typedef void (*opencl_arch_ndrange_free_func_t)(void *ndrange);
+ 
+Index: runtime/opencl/si-kernel.c
+===================================================================
+--- runtime/opencl/si-kernel.c	(revision 2172)
++++ runtime/opencl/si-kernel.c	(working copy)
+@@ -367,15 +367,27 @@
+ 
+ void opencl_si_ndrange_init(struct opencl_si_ndrange_t *ndrange)
+ {
+-	return;
++
+ }
+ 
++void opencl_si_ndrange_finish(struct opencl_si_ndrange_t *ndrange)
++{
++	/* Wait for the nd-range to complete */
++	syscall(OPENCL_SYSCALL_CODE, opencl_abi_si_ndrange_finish,
++		ndrange->id);
++
++	/* Flush the cache */
++	syscall(OPENCL_SYSCALL_CODE, opencl_abi_si_ndrange_flush, 
++		ndrange->id);
++
++}
++
+ void opencl_si_ndrange_free(struct opencl_si_ndrange_t *ndrange)
+ {
+ 	opencl_debug("[%s] freeing si kernel", __FUNCTION__);
+ 
+-	/* Wait for the nd-range to complete */
+-	syscall(OPENCL_SYSCALL_CODE, opencl_abi_si_ndrange_finish,
++	/* Free the ndrange */
++	syscall(OPENCL_SYSCALL_CODE, opencl_abi_si_ndrange_free, 
+ 		ndrange->id);
+ 
+ 	free(ndrange);
+@@ -417,6 +429,10 @@
+ 	opencl_si_ndrange_run_partial(ndrange, work_group_start,
+ 		work_group_count);
+ 
++	/* Wait for the nd-range to complete and then flush the cache */
++	opencl_si_ndrange_finish(ndrange);
++
++	/* Free the nd-range */
+ 	opencl_si_ndrange_free(ndrange);
+ }
+ 
+Index: runtime/opencl/si-kernel.h
+===================================================================
+--- runtime/opencl/si-kernel.h	(revision 2172)
++++ runtime/opencl/si-kernel.h	(working copy)
+@@ -106,17 +106,19 @@
+ 	void *cb_ptr;
+ };
+ 
++/* Kernel callbacks */
+ struct opencl_si_kernel_t *opencl_si_kernel_create(
+ 	struct opencl_kernel_t *parent, struct opencl_si_program_t *program,
+ 	char *func_name);
+ 
+-void opencl_si_kernel_free(struct opencl_si_kernel_t *kernel);
+-
+ void opencl_si_kernel_debug(struct opencl_si_kernel_t *kernel);
+ 
+ int opencl_si_kernel_set_arg(struct opencl_si_kernel_t *kernel, int arg_index,
+ 	unsigned int arg_size, void *arg_value);
+ 
++void opencl_si_kernel_free(struct opencl_si_kernel_t *kernel);
++
++/* ND-Range callbacks */
+ struct opencl_si_ndrange_t *opencl_si_ndrange_create(
+ 	struct opencl_ndrange_t *ndrange, struct opencl_si_kernel_t *si_kernel,
+ 	unsigned int work_dim, unsigned int *global_work_offset,
+@@ -123,8 +125,6 @@
+ 	unsigned int *global_work_size, unsigned int *local_work_size,
+ 	unsigned int fused);
+ 
+-void opencl_si_ndrange_free(struct opencl_si_ndrange_t *ndrange);
+-
+ void opencl_si_ndrange_init(struct opencl_si_ndrange_t *ndrange);
+ 
+ void opencl_si_ndrange_run(struct opencl_si_ndrange_t *ndrange);
+@@ -132,5 +132,9 @@
+ void opencl_si_ndrange_run_partial(struct opencl_si_ndrange_t *ndrange,
+ 	unsigned int work_group_start[3], unsigned int work_group_size[3]);
+ 
++void opencl_si_ndrange_finish(struct opencl_si_ndrange_t *ndrange);
++
++void opencl_si_ndrange_free(struct opencl_si_ndrange_t *ndrange);
++
+ #endif
+ 
+Index: runtime/opencl/platform.c
+===================================================================
+--- runtime/opencl/platform.c	(revision 2172)
++++ runtime/opencl/platform.c	(working copy)
+@@ -156,8 +156,8 @@
+ /* Version for the OpenCL runtime.
+  * NOTE: when modifying the values of these two macros, the same values should
+  * be reflected in 'src/driver/opencl/opencl.c'. */
+-#define OPENCL_VERSION_MAJOR  4
+-#define OPENCL_VERSION_MINOR  2143
++#define OPENCL_VERSION_MAJOR  5
++#define OPENCL_VERSION_MINOR  2173
+ 
+ cl_int clGetPlatformIDs(
+ 	cl_uint num_entries,
+Index: runtime/opencl/x86-device.c
+===================================================================
+--- runtime/opencl/x86-device.c	(revision 2172)
++++ runtime/opencl/x86-device.c	(working copy)
+@@ -611,6 +611,9 @@
+ 	parent->arch_ndrange_create_func =
+ 			(opencl_arch_ndrange_create_func_t)
+ 			opencl_x86_ndrange_create;
++	parent->arch_ndrange_finish_func =
++			(opencl_arch_ndrange_finish_func_t)
++			opencl_x86_ndrange_finish;
+ 	parent->arch_ndrange_free_func =
+ 			(opencl_arch_ndrange_free_func_t)
+ 			opencl_x86_ndrange_free;
+@@ -664,7 +667,7 @@
+ {
+ 	void *ptr;
+ 
+-	if (posix_memalign(&ptr, 16, size))
++	if (posix_memalign(&ptr, 4096, size))  /* Page align */
+ 		fatal("%s: out of memory", __FUNCTION__);
+ 	mhandle_register_ptr(ptr, size);
+ 	return ptr;
+Index: runtime/opencl/union-device.c
+===================================================================
+--- runtime/opencl/union-device.c	(revision 2172)
++++ runtime/opencl/union-device.c	(working copy)
+@@ -74,6 +74,9 @@
+ 	parent->arch_ndrange_create_func =
+ 			(opencl_arch_ndrange_create_func_t)
+ 			opencl_union_ndrange_create;
++	parent->arch_ndrange_finish_func =
++			(opencl_arch_ndrange_finish_func_t)
++			opencl_union_ndrange_finish;
+ 	parent->arch_ndrange_free_func =
+ 			(opencl_arch_ndrange_free_func_t)
+ 			opencl_union_ndrange_free;
+Index: src/mem-system/nmoesi-protocol.h
+===================================================================
+--- src/mem-system/nmoesi-protocol.h	(revision 2172)
++++ src/mem-system/nmoesi-protocol.h	(working copy)
+@@ -103,6 +103,8 @@
+ extern int EV_MOD_NMOESI_MESSAGE_REPLY;
+ extern int EV_MOD_NMOESI_MESSAGE_FINISH;
+ 
++extern int EV_MOD_NMOESI_FLUSH;
++extern int EV_MOD_NMOESI_FLUSH_FINISH;
+ 
+ void mod_handler_nmoesi_find_and_lock(int event, void *data);
+ void mod_handler_nmoesi_load(int event, void *data);
+@@ -115,6 +117,7 @@
+ void mod_handler_nmoesi_invalidate(int event, void *data);
+ void mod_handler_nmoesi_peer(int event, void *data);
+ void mod_handler_nmoesi_message(int event, void *data);
++void mod_handler_nmoesi_flush(int event, void *data);
+ 
+ 
+ #endif
+Index: src/mem-system/mem-system.c
+===================================================================
+--- src/mem-system/mem-system.c	(revision 2172)
++++ src/mem-system/mem-system.c	(working copy)
+@@ -286,6 +286,11 @@
+ 	EV_MOD_NMOESI_MESSAGE_FINISH = esim_register_event_with_name(mod_handler_nmoesi_message,
+ 			mem_domain_index, "mod_nmoesi_message_finish");
+ 
++	EV_MOD_NMOESI_FLUSH = esim_register_event_with_name(mod_handler_nmoesi_flush,
++			mem_domain_index, "mod_nmoesi_flush");
++	EV_MOD_NMOESI_FLUSH_FINISH = esim_register_event_with_name(mod_handler_nmoesi_flush,
++			mem_domain_index, "mod_nmoesi_flush_finish");
++
+ 	/* Local memory event driven simulation */
+ 
+ 	EV_MOD_LOCAL_MEM_LOAD = esim_register_event_with_name(mod_handler_local_mem_load,
+Index: src/mem-system/mod-stack.c
+===================================================================
+--- src/mem-system/mod-stack.c	(revision 2172)
++++ src/mem-system/mod-stack.c	(working copy)
+@@ -21,8 +21,9 @@
+ 
+ #include <lib/esim/esim.h>
+ #include <lib/mhandle/mhandle.h>
++#include <lib/util/debug.h>
++#include <lib/util/list.h>
+ #include <lib/util/misc.h>
+-#include <lib/util/debug.h>
+ 
+ #include "cache.h"
+ #include "mem-system.h"
+@@ -62,6 +63,10 @@
+ 	/* Wake up dependent accesses */
+ 	mod_stack_wakeup_stack(stack);
+ 
++	/* Execute the callback if one was provided */
++	if (stack->callback_function)
++		stack->callback_function(stack->callback_data);
++
+ 	/* Free */
+ 	free(stack);
+ 	esim_schedule_event(ret_event, ret_stack, 0);
+Index: src/mem-system/module.c
+===================================================================
+--- src/mem-system/module.c	(revision 2172)
++++ src/mem-system/module.c	(working copy)
+@@ -103,7 +103,8 @@
+ 
+ 
+ /* Access a memory module.
+- * Variable 'witness', if specified, will be increased when the access completes.
++ * Variable 'witness', if specified, will be increased when the access 
++ * completes.
+  * The function returns a unique access ID.
+  */
+ long long mod_access(struct mod_t *mod, enum mod_access_kind_t access_kind, 
+@@ -703,3 +704,28 @@
+ {
+ 	repos_free_object(mod->client_info_repos, client_info);
+ }
++
++/* 
++ * Flush all blocks contained within 'page_list' from the main-memory modules
++ * accessible by 'mod'. 'page_list' will be added to the stack structure 
++ * and freed when the stack is freed */
++void mod_flush(struct mod_t *mod, unsigned int page, int *witness_ptr,
++	void (*callback_function)(void *), void *callback_data)
++{
++	struct mod_stack_t *stack;
++
++	/* Create module stack with new ID */
++	mod_stack_id++;
++	stack = mod_stack_create(mod_stack_id, mod, 0, ESIM_EV_NONE, NULL);
++
++	/* Initialize */
++	stack->flush_page = page;
++	stack->callback_function = callback_function;
++	stack->callback_data = callback_data;
++	stack->witness_ptr = witness_ptr;
++
++	/* Schedule */
++	esim_execute_event(EV_MOD_NMOESI_FLUSH, stack);
++
++	return;
++}
+Index: src/mem-system/mod-stack.h
+===================================================================
+--- src/mem-system/mod-stack.h	(revision 2172)
++++ src/mem-system/mod-stack.h	(working copy)
+@@ -61,6 +61,8 @@
+ 	struct linked_list_t *event_queue;
+ 	void *event_queue_item;
+ 	struct mod_client_info_t *client_info;
++	void (*callback_function)(void *);
++	void *callback_data;
+ 
+ 	struct mod_t *mod;
+ 	struct mod_t *target_mod;
+@@ -98,6 +100,9 @@
+ 	struct mod_stack_t *bucket_list_prev;
+ 	struct mod_stack_t *bucket_list_next;
+ 
++	/* The page to flush for flush requests */
++	unsigned int flush_page;
++
+ 	/* Flags */
+ 	int hit : 1;
+ 	int err : 1;
+Index: src/mem-system/nmoesi-protocol.c
+===================================================================
+--- src/mem-system/nmoesi-protocol.c	(revision 2172)
++++ src/mem-system/nmoesi-protocol.c	(working copy)
+@@ -24,6 +24,7 @@
+ #include <lib/util/linked-list.h>
+ #include <lib/util/list.h>
+ #include <lib/util/string.h>
++#include <mem-system/memory.h>
+ #include <network/network.h>
+ #include <network/node.h>
+ 
+@@ -116,10 +117,11 @@
+ int EV_MOD_NMOESI_MESSAGE_REPLY;
+ int EV_MOD_NMOESI_MESSAGE_FINISH;
+ 
++int EV_MOD_NMOESI_FLUSH;
++int EV_MOD_NMOESI_FLUSH_FINISH;
+ 
+ 
+ 
+-
+ /* NMOESI Protocol */
+ 
+ void mod_handler_nmoesi_load(int event, void *data)
+@@ -2928,3 +2930,121 @@
+ 
+ 	abort();
+ }
++
++void nmoesi_flush_pages(struct mod_t *mod, struct mod_stack_t *stack)
++{
++	struct mod_stack_t *new_stack;
++
++	int set;
++	int way;
++	int tag;
++	int state;
++	unsigned int page_start;
++	unsigned int page_end;
++
++	page_start = stack->flush_page;
++	page_end = (page_start + MEM_PAGE_SIZE - 1);
++
++	for (set = 0; set < mod->dir_num_sets; set++)
++	{
++		for (way = 0; way < mod->dir_assoc; way++)
++		{
++			cache_get_block(mod->cache, set, way, &tag, &state);
++
++			if (!state)
++				continue;
++
++			if (!(tag >= page_start && tag <= page_end))
++				continue;
++
++			/* If the tag is within the page range,
++			 * send an invalidation request */
++			stack->pending++;
++			new_stack = mod_stack_create(stack->id, mod, 
++				tag, EV_MOD_NMOESI_FLUSH_FINISH, stack);
++
++			new_stack->except_mod = NULL;
++			new_stack->set = set;
++			new_stack->way = way;
++			new_stack->callback_function = stack->callback_function;
++			new_stack->callback_data = stack->callback_data;
++			new_stack->witness_ptr = stack->witness_ptr;
++
++			esim_schedule_event(EV_MOD_NMOESI_INVALIDATE, 
++				new_stack, 0);
++		}
++	}
++}
++
++void nmoesi_recursive_flush(struct mod_t *mod, struct mod_stack_t *stack)
++{
++	struct mod_t *low_mod;
++
++	LINKED_LIST_FOR_EACH(mod->low_mod_list)
++	{
++		low_mod = linked_list_get(mod->low_mod_list);
++		if (low_mod->kind != mod_kind_main_memory)
++		{
++			nmoesi_recursive_flush(low_mod, stack);
++		}
++		else
++		{
++			nmoesi_flush_pages(low_mod, stack);
++		}
++	}
++}
++
++void mod_handler_nmoesi_flush(int event, void *data)
++{
++	struct mod_stack_t *stack = data;
++
++	struct mod_t *mod = stack->mod;
++
++	if (event == EV_MOD_NMOESI_FLUSH)
++	{
++		mem_debug("  %lld %lld 0x%x %s flush\n", esim_time, stack->id,
++			stack->addr, mod->name);
++		mem_trace("mem.new_access name=\"A-%lld\" type=\"flush\" "
++			"state=\"%s:flush\" addr=0x%x\n",
++			stack->id, mod->name, stack->addr);
++
++		stack->pending = 1;
++
++		if (mod->kind == mod_kind_cache)
++		{
++			nmoesi_recursive_flush(mod, stack);
++		}
++
++		esim_schedule_event(EV_MOD_NMOESI_FLUSH_FINISH, stack, 0);
++		
++		return;
++	}
++
++	if (event == EV_MOD_NMOESI_FLUSH_FINISH)
++	{
++		/* Ignore while pending requests */
++		assert(stack->pending > 0);
++		stack->pending--;
++		if (stack->pending)
++			return;
++
++		mem_trace("mem.end_access name=\"A-%lld\"\n", stack->id);
++
++		/* Increment the witness pointer if one was provided */
++		if (stack->witness_ptr)
++		{
++			(*stack->witness_ptr)++;
++		}
++
++		/* Execute callback if one was provided */
++		if (stack->callback_function)
++			stack->callback_function(stack->callback_data);
++
++		/* Return */
++		mod_stack_return(stack);
++
++		return;
++	}
++
++	abort();
++}
+Index: src/mem-system/module.h
+===================================================================
+--- src/mem-system/module.h	(revision 2172)
++++ src/mem-system/module.h	(working copy)
+@@ -248,6 +248,9 @@
+ 	void *event_queue_item, struct mod_client_info_t *client_info);
+ int mod_can_access(struct mod_t *mod, unsigned int addr);
+ 
++void mod_flush(struct mod_t *mod, unsigned int page, int *witness_ptr,
++	void (*callback_function)(void *), void *callback_data);
++
+ int mod_find_block(struct mod_t *mod, unsigned int addr, int *set_ptr, int *way_ptr, 
+ 	int *tag_ptr, int *state_ptr);
+ 
+Index: src/driver/opencl/si-kernel.h
+===================================================================
+--- src/driver/opencl/si-kernel.h	(revision 2172)
++++ src/driver/opencl/si-kernel.h	(working copy)
+@@ -66,6 +66,8 @@
+ 	SINDRange *ndrange);
+ void opencl_si_kernel_debug_ndrange_state(struct opencl_si_kernel_t *kernel, 
+ 	SINDRange *ndrange);
++void opencl_si_kernel_flush_ndrange_buffers(SINDRange *ndrange, SIGpu *gpu,
++	X86Emu *x86_emu);
+ void opencl_si_kernel_create_ndrange_tables(SINDRange *ndrange, MMU *gpu_mmu);
+ void opencl_si_kernel_create_ndrange_constant_buffers(SINDRange *ndrange, 
+ 	MMU *gpu_mmu);
+Index: src/driver/opencl/opencl.c
+===================================================================
+--- src/driver/opencl/opencl.c	(revision 2172)
++++ src/driver/opencl/opencl.c	(working copy)
+@@ -26,6 +26,7 @@
+ #include <arch/x86/emu/regs.h>
+ #include <arch/x86/timing/cpu.h>
+ #include <lib/class/list.h>
++#include <lib/class/string.h>
+ #include <lib/mhandle/mhandle.h>
+ #include <lib/util/debug.h>
+ #include <lib/util/list.h>
+@@ -229,8 +230,8 @@
+ 
+ /* NOTE: when modifying the values of these two macros, the same values should
+  * be reflected in 'runtime/opencl/platform.c'. */
+-#define OPENCL_VERSION_MAJOR  4
+-#define OPENCL_VERSION_MINOR  2143
++#define OPENCL_VERSION_MAJOR  5
++#define OPENCL_VERSION_MINOR  2173
+ 
+ struct opencl_version_t
+ {
+@@ -308,13 +309,12 @@
+ 	if (si_gpu)
+ 	{
+ 		/* Allocate starting from nearest page boundary */
+-		if (si_emu->video_mem_top % si_gpu->mmu->page_mask)
++		if (si_emu->video_mem_top & si_gpu->mmu->page_mask)
+ 		{
+ 			si_emu->video_mem_top += si_gpu->mmu->page_size -
+ 				(si_emu->video_mem_top & 
+ 				 si_gpu->mmu->page_mask);
+ 		}
+-
+ 	}
+ 
+ 	/* Map new pages */
+@@ -1021,7 +1021,7 @@
+ 
+ static int opencl_abi_si_ndrange_create_impl(X86Context *ctx)
+ {
+-	SIArg *arg;
++	SIArg *arg, *arg_copy;
+ 	X86Emu *x86_emu = ctx->emu;
+ 	OpenclDriver *driver = x86_emu->opencl_driver;
+ 	SIEmu *si_emu = driver->si_emu;
+@@ -1115,12 +1115,17 @@
+ 	if (si_gpu)
+ 		SIGpuMapNDRange(si_gpu, ndrange);
+ 	
+-	opencl_debug("\tkernel arg_list has %d elems\n", 
++	opencl_debug("\tcopying %d arguments from the kernel\n", 
+ 		kernel->arg_list->count);
+ 
+ 	/* Copy kernel arg list to nd-range */
+ 	ListForEach(kernel->arg_list, arg, SIArg)
+-		ListAdd(ndrange->arg_list, asObject(arg));
++	{
++		arg_copy = SIArgCopy(arg);
++		ListAdd(ndrange->arg_list, asObject(arg_copy));
++		opencl_debug("setting arg to %p\n", asObject(arg_copy));
++		opencl_debug("device_ptr = %u\n", arg->pointer.device_ptr);
++	}
+ 
+ 	list_add(driver->si_ndrange_list, ndrange);
+ 
+@@ -1349,8 +1354,6 @@
+ {
+ 	assert(user_data);
+ 
+-	X86Emu *emu = ctx->emu;
+-	OpenclDriver *driver = emu->opencl_driver;
+ 	SINDRange *ndrange = (SINDRange *) user_data;
+ 
+ 	assert(!list_count(ndrange->waiting_work_groups));
+@@ -1357,10 +1360,6 @@
+ 	assert(!list_count(ndrange->running_work_groups));
+ 	assert(ndrange->last_work_group_sent);
+ 
+-	list_remove(driver->si_ndrange_list, ndrange);
+-
+-	delete(ndrange);
+-
+ 	return;
+ }
+ 
+@@ -1393,8 +1392,6 @@
+ 		!list_count(ndrange->waiting_work_groups))
+ 	{
+ 		opencl_debug("\tnd-range %d finished\n", ndrange_id);
+-		list_remove(driver->si_ndrange_list, ndrange);
+-		delete(ndrange);
+ 	}
+ 	else
+ 	{
+@@ -1537,9 +1534,131 @@
+ 	 * the CPU */
+ 	if (driver->fused)
+ 	{
++		opencl_debug("\tfused\n");
+ 		assert(si_gpu);
+ 		si_gpu->mmu->read_only = 1;
+ 	}
++	else
++	{
++		opencl_debug("\tnot fused\n");
++	}
+ 
+ 	return 0;
+ }
++
++/*
++ * OpenCL ABI call #20 - si_ndrange_flush
++ *
++ * @param int ndrange-id
++ *
++ *	ID of ND-Range to flush
++ *
++ * @return int
++ *
++ *	The function always returns 0.
++ */
++
++static int opencl_abi_si_ndrange_flush_can_wakeup(X86Context *ctx, 
++	void *user_data)
++{
++	assert(user_data);
++	
++	int* witness_ptr = user_data;
++	int can_wakeup = !(*witness_ptr);
++
++	return can_wakeup;
++}
++
++static void opencl_abi_si_ndrange_flush_wakeup(X86Context *ctx, 
++	void *user_data)
++{
++	assert(user_data);
++
++	int* witness_ptr = user_data;
++	assert(!(*witness_ptr));
++
++	return;
++}
++
++static int opencl_abi_si_ndrange_flush_impl(X86Context *ctx)
++{
++	struct x86_regs_t *regs = ctx->regs;
++	X86Emu *x86_emu = ctx->emu;
++	OpenclDriver *driver = x86_emu->opencl_driver;
++	SIGpu *si_gpu = driver->si_gpu;
++
++	/* If there's not a timing simulator, no need to flush */
++	if (!si_gpu)
++		return 0;
++
++	SINDRange *ndrange = NULL, *tmp_ndrange;
++
++	int index;
++	int ndrange_id;
++
++	ndrange_id = regs->ecx;
++
++	LIST_FOR_EACH(driver->si_ndrange_list, index)
++	{
++		tmp_ndrange = (SINDRange* )list_get(driver->si_ndrange_list, 
++			index);
++		if (tmp_ndrange->id == ndrange_id)
++			ndrange = tmp_ndrange;
++	}
++	if (!ndrange)
++		fatal("%s: invalid ndrange ID (%d)", __FUNCTION__, ndrange_id);
++
++	opencl_debug("\tndrange %d\n", ndrange->id);
++
++	/* Flush RW or WO buffers from this ND-Range */
++	opencl_si_kernel_flush_ndrange_buffers(ndrange, si_gpu, x86_emu);
++
++	X86ContextSuspend(ctx, opencl_abi_si_ndrange_flush_can_wakeup, 
++		&(ndrange->flushing), opencl_abi_si_ndrange_flush_wakeup, 
++		&(ndrange->flushing));
++
++	return 0;
++}
++
++/*
++ * OpenCL ABI call #21 - si_ndrange_free
++ *
++ * @param int ndrange-id
++ *
++ *	ID of ND-Range to free
++ *
++ * @return int
++ *
++ *	The function always returns 0.
++ */
++
++static int opencl_abi_si_ndrange_free_impl(X86Context *ctx)
++{
++	struct x86_regs_t *regs = ctx->regs;
++	X86Emu *x86_emu = ctx->emu;
++	OpenclDriver *driver = x86_emu->opencl_driver;
++
++	SINDRange *ndrange = NULL, *tmp_ndrange;
++
++	int index;
++	int ndrange_id;
++
++	ndrange_id = regs->ecx;
++
++	/* Check for nd-range in the driver's list */
++	LIST_FOR_EACH(driver->si_ndrange_list, index)
++	{
++		tmp_ndrange = (SINDRange* )list_get(driver->si_ndrange_list, 
++			index);
++		if (tmp_ndrange->id == ndrange_id)
++			ndrange = tmp_ndrange;
++	}
++	if (!ndrange)
++		fatal("%s: invalid ndrange ID (%d)", __FUNCTION__, ndrange_id);
++
++	/* Free */
++	list_remove(driver->si_ndrange_list, ndrange);
++	delete(ndrange);
++
++	return 0;
++}
+Index: src/driver/opencl/opencl.dat
+===================================================================
+--- src/driver/opencl/opencl.dat	(revision 2172)
++++ src/driver/opencl/opencl.dat	(working copy)
+@@ -17,4 +17,6 @@
+ OPENCL_ABI_CALL(si_ndrange_finish, 17)
+ OPENCL_ABI_CALL(si_ndrange_pass_mem_objs, 18)
+ OPENCL_ABI_CALL(si_ndrange_set_fused, 19)
++OPENCL_ABI_CALL(si_ndrange_flush, 20)
++OPENCL_ABI_CALL(si_ndrange_free, 21)
+ 
+Index: src/driver/opencl/si-kernel.c
+===================================================================
+--- src/driver/opencl/si-kernel.c	(revision 2172)
++++ src/driver/opencl/si-kernel.c	(working copy)
+@@ -21,6 +21,8 @@
+ #include <arch/southern-islands/asm/arg.h>
+ #include <arch/southern-islands/emu/isa.h>
+ #include <arch/southern-islands/emu/ndrange.h>
++#include <arch/southern-islands/timing/compute-unit.h>
++#include <arch/southern-islands/timing/gpu.h>
+ #include <arch/x86/emu/context.h>
+ #include <arch/x86/emu/emu.h>
+ #include <arch/x86/timing/cpu.h>
+@@ -32,6 +34,7 @@
+ #include <lib/util/string.h>
+ #include <mem-system/memory.h>
+ #include <mem-system/mmu.h>
++#include <mem-system/module.h>
+ 
+ #include "opencl.h"
+ #include "si-kernel.h"
+@@ -661,7 +664,7 @@
+ 	if (gpu_mmu)
+ 	{
+ 		/* Allocate starting from nearest page boundary */
+-		if (emu->video_mem_top % gpu_mmu->page_mask)
++		if (emu->video_mem_top & gpu_mmu->page_mask)
+ 		{
+ 			emu->video_mem_top += gpu_mmu->page_size -
+ 				(emu->video_mem_top & gpu_mmu->page_mask);
+@@ -827,7 +830,7 @@
+ 	if (gpu_mmu)
+ 	{
+ 		/* Allocate starting from nearest page boundary */
+-		if (emu->video_mem_top % gpu_mmu->page_mask)
++		if (emu->video_mem_top & gpu_mmu->page_mask)
+ 		{
+ 			emu->video_mem_top += gpu_mmu->page_size -
+ 				(emu->video_mem_top & gpu_mmu->page_mask);
+@@ -883,6 +886,8 @@
+ 			fatal("%s: kernel '%s': argument '%s' not set",
+ 				__FUNCTION__, kernel->name, arg->name->text);
+ 
++		opencl_debug("\targ[%d] = %s ", index, arg->name->text);
++
+ 		/* Process argument depending on its type */
+ 		switch (arg->type)
+ 		{
+@@ -914,9 +919,8 @@
+ 					arg->pointer.constant_offset,
+ 					&ndrange->local_mem_top, 4);
+ 
+-				opencl_debug("\targument %d: %u bytes reserved"
+-					" in local memory at 0x%x\n", index,
+-					arg->size, ndrange->local_mem_top);
++				opencl_debug("%u bytes at 0x%x", arg->size, 
++					ndrange->local_mem_top);
+ 
+ 				ndrange->local_mem_top += arg->size;
+ 
+@@ -925,6 +929,7 @@
+ 			/* UAV */
+ 			case SIArgUAV:
+ 			{
++				opencl_debug("(%x0x)", arg->pointer.device_ptr);
+ 				/* Create descriptor for argument */
+ 				opencl_si_create_buffer_desc(
+ 					arg->pointer.device_ptr,
+@@ -998,6 +1003,7 @@
+ 				__FUNCTION__, arg->type);
+ 
+ 		}
++		opencl_debug("\n");
+ 
+ 		/* Next */
+ 		index++;
+@@ -1192,8 +1198,6 @@
+ 	struct si_buffer_desc_t buffer_desc;
+ 	SIArg *arg;
+ 
+-	opencl_debug("\tndrange arg_list has %d elems\n", ndrange->arg_list->count);
+-
+         si_isa_debug("\n");
+         si_isa_debug("================ Initialization Summary ================"
+                 "\n");
+@@ -1206,15 +1210,15 @@
+         si_isa_debug("\t------------------------------------------------\n");
+         si_isa_debug("\t|    Name            |    Address Range        |\n");
+         si_isa_debug("\t------------------------------------------------\n");
+-        si_isa_debug("\t| Const Buffer table | [%10u:%10u] |\n",
++        si_isa_debug("\t| Const Buffer table | [0x%8x:0x%8x] |\n",
+                 ndrange->const_buf_table,
+                 ndrange->const_buf_table +
+                 SI_EMU_CONST_BUF_TABLE_SIZE-1);
+-        si_isa_debug("\t| Resource table     | [%10u:%10u] |\n",
++        si_isa_debug("\t| Resource table     | [0x%8x:0x%8x] |\n",
+                 ndrange->resource_table,
+                 ndrange->resource_table +
+                 SI_EMU_RESOURCE_TABLE_SIZE-1);
+-        si_isa_debug("\t| UAV table          | [%10u:%10u] |\n",
++        si_isa_debug("\t| UAV table          | [0x%8x:0x%8x] |\n",
+                 ndrange->uav_table,
+                 ndrange->uav_table + SI_EMU_UAV_TABLE_SIZE - 1);
+         si_isa_debug("\t------------------------------------------------\n");
+@@ -1373,7 +1377,7 @@
+ 			i*SI_EMU_CONST_BUF_TABLE_ENTRY_SIZE, 
+ 			sizeof(buffer_desc), &buffer_desc);
+ 
+-        	si_isa_debug("\t| CB%-2d  | [%10llu:%10llu] |\n",
++        	si_isa_debug("\t| CB%-2d  | [0x%8llx:0x%8llx] |\n",
+ 			i, (long long unsigned int)buffer_desc.base_addr,
+ 			(long long unsigned int)buffer_desc.base_addr + 
+ 			(long long unsigned int)buffer_desc.num_records - 1);
+@@ -1395,7 +1399,7 @@
+ 			ndrange->uav_table + i*SI_EMU_UAV_TABLE_ENTRY_SIZE, 
+ 			sizeof(buffer_desc), &buffer_desc);
+ 
+-        	si_isa_debug("\t| UAV%-2d | [%10u:%10u] |\n",
++        	si_isa_debug("\t| UAV%-2d | [0x%8x:0x%8x] |\n",
+ 			i, (unsigned int)buffer_desc.base_addr,
+ 			(unsigned int)buffer_desc.base_addr + 
+ 			(unsigned int)buffer_desc.num_records - 1);
+@@ -1480,4 +1484,139 @@
+ 	}
+ }
+ 
++static void flush_callback(void *data)
++{
++	assert(data);
+ 
++	X86Emu *x86_emu = (X86Emu *)data;
++	X86EmuProcessEventsSchedule(x86_emu);
++}
++
++/* Go through list of arguments */
++/* For each buffer found, check if rw or wo */
++/* For each rw or wo buffer, create a list of pages to flush */
++void opencl_si_kernel_flush_ndrange_buffers(SINDRange *ndrange, SIGpu *gpu,
++	X86Emu *x86_emu)
++{
++	MMU *mmu = gpu->mmu;
++	SIArg *arg;
++
++	int num_pages;
++	int i;
++
++	unsigned int phys_page;
++
++	/* Compute unit whose cache will be used for the flush */
++	SIComputeUnit *compute_unit = gpu->compute_units[0];
++	assert(compute_unit);
++
++	/* Use vector cache for module that receives the flush request */
++	struct mod_t *flush_mod = compute_unit->vector_cache;
++	assert(flush_mod);
++
++	ListForEach(ndrange->arg_list, arg, SIArg)
++	{
++		/* Check that argument was set */
++		assert(arg);
++		assert(arg->set);
++
++		/* Process argument depending on its type */
++		switch (arg->type)
++		{
++
++		case SIArgTypeValue:
++
++			/* Ignore values */
++			break;
++
++		case SIArgTypePointer:
++
++			switch (arg->pointer.scope)
++			{
++
++			/* Hardware local memory */
++			case SIArgHwLocal:
++			{
++				/* Ignore local memory */
++				break;
++			}
++
++			/* UAV */
++			case SIArgUAV:
++			{
++				/* Flush UAVs if they are RW or WO */
++				if ((arg->pointer.access_type == 
++					SIArgWriteOnly) || 
++					(arg->pointer.access_type == 
++					SIArgReadWrite))
++				{
++					opencl_debug("\tflushing buffer %s: virtual address 0x%x, ndrange %d (asid %d)\n", 
++						arg->name->text, 
++						arg->pointer.device_ptr, 
++						ndrange->id, 
++						ndrange->address_space_index);
++					assert(!(arg->pointer.device_ptr %
++						mmu->page_size));
++
++					num_pages = (arg->size + 
++						mmu->page_size - 1) /
++						mmu->page_size;
++
++					/* Iterate through pages and generate
++					 * an flush request for each one */
++					for (i = 0; i < num_pages; i++)
++					{
++						phys_page = MMUTranslate(
++							gpu->mmu,
++							ndrange->
++							address_space_index,
++							arg->
++							pointer.device_ptr + 
++							i*mmu->page_size);
++
++						ndrange->flushing--;
++
++						mod_flush(flush_mod, phys_page,
++							&ndrange->flushing,
++							flush_callback,
++							x86_emu);
++					}
++				}
++				break;
++			}
++
++			/* Hardware constant memory */
++			case SIArgHwConstant:
++			{
++				/* Ignore constant memory */
++				break;
++			}
++
++			default:
++			{
++				fatal("%s: not implemented memory scope",
++						__FUNCTION__);
++			}
++
++			}
++
++			break;
++
++		case SIArgTypeImage:
++
++			/* Ignore images */
++			break;
++
++		case SIArgTypeSampler:
++
++			/* Ignore samplers */
++			break;
++
++		default:
++
++			fatal("%s: argument type not recognized (%d)",
++				__FUNCTION__, arg->type);
++
++		}
++	}
++}
+Index: src/arch/southern-islands/asm/arg.c
+===================================================================
+--- src/arch/southern-islands/asm/arg.c	(revision 2172)
++++ src/arch/southern-islands/asm/arg.c	(working copy)
+@@ -185,4 +185,35 @@
+ }
+ 
+ 
++SIArg * SIArgCopy(SIArg *original)
++{
++	SIArg *copy;
+ 
++	copy = new(SIArg, original->type, original->name->text);
++	delete(copy->name);
++
++	memcpy(copy, original, sizeof(*original));
++
++	/* Copy name */
++	copy->name = asString(StringClone(asObject(original->name)));
++
++	/* Copy specific fields per type */ 
++	switch (copy->type)
++	{
++	case SIArgTypeValue:
++
++		if (copy->value.value_ptr)
++		{
++			copy->value.value_ptr = xcalloc(1, copy->size); 
++			memcpy(copy->value.value_ptr, original->value.value_ptr,
++				copy->size);
++		}
++		break;
++
++	default:
++		break;
++	}
++
++	return copy;
++}
++
+Index: src/arch/southern-islands/asm/arg.h
+===================================================================
+--- src/arch/southern-islands/asm/arg.h	(revision 2172)
++++ src/arch/southern-islands/asm/arg.h	(working copy)
+@@ -163,5 +163,6 @@
+ extern struct str_map_t si_arg_reflection_map;
+ 
+ int SIArgGetDataSize(SIArgDataType data_type);
++SIArg * SIArgCopy(SIArg *original);
+ 
+ #endif
+Index: src/arch/southern-islands/emu/ndrange.c
+===================================================================
+--- src/arch/southern-islands/emu/ndrange.c	(revision 2172)
++++ src/arch/southern-islands/emu/ndrange.c	(working copy)
+@@ -18,6 +18,7 @@
+  */
+ 
+ 
++#include <arch/southern-islands/asm/arg.h>
+ #include <lib/class/list.h>
+ #include <lib/mhandle/mhandle.h>
+ #include <lib/util/debug.h>
+@@ -62,14 +63,14 @@
+ 	list_free(self->running_work_groups);
+ 	list_free(self->completed_work_groups);
+ 
+-	/* Free argument list (do not free the arguments themselves,
+-	 * they can still be used in later ND-Ranges) */
++	/* Free the argument list */
++	ListDeleteObjects(self->arg_list);
+ 	delete(self->arg_list);
+ }
+ 
+ 
+-void SINDRangeSetupSize(SINDRange *self,
+-	unsigned int *global_size, unsigned int *local_size, int work_dim)
++void SINDRangeSetupSize(SINDRange *self, unsigned int *global_size, 
++	unsigned int *local_size, int work_dim)
+ {
+ 	int i;
+ 
+Index: src/arch/southern-islands/emu/ndrange.h
+===================================================================
+--- src/arch/southern-islands/emu/ndrange.h	(revision 2172)
++++ src/arch/southern-islands/emu/ndrange.h	(working copy)
+@@ -97,6 +97,10 @@
+ 	/* Each ND-Range has it's own address space */
+ 	int address_space_index;
+ 
++	/* A non-zero value indicates that a flush of the caches
++	 * is being performed, evicting data modified by this kernel */
++	int flushing;
++
+ 	/* Number of register used by each work-item. This fields determines
+ 	 * how many work-groups can be allocated per compute unit, among
+ 	 * others. */
