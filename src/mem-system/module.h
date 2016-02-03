@@ -197,7 +197,8 @@ struct mod_t
 	struct mod_mshr_record_t* mshr_record;
 
 	/* Mod snapshot */
-	struct snapshot_t *snapshot;
+	struct snapshot_t *snapshot_load;
+	struct snapshot_t *snapshot_store;
 
 	/* Statistics */
 	long long accesses;

@@ -150,14 +150,19 @@ void mod_handler_nmoesi_load(int event, void *data)
 			stack->id, mod->name, stack->addr);
 		if (mem_snap_period != 0)
 		{
-			assert(main_snapshot);
+			assert(snapshot_load);
 			long long cycle = esim_domain_cycle(mem_domain_index);
 
-			snapshot_record(main_snapshot, cycle, stack->addr, 0);
+			snapshot_record(snapshot_load, cycle, stack->addr);
 
-			if (cache_snapshot && !mod->snapshot)
-				mod->snapshot = snapshot_create(mod->name);
-			snapshot_record(mod->snapshot, cycle, stack->addr, 0);
+			if (cache_snapshot && !mod->snapshot_load)
+			{
+				char file[MAX_STRING_SIZE];
+				snprintf(file, sizeof file,
+						"%s_load", mod->name);
+				mod->snapshot_load = snapshot_create(file);
+			}
+			snapshot_record(mod->snapshot_load, cycle, stack->addr);
 		}
 
 		/* Record access */
@@ -364,13 +369,18 @@ void mod_handler_nmoesi_store(int event, void *data)
 			stack->id, mod->name, stack->addr);
 		if (mem_snap_period != 0)
 		{
-			assert(main_snapshot);
+			assert(snapshot_store);
 			long long cycle = esim_domain_cycle(mem_domain_index);
 
-			snapshot_record(main_snapshot, cycle, stack->addr, 1);
-			if (cache_snapshot && !mod->snapshot)
-				mod->snapshot = snapshot_create(mod->name);
-			snapshot_record(mod->snapshot, cycle, stack->addr, 1);
+			snapshot_record(snapshot_store, cycle, stack->addr);
+			if (cache_snapshot && !mod->snapshot_store)
+			{
+				char file[MAX_STRING_SIZE];
+				snprintf(file, sizeof file,
+						"%s_store", mod->name);
+				mod->snapshot_store = snapshot_create(file);
+			}
+			snapshot_record(mod->snapshot_store, cycle, stack->addr);
 		}
 
 		/* Record access */
@@ -562,14 +572,19 @@ void mod_handler_nmoesi_nc_store(int event, void *data)
 
 		if (mem_snap_period != 0)
 		{
-			assert(main_snapshot);
+			assert(snapshot_store);
 			long long cycle = esim_domain_cycle(mem_domain_index);
 
-			snapshot_record(main_snapshot, cycle, stack->addr, 1);
+			snapshot_record(snapshot_store, cycle, stack->addr);
 
-			if (cache_snapshot && !mod->snapshot)
-				mod->snapshot = snapshot_create(mod->name);
-			snapshot_record(mod->snapshot, cycle, stack->addr, 1);
+			if (cache_snapshot && !mod->snapshot_store)
+			{
+				char file[MAX_STRING_SIZE];
+				snprintf(file, sizeof file,
+						"%s_store", mod->name);
+				mod->snapshot_store = snapshot_create(file);
+			}
+			snapshot_record(mod->snapshot_store, cycle, stack->addr);
 		}
 
 		/* Record access */

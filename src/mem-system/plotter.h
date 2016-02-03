@@ -24,13 +24,10 @@ struct snapshot_t
 {
 	long long last_snapshot;
 
-	FILE *snapshot_load;
-	char load_file_name[MAX_STRING_SIZE];
-	FILE *snapshot_store;
-	char store_file_name[MAX_STRING_SIZE];
+	FILE *snapshot;
+	char file_name[MAX_STRING_SIZE];
 
-	struct list_t *mem_regions_loads;
-	struct list_t *mem_regions_stores;
+	struct list_t *mem_regions;
 
 	int max_accesses;
 	int max_address;
@@ -49,7 +46,7 @@ struct mod_mshr_record_t
 struct snapshot_t *snapshot_create(char *snapshot_name);
 void snapshot_free(struct snapshot_t *snap_struct);
 void snapshot_record(struct snapshot_t *snapshot_struct,
-		long long cycle, unsigned int addr, int type);
+		long long cycle, unsigned int addr);
 void snapshot_dump(struct snapshot_t * snapshot);
 
 /* MSHR graph */

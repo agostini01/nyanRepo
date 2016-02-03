@@ -98,8 +98,16 @@ void mod_free(struct mod_t *mod)
 	if (mod->mshr_record)
 		mod_mshr_record_free(mod->mshr_record);
 
-	if (mod->snapshot)
-		snapshot_free(mod->snapshot);
+	if (mod->snapshot_load)
+	{
+		snapshot_dump(mod->snapshot_load);
+		snapshot_free(mod->snapshot_load);
+	}
+	if (mod->snapshot_store)
+	{
+		snapshot_dump(mod->snapshot_store);
+		snapshot_free(mod->snapshot_store);
+	}
 
 	free(mod->name);
 	free(mod);

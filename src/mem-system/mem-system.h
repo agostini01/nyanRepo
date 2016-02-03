@@ -81,7 +81,8 @@ extern int mem_snap_period;
 extern int mem_snapshot_block_size;
 extern int cache_snapshot;
 
-struct snapshot_t *main_snapshot;
+struct snapshot_t *snapshot_load;
+struct snapshot_t *snapshot_store;
 
 /*
  * Public Functions

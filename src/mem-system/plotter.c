@@ -29,6 +29,8 @@
 #include "plotter.h"
 
 #define MEM_SNAPSHOT_LIMIT 1000000
+#define KEEP_TEMP 0 
+#define THREEDIM 0
 
 int mem_snap_period = 0;
 int mem_snapshot_block_size = 0;
@@ -58,21 +60,13 @@ struct snapshot_t *snapshot_create(char *name)
 
 
 	/* Create a temp file for load access */
-	snprintf(snapshot->load_file_name, sizeof snapshot->load_file_name,
-			"%s_snapshot_load_accesses", name);
-	snapshot->snapshot_load = file_open_for_write(snapshot->load_file_name);
-	if (!snapshot->snapshot_load)
-		fatal("Mem_snapshot_load: cannot write on snapshot file");
+	snprintf(snapshot->file_name, sizeof snapshot->file_name,
+			"%s_accesses", name);
+	snapshot->snapshot = file_open_for_write(snapshot->file_name);
+	if (!snapshot->snapshot)
+		fatal(": cannot write on snapshot file");
 
-	/* Create a temp file for store accesses */
-	snprintf(snapshot->store_file_name, sizeof snapshot->store_file_name,
-			"%s_mem_snapshot_store_accesses", name);
-	snapshot->snapshot_store = file_open_for_write(snapshot->store_file_name);
-	if (!snapshot->snapshot_store)
-		fatal("Mem_snapshot_store: cannot write on snapshot file");
-
-	snapshot->mem_regions_loads = list_create();
-	snapshot->mem_regions_stores = list_create();
+	snapshot->mem_regions = list_create();
 
 	return snapshot;
 }
@@ -81,23 +75,18 @@ void snapshot_free(struct snapshot_t * snapshot)
 {
 	if (snapshot)
 	{
-		for (int i=0; i < list_count(snapshot->mem_regions_loads); i++)
+		for (int i=0; i < list_count(snapshot->mem_regions); i++)
 		{
-			free(list_get(snapshot->mem_regions_loads , i));
+			free(list_get(snapshot->mem_regions , i));
 		}
-		list_free(snapshot->mem_regions_loads);
+		list_free(snapshot->mem_regions);
 
-		for (int i=0; i < list_count(snapshot->mem_regions_stores); i++)
-		{
-			free(list_get(snapshot->mem_regions_stores, i));
-		}
-		list_free(snapshot->mem_regions_stores);
 		free(snapshot);
 	}
 }
 
 void snapshot_record(struct snapshot_t *snapshot,
-		long long cycle, unsigned int addr, int type)
+		long long cycle, unsigned int addr)
 {
 	if (!snapshot)
 		return;
@@ -105,113 +94,80 @@ void snapshot_record(struct snapshot_t *snapshot,
 	if (snapshot->partial_snapshot)
 		return;
 
+	if (cycle > (snapshot->last_snapshot + 1) * mem_snap_period)
+	{
+		for (int i = 0; i < list_count(snapshot->mem_regions) ; i++)
+		{
+			int * element_value = list_get(snapshot->mem_regions, i);
+
+			fprintf(snapshot->snapshot, "%lld %d %d \n" ,
+					snapshot->last_snapshot * mem_snap_period,
+					i * snapshot->mem_snapshot_region_size, * element_value);
+			fprintf(snapshot->snapshot, "%lld %d %d \n" ,
+					snapshot->last_snapshot * mem_snap_period,
+					(i + 1) * snapshot->mem_snapshot_region_size,
+					* element_value);
+		}
+		fprintf(snapshot->snapshot, "\n");
+
+		for (int i = 0; i < list_count(snapshot->mem_regions); i++)
+		{
+			int * element_value = list_get(snapshot->mem_regions, i);
+
+			fprintf(snapshot->snapshot, "%lld %d %d \n" ,
+					(snapshot->last_snapshot + 1) * mem_snap_period,
+					i  * snapshot->mem_snapshot_region_size, * element_value);
+			fprintf(snapshot->snapshot, "%lld %d %d \n" ,
+					(snapshot->last_snapshot + 1) * mem_snap_period,
+					(i + 1)  * snapshot->mem_snapshot_region_size,
+					* element_value);
+
+			if ( snapshot->max_accesses < * element_value)
+				snapshot->max_accesses = * element_value;
+
+			* element_value = 0;
+		}
+		fprintf(snapshot->snapshot, "\n");
+
+		snapshot->last_snapshot++;
+	}
+
+	// calculate the maximum address accessed
 	snapshot->max_address = snapshot->max_address < addr ? addr :
 			snapshot->max_address;
 
+	// Assuming a 2D array: time_sample x (max_address/region_size)
+	// if the elements in the 2D array grow bigger than 100000 abort recording.
+	// But show the element that we recorded so far.
 	if ((cycle / mem_snap_period) * (snapshot->max_address /
 			snapshot->mem_snapshot_region_size) > MEM_SNAPSHOT_LIMIT)
 	{
 		warning("%s: The memory snapshot file grow too big. \n"
 				"Recording stops, and the resulting image is partial.\n"
 				"For full results, either increase the snapshot period,\n"
-				"or the snapshot region size and try again \n", __FUNCTION__);
+				"or the snapshot region size and try again \n",
+				snapshot->file_name);
 		snapshot->partial_snapshot = 1;
-		return;
 	}
 
-	if (cycle > (snapshot->last_snapshot + 1) * mem_snap_period)
-	{
-		for (int i = 0; i < list_count(snapshot->mem_regions_loads) ; i++)
-		{
-			int * element_value = list_get(snapshot->mem_regions_loads, i);
-
-			fprintf(snapshot->snapshot_load, "%lld %d %d \n" ,
-					snapshot->last_snapshot * mem_snap_period,
-					i * snapshot->mem_snapshot_region_size, * element_value);
-			fprintf(snapshot->snapshot_load, "%lld %d %d \n" ,
-					snapshot->last_snapshot * mem_snap_period,
-					(i + 1) * snapshot->mem_snapshot_region_size,
-					* element_value);
-		}
-		fprintf(snapshot->snapshot_load, "\n");
-
-		for (int i = 0; i < list_count(snapshot->mem_regions_loads); i++)
-		{
-			int * element_value = list_get(snapshot->mem_regions_loads, i);
-
-			fprintf(snapshot->snapshot_load, "%lld %d %d \n" ,
-					(snapshot->last_snapshot + 1) * mem_snap_period,
-					i  * snapshot->mem_snapshot_region_size, * element_value);
-			fprintf(snapshot->snapshot_load, "%lld %d %d \n" ,
-					(snapshot->last_snapshot + 1) * mem_snap_period,
-					(i + 1)  * snapshot->mem_snapshot_region_size,
-					* element_value);
-
-			if ( snapshot->max_accesses < * element_value)
-				snapshot->max_accesses = * element_value;
-
-			* element_value = 0;
-		}
-		fprintf(snapshot->snapshot_load, "\n");
-
-		for (int i = 0; i < list_count(snapshot->mem_regions_stores) ; i++)
-		{
-			int * element_value = list_get(snapshot->mem_regions_stores, i);
-
-			fprintf(snapshot->snapshot_store, "%lld %d %d \n" ,
-					snapshot->last_snapshot * mem_snap_period,
-					i * snapshot->mem_snapshot_region_size, * element_value);
-			fprintf(snapshot->snapshot_store, "%lld %d %d \n" ,
-					snapshot->last_snapshot * mem_snap_period,
-					(i + 1) * snapshot->mem_snapshot_region_size,
-					* element_value);
-		}
-		fprintf(snapshot->snapshot_store, "\n");
-
-		for (int i = 0; i < list_count(snapshot->mem_regions_stores); i++)
-		{
-			int * element_value = list_get(snapshot->mem_regions_stores, i);
-
-			fprintf(snapshot->snapshot_store, "%lld %d %d \n" ,
-					(snapshot->last_snapshot + 1) * mem_snap_period,
-					i  * snapshot->mem_snapshot_region_size, * element_value);
-			fprintf(snapshot->snapshot_store, "%lld %d %d \n" ,
-					(snapshot->last_snapshot + 1) * mem_snap_period,
-					(i + 1)  * snapshot->mem_snapshot_region_size,
-					* element_value);
-
-			if ( snapshot->max_accesses < * element_value)
-				snapshot->max_accesses = * element_value;
-
-			* element_value = 0;
-		}
-		fprintf(snapshot->snapshot_store, "\n");
-
-		snapshot->last_snapshot++;
-	}
-
+	// If current element (address) is outside the range of the 2D array,
+	// a new row should be added. 
+	// first calculate the index of the current element
 	int current_element = addr >> snapshot->snapshot_blocks_in_bits;
 
-	struct list_t *chosen_list;
-
-	if (type == 0)
-		chosen_list = snapshot->mem_regions_loads;
-	else if (type == 1)
-		chosen_list = snapshot->mem_regions_stores;
-	else
-		fatal("unspecified type for snapshot");
-
-
-	if (list_count(chosen_list) <= current_element)
+	// if the index is bigger that count of the list, we should
+	// add a new row.
+	if (list_count(snapshot->mem_regions) <= current_element)
 	{
-		while (list_count(chosen_list) != current_element + 1)
+		while (list_count(snapshot->mem_regions) != current_element + 1)
 		{
 			int * new_element = xcalloc(1, sizeof(int));
-			list_add(chosen_list, new_element);
+			list_add(snapshot->mem_regions, new_element);
 		}
 	}
 
-	int * temp = list_get(chosen_list, current_element);
+	// Now the current element is increased one, because of the access
+	int * temp = list_get(snapshot->mem_regions, current_element);
 	* temp = (*temp) + 1;
 
 	if (snapshot->max_address < addr)
@@ -225,28 +181,28 @@ void snapshot_dump(struct snapshot_t * snapshot)
 	if (mem_snap_period == 0)
 		return;
 
-	// Last Load accesses
-	for (int i = 0; i < list_count(snapshot->mem_regions_loads) ; i++)
+	// Last accesses
+	for (int i = 0; i < list_count(snapshot->mem_regions) ; i++)
 	{
-		int * element_value = list_get(snapshot->mem_regions_loads, i);
+		int *element_value = list_get(snapshot->mem_regions, i);
 
-		fprintf(snapshot->snapshot_load, "%lld %d %d \n" ,
+		fprintf(snapshot->snapshot, "%lld %d %d \n" ,
 				snapshot->last_snapshot * mem_snap_period,
 				i * snapshot->mem_snapshot_region_size, * element_value);
-		fprintf(snapshot->snapshot_load, "%lld %d %d \n" ,
+		fprintf(snapshot->snapshot, "%lld %d %d \n" ,
 				snapshot->last_snapshot * mem_snap_period,
 				(i + 1) * snapshot->mem_snapshot_region_size, * element_value);
 	}
-	fprintf(snapshot->snapshot_load, "\n");
+	fprintf(snapshot->snapshot, "\n");
 
-	for (int i = 0; i < list_count(snapshot->mem_regions_loads); i++)
+	for (int i = 0; i < list_count(snapshot->mem_regions); i++)
 	{
-		int * element_value = list_get(snapshot->mem_regions_loads, i);
+		int *element_value = list_get(snapshot->mem_regions, i);
 
-		fprintf(snapshot->snapshot_load, "%lld %d %d \n" ,
+		fprintf(snapshot->snapshot, "%lld %d %d \n" ,
 				(snapshot->last_snapshot + 1) * mem_snap_period,
 				i  * snapshot->mem_snapshot_region_size, * element_value);
-		fprintf(snapshot->snapshot_load, "%lld %d %d \n" ,
+		fprintf(snapshot->snapshot, "%lld %d %d \n" ,
 				(snapshot->last_snapshot + 1) * mem_snap_period,
 				(i + 1)  * snapshot->mem_snapshot_region_size, * element_value);
 
@@ -255,129 +211,93 @@ void snapshot_dump(struct snapshot_t * snapshot)
 
 		* element_value = 0;
 	}
-	fprintf(snapshot->snapshot_load, "\n");
-	fclose(snapshot->snapshot_load);
+	fprintf(snapshot->snapshot, "\n");
+	fclose(snapshot->snapshot);
 
-	// Last store Accesses
-	for (int i = 0; i < list_count(snapshot->mem_regions_stores) ; i++)
-	{
-		int * element_value = list_get(snapshot->mem_regions_stores, i);
-
-		fprintf(snapshot->snapshot_store, "%lld %d %d \n" ,
-				snapshot->last_snapshot * mem_snap_period,
-				i * snapshot->mem_snapshot_region_size, * element_value);
-		fprintf(snapshot->snapshot_store, "%lld %d %d \n" ,
-				snapshot->last_snapshot * mem_snap_period,
-				(i + 1) * snapshot->mem_snapshot_region_size, * element_value);
-	}
-	fprintf(snapshot->snapshot_store, "\n");
-
-	for (int i = 0; i < list_count(snapshot->mem_regions_stores); i++)
-	{
-		int * element_value = list_get(snapshot->mem_regions_stores, i);
-
-		fprintf(snapshot->snapshot_store, "%lld %d %d \n" ,
-				(snapshot->last_snapshot + 1) * mem_snap_period,
-				i  * snapshot->mem_snapshot_region_size, * element_value);
-		fprintf(snapshot->snapshot_store, "%lld %d %d \n" ,
-				(snapshot->last_snapshot + 1) * mem_snap_period,
-				(i + 1)  * snapshot->mem_snapshot_region_size, * element_value);
-
-		if ( snapshot->max_accesses < * element_value)
-			snapshot->max_accesses = * element_value;
-
-		* element_value = 0;
-	}
-	fprintf(snapshot->snapshot_store, "\n");
-	fclose(snapshot->snapshot_store);
-
-	/* Run the script - Load script */
-	FILE *load_script_file;
+	/* Run the script */
+	FILE *script_file;
 	char cmd[MAX_PATH_SIZE];
 
-	char load_script_file_name[MAX_PATH_SIZE];
+	char script_file_name[MAX_PATH_SIZE];
 	char plot_file_name[MAX_PATH_SIZE];
 
 	/* Create plot file */
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < THREEDIM + 1; i++)
 	{
-		if (i < 2)
-			snprintf(plot_file_name, MAX_PATH_SIZE, "%d_%d_%dD_loads.ps",
-					mem_snap_period, snapshot->mem_snapshot_region_size,i+2);
-		else
-			snprintf(plot_file_name, MAX_PATH_SIZE, "%d_%d_%dD_stores.ps",
-					mem_snap_period, snapshot->mem_snapshot_region_size,i);
+		snprintf(plot_file_name, MAX_PATH_SIZE, "%d_%d_%dD_%s.ps",
+				mem_snap_period, snapshot->mem_snapshot_region_size,
+				i+2 ,snapshot->file_name);
 		if (!file_can_open_for_write(plot_file_name))
 		{
 			fatal("%s: cannot write GPU occupancy calculation plot",
 					plot_file_name);
 		}
 
-		load_script_file = file_create_temp(load_script_file_name,
+		script_file = file_create_temp(script_file_name,
 				MAX_PATH_SIZE);
-		fprintf(load_script_file, "unset origin\n");
-		fprintf(load_script_file, "unset label\n");
-		fprintf(load_script_file, "set term postscript eps enhanced color\n");
-		fprintf(load_script_file, "set ticslevel 0\n");
-		fprintf(load_script_file, "set nohidden3d\n");
-		fprintf(load_script_file, "set size square\n");
-		fprintf(load_script_file, "unset key\n");
-		fprintf(load_script_file, "set origin 0,-0.1\n");
+		fprintf(script_file, "unset origin\n");
+		fprintf(script_file, "unset label\n");
+		fprintf(script_file, "set term postscript eps enhanced color\n");
+		fprintf(script_file, "set ticslevel 0\n");
+		fprintf(script_file, "set nohidden3d\n");
+		fprintf(script_file, "set size square\n");
+		fprintf(script_file, "unset key\n");
+		fprintf(script_file, "set origin 0,-0.1\n");
 		switch(i%2)
 		{
 		case 1:
 			/* 3D view */
-			fprintf(load_script_file, "set view 30,40,0.5\n");
+			fprintf(script_file, "set view 30,40,0.5\n");
 			break;
 		case 0:
 		default:
 			/* 2D view */
-			fprintf(load_script_file, "set view 0,0, 0.5\n");
+			fprintf(script_file, "set view 0,0, 0.5\n");
 		}
 
-		fprintf(load_script_file, "set pm3d\n");
-		fprintf(load_script_file, "set palette defined "
+		fprintf(script_file, "set pm3d\n");
+		fprintf(script_file, "set palette defined "
 				"(0 \"white\", 0.0001 \"black\", "
 				"10 \"gray\", 60 \"cyan\", 100 \"blue\")\n");
-		fprintf(load_script_file, "set colorbox vertical user origin "
+		fprintf(script_file, "set colorbox vertical user origin "
 				".2,.28 size 0.03, 0.26\n");
-		fprintf(load_script_file, "unset surface\n");
-		fprintf(load_script_file, "set cbtics font \"Helvettica, 6\"\n");
-		fprintf(load_script_file, "set xlabel 'Time (cycles)' "
-				"font \"Helvettica, 7\"\n");
-		fprintf(load_script_file, "set xtics font \"Helvettica, 6\"\n");
-		fprintf(load_script_file, "set xtics offset -0.5,-0.2\n");
-		fprintf(load_script_file, "set ylabel 'Address (Hex)' "
+		fprintf(script_file, "unset surface\n");
+		fprintf(script_file, "set cbtics font \"Helvettica, 6\"\n");
+		if (snapshot->partial_snapshot)
+			fprintf(script_file, "set xlabel 'Time (cycles) -- PARTIAL' "
+					"font \"Helvettica,7\" tc rgb \"red\"\n");
+		else
+			fprintf(script_file, "set xlabel 'Time (cycles)' "
+					"font \"Helvettica,7\"\n");
+
+		fprintf(script_file, "set xtics font \"Helvettica, 6\"\n");
+		fprintf(script_file, "set xtics offset -0.5,-0.2\n");
+		fprintf(script_file, "set ylabel 'Address (Hex)' "
 				"rotate by 135 offset 2, 0 font \"Helvettica, 7\"\n");
-		fprintf(load_script_file, "set ytics offset 1.5,0\n");
-		//	fprintf(load_script_file, "set format y \"%.X\"\n");
-		fprintf(load_script_file, "set ytics font \"Helvettica, 8\"\n");
-		fprintf(load_script_file, "set mytics 4\n");
-		fprintf(load_script_file, "unset ztics\n");
-		fprintf(load_script_file, "set label \"Number of Accesses\" "
+		fprintf(script_file, "set ytics offset 1.5,0\n");
+		fprintf(script_file, "set ytics font \"Helvettica, 8\"\n");
+		fprintf(script_file, "set mytics 4\n");
+		fprintf(script_file, "unset ztics\n");
+		fprintf(script_file, "set label \"Number of Accesses\" "
 				"font \"Helvetica,7\" at screen 0.27, "
 				"screen 0.35 rotate by 90\n");
-		if ( i < 2)
-			fprintf(load_script_file, "splot \"%s\" with lines\n",
-					snapshot->load_file_name);
-		else
-			fprintf(load_script_file, "splot \"%s\" with lines\n",
-					snapshot->store_file_name);
-		fprintf(load_script_file, "unset multiplot\n");
-		fclose(load_script_file);
+		fprintf(script_file, "splot \"%s\" with lines\n",
+				snapshot->file_name);
+		fprintf(script_file, "unset multiplot\n");
+		fclose(script_file);
 
 		/* Plot */
-		sprintf(cmd, "gnuplot %s > %s", load_script_file_name, plot_file_name);
+		sprintf(cmd, "gnuplot %s > %s", script_file_name, plot_file_name);
 		int err = system(cmd);
 		if (err)
 			warning("could not execute gnuplot\nEither gnuplot is "
 					"not installed or is not the supported version\n");
 
 		/* Remove temporary files */
-		unlink(load_script_file_name);
+		unlink(script_file_name);
 	}
-	unlink(snapshot->load_file_name);
-	unlink(snapshot->store_file_name);
+	if (!KEEP_TEMP)
+		unlink(snapshot->file_name);
 
 }
 

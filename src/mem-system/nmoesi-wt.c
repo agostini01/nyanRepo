@@ -134,10 +134,10 @@ void mod_handler_nmoesi_load_wt(int event, void *data)
 				stack->id, mod->name, stack->addr);
 		if (mem_snap_period != 0)
 		{
-			assert(main_snapshot);
+			assert(snapshot_load);
 			long long cycle = esim_domain_cycle(mem_domain_index);
 
-			snapshot_record(main_snapshot, cycle, stack->addr, 0);
+			snapshot_record(snapshot_load, cycle, stack->addr);
 		}
 
 		/* Record access */
@@ -343,10 +343,10 @@ void mod_handler_nmoesi_store_wt(int event, void *data)
 				stack->id, mod->name, stack->addr);
 		if (mem_snap_period != 0)
 		{
-			assert(main_snapshot);
+			assert(snapshot_store);
 			long long cycle = esim_domain_cycle(mem_domain_index);
 
-			snapshot_record(main_snapshot, cycle, stack->addr, 1);
+			snapshot_record(snapshot_store, cycle, stack->addr);
 		}
 
 		/* Record access */
@@ -535,10 +535,10 @@ void mod_handler_nmoesi_nc_store_wt(int event, void *data)
 
 		if (mem_snap_period != 0)
 		{
-			assert(main_snapshot);
+			assert(snapshot_store);
 			long long cycle = esim_domain_cycle(mem_domain_index);
 
-			snapshot_record(main_snapshot, cycle, stack->addr, 1);
+			snapshot_record(snapshot_store, cycle, stack->addr);
 		}
 
 		/* Record access */
