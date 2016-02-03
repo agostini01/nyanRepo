@@ -20,7 +20,7 @@
 #ifndef MEM_SYSTEM_PLOTTER_H
 #define MEM_SYSTEM_PLOTTER_H
 
-struct mem_system_snapshot_t
+struct snapshot_t
 {
 	long long last_snapshot;
 
@@ -36,6 +36,7 @@ struct mem_system_snapshot_t
 	int max_address;
 	int mem_snapshot_region_size;
 	int snapshot_blocks_in_bits;
+	int partial_snapshot; 
 };
 
 struct mod_mshr_record_t
@@ -45,16 +46,16 @@ struct mod_mshr_record_t
 };
 
 /* Memory Snapshot */
-struct mem_system_snapshot_t * mem_system_snapshot_create(void);
-void mem_system_snapshot_free(struct mem_system_snapshot_t * snap_struct);
-void mem_system_snapshot_record(struct mem_system_snapshot_t *snapshot_struct,
+struct snapshot_t *snapshot_create(char *snapshot_name);
+void snapshot_free(struct snapshot_t *snap_struct);
+void snapshot_record(struct snapshot_t *snapshot_struct,
 		long long cycle, unsigned int addr, int type);
-void mem_system_snapshot_dump(struct mem_system_snapshot_t * snapshot);
+void snapshot_dump(struct snapshot_t * snapshot);
 
 /* MSHR graph */
-void mem_access_record(struct mod_mshr_record_t* mshr_record, int list_size);
+void mem_access_record(struct mod_mshr_record_t *mshr_record, int list_size);
 struct mod_mshr_record_t* mod_mshr_record_create(struct mod_t* mod);
-void mod_mshr_record_free(struct mod_mshr_record_t * mshr_record);
+void mod_mshr_record_free(struct mod_mshr_record_t *mshr_record);
 void mod_mshr_record_dump();
 
 #endif

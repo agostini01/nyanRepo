@@ -574,9 +574,9 @@ static char *m2s_err_note =
 
 static void m2s_need_two_arguments(int argc, char **argv, int argi)
 {
-	if (++argi == argc - 1)
+	if ((argi == argc - 1) || (argi == argc - 2))
 		fatal("option %s requires two arguments.\n%s",
-				argv[--argi], m2s_err_note);
+				argv[argi], m2s_err_note);
 }
 
 static void m2s_need_argument(int argc, char **argv, int argi)
@@ -1360,7 +1360,16 @@ static void m2s_read_command_line(int *argc_ptr, char **argv)
 			mem_snapshot_block_size = atoi(argv[++argi]);
 			continue;
 		}
-
+		
+		/* Cache snapshot -- TRUE/FALSE */
+		if (!strcmp(argv[argi], "--cache-snapshot"))
+		{
+			m2s_need_argument(argc, argv, argi);
+			cache_snapshot = atoi(argv[++argi]);
+			if (cache_snapshot != 0)
+				cache_snapshot = 1;
+			continue;
+		}
 
 		/*
 		 * Network Options
@@ -1399,10 +1408,10 @@ static void m2s_read_command_line(int *argc_ptr, char **argv)
 			continue;
 		}
 
-    /* Injection rate for network simulation */
+		/* Injection rate for network simulation */
 		if (!strcmp(argv[argi], "--net-ignore-buffer-busy"))
 		{
-      net_ignore_buffer_busy = 1;
+			net_ignore_buffer_busy = 1;
 			continue;
 		}
 

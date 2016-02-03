@@ -37,6 +37,8 @@
 #include "prefetcher.h"
 #include "plotter.h"
 
+int cache_snapshot;
+
 
 /* Events */
 
@@ -151,7 +153,11 @@ void mod_handler_nmoesi_load(int event, void *data)
 			assert(main_snapshot);
 			long long cycle = esim_domain_cycle(mem_domain_index);
 
-			mem_system_snapshot_record(main_snapshot, cycle, stack->addr, 0);
+			snapshot_record(main_snapshot, cycle, stack->addr, 0);
+
+			if (cache_snapshot && !mod->snapshot)
+				mod->snapshot = snapshot_create(mod->name);
+			snapshot_record(mod->snapshot, cycle, stack->addr, 0);
 		}
 
 		/* Record access */
@@ -361,7 +367,10 @@ void mod_handler_nmoesi_store(int event, void *data)
 			assert(main_snapshot);
 			long long cycle = esim_domain_cycle(mem_domain_index);
 
-			mem_system_snapshot_record(main_snapshot, cycle, stack->addr, 1);
+			snapshot_record(main_snapshot, cycle, stack->addr, 1);
+			if (cache_snapshot && !mod->snapshot)
+				mod->snapshot = snapshot_create(mod->name);
+			snapshot_record(mod->snapshot, cycle, stack->addr, 1);
 		}
 
 		/* Record access */
@@ -556,7 +565,11 @@ void mod_handler_nmoesi_nc_store(int event, void *data)
 			assert(main_snapshot);
 			long long cycle = esim_domain_cycle(mem_domain_index);
 
-			mem_system_snapshot_record(main_snapshot, cycle, stack->addr, 1);
+			snapshot_record(main_snapshot, cycle, stack->addr, 1);
+
+			if (cache_snapshot && !mod->snapshot)
+				mod->snapshot = snapshot_create(mod->name);
+			snapshot_record(mod->snapshot, cycle, stack->addr, 1);
 		}
 
 		/* Record access */

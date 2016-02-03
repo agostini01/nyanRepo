@@ -1,6 +1,6 @@
 [General]
 SharedNetwork = On
-
+FinalFlush = Off
 ;--------------------------------------------Geometeries
 [CacheGeometry si-geo-vector-l1]
 Sets = 64

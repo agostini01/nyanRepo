@@ -137,7 +137,7 @@ void mod_handler_nmoesi_load_wt(int event, void *data)
 			assert(main_snapshot);
 			long long cycle = esim_domain_cycle(mem_domain_index);
 
-			mem_system_snapshot_record(main_snapshot, cycle, stack->addr, 0);
+			snapshot_record(main_snapshot, cycle, stack->addr, 0);
 		}
 
 		/* Record access */
@@ -346,7 +346,7 @@ void mod_handler_nmoesi_store_wt(int event, void *data)
 			assert(main_snapshot);
 			long long cycle = esim_domain_cycle(mem_domain_index);
 
-			mem_system_snapshot_record(main_snapshot, cycle, stack->addr, 1);
+			snapshot_record(main_snapshot, cycle, stack->addr, 1);
 		}
 
 		/* Record access */
@@ -538,7 +538,7 @@ void mod_handler_nmoesi_nc_store_wt(int event, void *data)
 			assert(main_snapshot);
 			long long cycle = esim_domain_cycle(mem_domain_index);
 
-			mem_system_snapshot_record(main_snapshot, cycle, stack->addr, 1);
+			snapshot_record(main_snapshot, cycle, stack->addr, 1);
 		}
 
 		/* Record access */

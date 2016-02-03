@@ -33,14 +33,14 @@
 int mem_snap_period = 0;
 int mem_snapshot_block_size = 0;
 
-struct mem_system_snapshot_t *mem_system_snapshot_create(void)
+struct snapshot_t *snapshot_create(char *name)
 {
-	struct mem_system_snapshot_t *snapshot;
+	struct snapshot_t *snapshot;
 
-	snapshot = xcalloc(1, sizeof(struct mem_system_snapshot_t));
+	snapshot = xcalloc(1, sizeof(struct snapshot_t));
 	snapshot->last_snapshot = 0;
 	snapshot->mem_snapshot_region_size = 1;
-
+	snapshot->partial_snapshot = 0;
 	snapshot->snapshot_blocks_in_bits = 0;
 
 	int x = mem_snapshot_block_size;
@@ -59,14 +59,14 @@ struct mem_system_snapshot_t *mem_system_snapshot_create(void)
 
 	/* Create a temp file for load access */
 	snprintf(snapshot->load_file_name, sizeof snapshot->load_file_name,
-			"mem_snapshot_load_accesses");
+			"%s_snapshot_load_accesses", name);
 	snapshot->snapshot_load = file_open_for_write(snapshot->load_file_name);
 	if (!snapshot->snapshot_load)
 		fatal("Mem_snapshot_load: cannot write on snapshot file");
 
 	/* Create a temp file for store accesses */
 	snprintf(snapshot->store_file_name, sizeof snapshot->store_file_name,
-			"mem_snapshot_store_accesses");
+			"%s_mem_snapshot_store_accesses", name);
 	snapshot->snapshot_store = file_open_for_write(snapshot->store_file_name);
 	if (!snapshot->snapshot_store)
 		fatal("Mem_snapshot_store: cannot write on snapshot file");
@@ -77,7 +77,7 @@ struct mem_system_snapshot_t *mem_system_snapshot_create(void)
 	return snapshot;
 }
 
-void mem_system_snapshot_free(struct mem_system_snapshot_t * snapshot)
+void snapshot_free(struct snapshot_t * snapshot)
 {
 	if (snapshot)
 	{
@@ -96,9 +96,14 @@ void mem_system_snapshot_free(struct mem_system_snapshot_t * snapshot)
 	}
 }
 
-void mem_system_snapshot_record(struct mem_system_snapshot_t *snapshot,
+void snapshot_record(struct snapshot_t *snapshot,
 		long long cycle, unsigned int addr, int type)
 {
+	if (!snapshot)
+		return;
+
+	if (snapshot->partial_snapshot)
+		return;
 
 	snapshot->max_address = snapshot->max_address < addr ? addr :
 			snapshot->max_address;
@@ -107,11 +112,13 @@ void mem_system_snapshot_record(struct mem_system_snapshot_t *snapshot,
 			snapshot->mem_snapshot_region_size) > MEM_SNAPSHOT_LIMIT)
 	{
 		warning("%s: The memory snapshot file grow too big. \n"
-				"Either increase the snapshot period, or the snapshot "
-				"region size and try again \n", __FUNCTION__);
-		mem_snap_period = 0;
+				"Recording stops, and the resulting image is partial.\n"
+				"For full results, either increase the snapshot period,\n"
+				"or the snapshot region size and try again \n", __FUNCTION__);
+		snapshot->partial_snapshot = 1;
 		return;
 	}
+
 	if (cycle > (snapshot->last_snapshot + 1) * mem_snap_period)
 	{
 		for (int i = 0; i < list_count(snapshot->mem_regions_loads) ; i++)
@@ -180,7 +187,7 @@ void mem_system_snapshot_record(struct mem_system_snapshot_t *snapshot,
 		}
 		fprintf(snapshot->snapshot_store, "\n");
 
-		snapshot->last_snapshot ++;
+		snapshot->last_snapshot++;
 	}
 
 	int current_element = addr >> snapshot->snapshot_blocks_in_bits;
@@ -213,10 +220,11 @@ void mem_system_snapshot_record(struct mem_system_snapshot_t *snapshot,
 	}
 }
 
-void mem_system_snapshot_dump(struct mem_system_snapshot_t * snapshot)
+void snapshot_dump(struct snapshot_t * snapshot)
 {
 	if (mem_snap_period == 0)
 		return;
+
 	// Last Load accesses
 	for (int i = 0; i < list_count(snapshot->mem_regions_loads) ; i++)
 	{

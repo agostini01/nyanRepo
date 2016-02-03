@@ -35,7 +35,6 @@
 #include "nmoesi-wt.h"
 #include "plotter.h"
 
-
 /* String map for access type */
 struct str_map_t mod_access_kind_map =
 {
@@ -79,7 +78,8 @@ struct mod_t *mod_create(char *name, enum mod_kind_t kind, int num_ports,
 	mod->log_block_size = log_base2(block_size);
 
 	mod->client_info_repos = repos_create(sizeof(struct mod_client_info_t), mod->name);
-
+	
+	/* Return */	
 	return mod;
 }
 
@@ -96,9 +96,10 @@ void mod_free(struct mod_t *mod)
 	repos_free(mod->client_info_repos);
 
 	if (mod->mshr_record)
-	{
 		mod_mshr_record_free(mod->mshr_record);
-	}
+
+	if (mod->snapshot)
+		snapshot_free(mod->snapshot);
 
 	free(mod->name);
 	free(mod);

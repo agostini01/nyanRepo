@@ -153,7 +153,7 @@ void mem_system_init(void)
 
 	if (mem_snap_period)
 	{
-		main_snapshot = mem_system_snapshot_create();
+		main_snapshot = snapshot_create("mem_system");
 	}
 
 	/* NMOESI memory event-driven simulation */
@@ -500,9 +500,9 @@ void mem_system_done(void)
 	/* Snapshot */
 	if (mem_snap_period)
 	{
-		mem_system_snapshot_dump(main_snapshot);
+		snapshot_dump(main_snapshot);
 	}
-	mem_system_snapshot_free(main_snapshot);
+	snapshot_free(main_snapshot);
 
 
 	/* Free memory system */

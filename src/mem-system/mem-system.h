@@ -79,8 +79,9 @@ extern struct mem_system_t *mem_system;
 /* Memory Snapshot */
 extern int mem_snap_period;
 extern int mem_snapshot_block_size;
+extern int cache_snapshot;
 
-struct mem_system_snapshot_t *main_snapshot;
+struct snapshot_t *main_snapshot;
 
 /*
  * Public Functions
