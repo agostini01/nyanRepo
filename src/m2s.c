@@ -1649,6 +1649,8 @@ static void m2s_read_command_line(int *argc_ptr, char **argv)
 		fatal("option '--net-sim' requires '--net-config'");
 	if(!*dram_sim_system_name && dram_sim_last_option)
 		fatal("option '%s' requires '--dram-sim'", dram_sim_last_option);
+	if(!mem_snap_period && cache_snapshot)
+		fatal("options '--cache-snapshot' only works when option '--mem-snapshot' is used.");
 
 	/* Discard arguments used as options */
 	arg_discard = argi - 1;
