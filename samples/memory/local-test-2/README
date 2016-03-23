@@ -1,0 +1,2 @@
+../../../bin/m2s --x86-sim detailed --x86-config x86-config --mem-config mem-config --net-config net-config --trace trace.gz
+
