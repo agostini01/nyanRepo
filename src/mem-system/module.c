@@ -32,7 +32,7 @@
 #include "mem-system.h"
 #include "mod-stack.h"
 #include "nmoesi-protocol.h"
-#include "nmoesi-wt.h"
+#include "nmsi.h"
 #include "plotter.h"
 
 /* String map for access type */
@@ -147,10 +147,10 @@ long long mod_access(struct mod_t *mod, enum mod_access_kind_t access_kind,
 	{
 		if (access_kind == mod_access_load)
 		{
-			if (writepolicy == mem_writepolicy_writeback)
+			if (policy == mem_policy_nmoesi)
 				event = EV_MOD_NMOESI_LOAD;
-			else if (writepolicy == mem_writepolicy_writethrough)
-				event = EV_MOD_NMOESI_LOAD_WT;
+			else if (policy == mem_policy_nmsi)
+				event = EV_MOD_NMSI_LOAD;
 		}
 		else if (access_kind == mod_access_store)
 		{
@@ -158,10 +158,10 @@ long long mod_access(struct mod_t *mod, enum mod_access_kind_t access_kind,
 		}
 		else if (access_kind == mod_access_nc_store)
 		{
-			if (writepolicy == mem_writepolicy_writeback)
+			if (policy == mem_policy_nmoesi)
 				event = EV_MOD_NMOESI_NC_STORE;
-			else if (writepolicy == mem_writepolicy_writethrough)
-				event = EV_MOD_NMOESI_NC_STORE_WT;
+			else if (policy == mem_policy_nmsi)
+				event = EV_MOD_NMSI_NC_STORE;
 		}
 		else if (access_kind == mod_access_prefetch)
 		{

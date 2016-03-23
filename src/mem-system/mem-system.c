@@ -36,7 +36,7 @@
 #include "mem-system.h"
 #include "module.h"
 #include "nmoesi-protocol.h"
-#include "nmoesi-wt.h"
+#include "nmsi.h"
 #include "plotter.h"
 
 
@@ -50,7 +50,7 @@ int mem_peer_transfers;
 int mem_final_flush;
 int mem_multinet;
 int mem_shared_net;
-enum mem_writepolicy_t writepolicy;
+enum mem_policy_t policy;
 
 /* Frequency domain, as returned by function 'esim_new_domain'. */
 int mem_frequency = 1000;
@@ -61,12 +61,11 @@ struct mem_system_t *mem_system;
 char *mem_report_file_name = "";
 
 
-struct str_map_t mem_writepolicy_map =
+struct str_map_t mem_policy_map =
 {
-		3, {
-				{ "WriteBack", mem_writepolicy_writeback },
-				{ "WriteThrough", mem_writepolicy_writethrough },
-				{ "Combined", mem_writepolicy_combined}
+		2, {
+				{ "NMOESI", mem_policy_nmoesi},
+				{ "NMSI", mem_policy_nmsi}
 		}
 };
 
@@ -158,7 +157,7 @@ void mem_system_init(void)
 	}
 
 	/* NMOESI memory event-driven simulation */
-	if (writepolicy == mem_writepolicy_writeback)
+	if (policy == mem_policy_nmoesi)
 	{
 		EV_MOD_NMOESI_LOAD = esim_register_event_with_name(mod_handler_nmoesi_load,
 				mem_domain_index, "mod_nmoesi_load");
@@ -317,154 +316,170 @@ void mem_system_init(void)
 				mem_domain_index, "mod_nmoesi_flush_finish");
 
 	}
-	else if (writepolicy == mem_writepolicy_writethrough)
+	else if (policy == mem_policy_nmsi)
 	{
-		EV_MOD_NMOESI_LOAD_WT = esim_register_event_with_name(mod_handler_nmoesi_load_wt,
-				mem_domain_index, "mod_nmoesi_load_wt");
-		EV_MOD_NMOESI_LOAD_LOCK_WT = esim_register_event_with_name(mod_handler_nmoesi_load_wt,
-				mem_domain_index, "mod_nmoesi_load_lock_wt");
-		EV_MOD_NMOESI_LOAD_ACTION_WT = esim_register_event_with_name(mod_handler_nmoesi_load_wt,
-				mem_domain_index, "mod_nmoesi_load_action_wt");
-		EV_MOD_NMOESI_LOAD_MISS_WT = esim_register_event_with_name(mod_handler_nmoesi_load_wt,
-				mem_domain_index, "mod_nmoesi_load_miss_wt");
-		EV_MOD_NMOESI_LOAD_UNLOCK_WT = esim_register_event_with_name(mod_handler_nmoesi_load_wt,
-				mem_domain_index, "mod_nmoesi_load_unlock_wt");
-		EV_MOD_NMOESI_LOAD_FINISH_WT = esim_register_event_with_name(mod_handler_nmoesi_load_wt,
-				mem_domain_index, "mod_nmoesi_load_finish_wt");
+		EV_MOD_NMSI_LOAD = esim_register_event_with_name(mod_handler_nmsi_load,
+				mem_domain_index, "mod_nmsi_load");
+		EV_MOD_NMSI_LOAD_LOCK = esim_register_event_with_name(mod_handler_nmsi_load,
+				mem_domain_index, "mod_nmsi_load_lock");
+		EV_MOD_NMSI_LOAD_ACTION = esim_register_event_with_name(mod_handler_nmsi_load,
+				mem_domain_index, "mod_nmsi_load_action");
+		EV_MOD_NMSI_LOAD_MISS = esim_register_event_with_name(mod_handler_nmsi_load,
+				mem_domain_index, "mod_nmsi_load_miss");
+		EV_MOD_NMSI_LOAD_UNLOCK = esim_register_event_with_name(mod_handler_nmsi_load,
+				mem_domain_index, "mod_nmsi_load_unlock");
+		EV_MOD_NMSI_LOAD_FINISH = esim_register_event_with_name(mod_handler_nmsi_load,
+				mem_domain_index, "mod_nmsi_load_finish");
 
-		EV_MOD_NMOESI_STORE_WT = esim_register_event_with_name(mod_handler_nmoesi_store_wt,
-				mem_domain_index, "mod_nmoesi_store_wt");
-		EV_MOD_NMOESI_STORE_LOCK_WT = esim_register_event_with_name(mod_handler_nmoesi_store_wt,
-				mem_domain_index, "mod_nmoesi_store_lock_wt");
-		EV_MOD_NMOESI_STORE_ACTION_WT = esim_register_event_with_name(mod_handler_nmoesi_store_wt,
-				mem_domain_index, "mod_nmoesi_store_action_wt");
-		EV_MOD_NMOESI_STORE_UNLOCK_WT = esim_register_event_with_name(mod_handler_nmoesi_store_wt,
-				mem_domain_index, "mod_nmoesi_store_unlock_wt");
-		EV_MOD_NMOESI_STORE_FINISH_WT = esim_register_event_with_name(mod_handler_nmoesi_store_wt,
-				mem_domain_index, "mod_nmoesi_store_finish_wt");
+		EV_MOD_NMSI_STORE = esim_register_event_with_name(mod_handler_nmsi_store,
+				mem_domain_index, "mod_nmsi_store");
+		EV_MOD_NMSI_STORE_LOCK = esim_register_event_with_name(mod_handler_nmsi_store,
+				mem_domain_index, "mod_nmsi_store_lock");
+		EV_MOD_NMSI_STORE_ACTION = esim_register_event_with_name(mod_handler_nmsi_store,
+				mem_domain_index, "mod_nmsi_store_action");
+		EV_MOD_NMSI_STORE_UNLOCK = esim_register_event_with_name(mod_handler_nmsi_store,
+				mem_domain_index, "mod_nmsi_store_unlock");
+		EV_MOD_NMSI_STORE_FINISH = esim_register_event_with_name(mod_handler_nmsi_store,
+				mem_domain_index, "mod_nmsi_store_finish");
 
-		EV_MOD_NMOESI_NC_STORE_WT = esim_register_event_with_name(mod_handler_nmoesi_nc_store_wt,
-				mem_domain_index, "mod_nmoesi_nc_store_wt");
-		EV_MOD_NMOESI_NC_STORE_LOCK_WT = esim_register_event_with_name(mod_handler_nmoesi_nc_store_wt,
-				mem_domain_index, "mod_nmoesi_nc_store_lock_wt");
-		EV_MOD_NMOESI_NC_STORE_ACTION_WT = esim_register_event_with_name(mod_handler_nmoesi_nc_store_wt,
-				mem_domain_index, "mod_nmoesi_nc_store_action_wt");
-		EV_MOD_NMOESI_NC_STORE_MISS_WT = esim_register_event_with_name(mod_handler_nmoesi_nc_store_wt,
-				mem_domain_index, "mod_nmoesi_nc_store_miss_wt");
-		EV_MOD_NMOESI_NC_STORE_UNLOCK_WT = esim_register_event_with_name(mod_handler_nmoesi_nc_store_wt,
-				mem_domain_index, "mod_nmoesi_nc_store_unlock_wt");
-		EV_MOD_NMOESI_NC_STORE_MERGE_WT = esim_register_event_with_name(mod_handler_nmoesi_nc_store_wt,
-				mem_domain_index, "mod_nmoesi_nc_store_merge_wt");
-		EV_MOD_NMOESI_NC_STORE_FINISH_WT = esim_register_event_with_name(mod_handler_nmoesi_nc_store_wt,
-				mem_domain_index, "mod_nmoesi_nc_store_finish_wt");
+		EV_MOD_NMSI_NC_STORE = esim_register_event_with_name(mod_handler_nmsi_nc_store,
+				mem_domain_index, "mod_nmsi_nc_store");
+		EV_MOD_NMSI_NC_STORE_LOCK = esim_register_event_with_name(mod_handler_nmsi_nc_store,
+				mem_domain_index, "mod_nmsi_nc_store_lock");
+		EV_MOD_NMSI_NC_STORE_WRITEBACK = esim_register_event_with_name(mod_handler_nmsi_nc_store,
+				mem_domain_index, "mod_nmsi_nc_store_writeback");
+		EV_MOD_NMSI_NC_STORE_ACTION = esim_register_event_with_name(mod_handler_nmsi_nc_store,
+				mem_domain_index, "mod_nmsi_nc_store_action");
+		EV_MOD_NMSI_NC_STORE_MISS= esim_register_event_with_name(mod_handler_nmsi_nc_store,
+				mem_domain_index, "mod_nmsi_nc_store_miss");
+		EV_MOD_NMSI_NC_STORE_UNLOCK = esim_register_event_with_name(mod_handler_nmsi_nc_store,
+				mem_domain_index, "mod_nmsi_nc_store_unlock");
+		EV_MOD_NMSI_NC_STORE_FINISH = esim_register_event_with_name(mod_handler_nmsi_nc_store,
+				mem_domain_index, "mod_nmsi_nc_store_finish");
 
-		EV_MOD_NMOESI_FIND_AND_LOCK_READ_WT = esim_register_event_with_name(mod_handler_nmoesi_find_and_lock_read_wt,
-				mem_domain_index, "mod_nmoesi_find_and_lock_read_wt");
-		EV_MOD_NMOESI_FIND_AND_LOCK_PORT_READ_WT = esim_register_event_with_name(mod_handler_nmoesi_find_and_lock_read_wt,
-				mem_domain_index, "mod_nmoesi_find_and_lock_port_read_wt");
-		EV_MOD_NMOESI_FIND_AND_LOCK_ACTION_READ_WT = esim_register_event_with_name(mod_handler_nmoesi_find_and_lock_read_wt,
-				mem_domain_index, "mod_nmoesi_find_and_lock_action_read_wt");
-		EV_MOD_NMOESI_FIND_AND_LOCK_FINISH_READ_WT = esim_register_event_with_name(mod_handler_nmoesi_find_and_lock_read_wt,
-				mem_domain_index, "mod_nmoesi_find_and_lock_finish_read_wt");
+		EV_MOD_NMSI_PREFETCH = esim_register_event_with_name(mod_handler_nmsi_prefetch,
+				mem_domain_index, "mod_nmsi_prefetch");
+		EV_MOD_NMSI_PREFETCH_LOCK = esim_register_event_with_name(mod_handler_nmsi_prefetch,
+				mem_domain_index, "mod_nmsi_prefetch_lock");
+		EV_MOD_NMSI_PREFETCH_ACTION = esim_register_event_with_name(mod_handler_nmsi_prefetch,
+				mem_domain_index, "mod_nmsi_prefetch_action");
+		EV_MOD_NMSI_PREFETCH_MISS = esim_register_event_with_name(mod_handler_nmsi_prefetch,
+				mem_domain_index, "mod_nmsi_prefetch_miss");
+		EV_MOD_NMSI_PREFETCH_UNLOCK = esim_register_event_with_name(mod_handler_nmsi_prefetch,
+				mem_domain_index, "mod_nmsi_prefetch_unlock");
+		EV_MOD_NMSI_PREFETCH_FINISH = esim_register_event_with_name(mod_handler_nmsi_prefetch,
+				mem_domain_index, "mod_nmsi_prefetch_finish");
 
-		EV_MOD_NMOESI_FIND_AND_LOCK_WRITE_WT= esim_register_event_with_name(mod_handler_nmoesi_find_and_lock_write_wt,
-				mem_domain_index, "mod_nmoesi_find_and_lock_wt");
-		EV_MOD_NMOESI_FIND_AND_LOCK_PORT_WRITE_WT = esim_register_event_with_name(mod_handler_nmoesi_find_and_lock_write_wt,
-				mem_domain_index, "mod_nmoesi_find_and_lock_port_wt");
-		EV_MOD_NMOESI_FIND_AND_LOCK_ACTION_WRITE_WT = esim_register_event_with_name(mod_handler_nmoesi_find_and_lock_write_wt,
-				mem_domain_index, "mod_nmoesi_find_and_lock_action_wt");
-		EV_MOD_NMOESI_FIND_AND_LOCK_FINISH_WRITE_WT = esim_register_event_with_name(mod_handler_nmoesi_find_and_lock_write_wt,
-				mem_domain_index, "mod_nmoesi_find_and_lock_finish_wt");
+		EV_MOD_NMSI_FIND_AND_LOCK = esim_register_event_with_name(mod_handler_nmsi_find_and_lock,
+				mem_domain_index, "mod_nmsi_find_and_lock");
+		EV_MOD_NMSI_FIND_AND_LOCK_PORT = esim_register_event_with_name(mod_handler_nmsi_find_and_lock,
+				mem_domain_index, "mod_nmsi_find_and_lock_port");
+		EV_MOD_NMSI_FIND_AND_LOCK_ACTION = esim_register_event_with_name(mod_handler_nmsi_find_and_lock,
+				mem_domain_index, "mod_nmsi_find_and_lock_action");
+		EV_MOD_NMSI_FIND_AND_LOCK_FINISH = esim_register_event_with_name(mod_handler_nmsi_find_and_lock,
+				mem_domain_index, "mod_nmsi_find_and_lock_finish");
 
-		EV_MOD_NMOESI_WRITE_REQUEST_WT = esim_register_event_with_name(mod_handler_nmoesi_write_request_wt,
-				mem_domain_index, "mod_nmoesi_write_request_wt");
-		EV_MOD_NMOESI_WRITE_REQUEST_RECEIVE_WT = esim_register_event_with_name(mod_handler_nmoesi_write_request_wt,
-				mem_domain_index, "mod_nmoesi_write_request_receive_wt");
-		EV_MOD_NMOESI_WRITE_REQUEST_ACTION_WT = esim_register_event_with_name(mod_handler_nmoesi_write_request_wt,
-				mem_domain_index, "mod_nmoesi_write_request_action_wt");
-		EV_MOD_NMOESI_WRITE_REQUEST_EXCLUSIVE_WT = esim_register_event_with_name(mod_handler_nmoesi_write_request_wt,
-				mem_domain_index, "mod_nmoesi_write_request_exclusive_wt");
-		EV_MOD_NMOESI_WRITE_REQUEST_UPDOWN_WT = esim_register_event_with_name(mod_handler_nmoesi_write_request_wt,
-				mem_domain_index, "mod_nmoesi_write_request_updown_wt");
-		EV_MOD_NMOESI_WRITE_REQUEST_UPDOWN_FINISH_WT = esim_register_event_with_name(mod_handler_nmoesi_write_request_wt,
-				mem_domain_index, "mod_nmoesi_write_request_updown_finish_wt");
-		EV_MOD_NMOESI_WRITE_REQUEST_DOWNUP_WT = esim_register_event_with_name(mod_handler_nmoesi_write_request_wt,
-				mem_domain_index, "mod_nmoesi_write_request_downup_wt");
-		EV_MOD_NMOESI_WRITE_REQUEST_DOWNUP_FINISH_WT = esim_register_event_with_name(mod_handler_nmoesi_write_request_wt,
-				mem_domain_index, "mod_nmoesi_write_request_downup_finish_wt");
-		EV_MOD_NMOESI_WRITE_REQUEST_REPLY_WT = esim_register_event_with_name(mod_handler_nmoesi_write_request_wt,
-				mem_domain_index, "mod_nmoesi_write_request_reply_wt");
-		EV_MOD_NMOESI_WRITE_REQUEST_FINISH_WT = esim_register_event_with_name(mod_handler_nmoesi_write_request_wt,
-				mem_domain_index, "mod_nmoesi_write_request_finish_wt");
+		EV_MOD_NMSI_EVICT = esim_register_event_with_name(mod_handler_nmsi_evict,
+				mem_domain_index, "mod_nmsi_evict");
+		EV_MOD_NMSI_EVICT_INVALID = esim_register_event_with_name(mod_handler_nmsi_evict,
+				mem_domain_index, "mod_nmsi_evict_invalid");
+		EV_MOD_NMSI_EVICT_ACTION = esim_register_event_with_name(mod_handler_nmsi_evict,
+				mem_domain_index, "mod_nmsi_evict_action");
+		EV_MOD_NMSI_EVICT_RECEIVE = esim_register_event_with_name(mod_handler_nmsi_evict,
+				mem_domain_index, "mod_nmsi_evict_receive");
+		EV_MOD_NMSI_EVICT_PROCESS = esim_register_event_with_name(mod_handler_nmsi_evict,
+				mem_domain_index, "mod_nmsi_evict_process");
+		EV_MOD_NMSI_EVICT_PROCESS_NONCOHERENT = esim_register_event_with_name(mod_handler_nmsi_evict,
+				mem_domain_index, "mod_nmsi_evict_process_noncoherent");
+		EV_MOD_NMSI_EVICT_REPLY = esim_register_event_with_name(mod_handler_nmsi_evict,
+				mem_domain_index, "mod_nmsi_evict_reply");
+		EV_MOD_NMSI_EVICT_REPLY = esim_register_event_with_name(mod_handler_nmsi_evict,
+				mem_domain_index, "mod_nmsi_evict_reply");
+		EV_MOD_NMSI_EVICT_REPLY_RECEIVE = esim_register_event_with_name(mod_handler_nmsi_evict,
+				mem_domain_index, "mod_nmsi_evict_reply_receive");
+		EV_MOD_NMSI_EVICT_FINISH = esim_register_event_with_name(mod_handler_nmsi_evict,
+				mem_domain_index, "mod_nmsi_evict_finish");
 
-		EV_MOD_NMOESI_WRITE_DATA_WT = esim_register_event_with_name(mod_handler_nmoesi_write_data_wt,
-				mem_domain_index, "mod_nmoesi_write_data_wt");
-		EV_MOD_NMOESI_WRITE_DATA_RECEIVE_WT = esim_register_event_with_name(mod_handler_nmoesi_write_data_wt,
-				mem_domain_index, "mod_nmoesi_write_data_receive_wt");
-		EV_MOD_NMOESI_WRITE_DATA_ACTION_WT = esim_register_event_with_name(mod_handler_nmoesi_write_data_wt,
-				mem_domain_index, "mod_nmoesi_write_data_action_wt");
-		EV_MOD_NMOESI_WRITE_DATA_BLOCK_WT = esim_register_event_with_name(mod_handler_nmoesi_write_data_wt,
-				mem_domain_index, "mod_nmoesi_write_data_block_wt");
-		EV_MOD_NMOESI_WRITE_DATA_LOWER_WT = esim_register_event_with_name(mod_handler_nmoesi_write_data_wt,
-				mem_domain_index, "mod_nmoesi_write_data_lower_wt");
-		EV_MOD_NMOESI_WRITE_DATA_DONE_WT = esim_register_event_with_name(mod_handler_nmoesi_write_data_wt,
-				mem_domain_index, "mod_nmoesi_write_data_done_wt");
-		EV_MOD_NMOESI_WRITE_DATA_REPLY_WT = esim_register_event_with_name(mod_handler_nmoesi_write_data_wt,
-				mem_domain_index, "mod_nmoesi_write_data_reply_wt");
-		EV_MOD_NMOESI_WRITE_DATA_FINISH_WT = esim_register_event_with_name(mod_handler_nmoesi_write_data_wt,
-				mem_domain_index, "mod_nmoesi_write_data_finish_wt");
+		EV_MOD_NMSI_WRITE_REQUEST = esim_register_event_with_name(mod_handler_nmsi_write_request,
+				mem_domain_index, "mod_nmsi_write_request");
+		EV_MOD_NMSI_WRITE_REQUEST_RECEIVE = esim_register_event_with_name(mod_handler_nmsi_write_request,
+				mem_domain_index, "mod_nmsi_write_request_receive");
+		EV_MOD_NMSI_WRITE_REQUEST_ACTION = esim_register_event_with_name(mod_handler_nmsi_write_request,
+				mem_domain_index, "mod_nmsi_write_request_action");
+		EV_MOD_NMSI_WRITE_REQUEST_EXCLUSIVE = esim_register_event_with_name(mod_handler_nmsi_write_request,
+				mem_domain_index, "mod_nmsi_write_request_exclusive");
+		EV_MOD_NMSI_WRITE_REQUEST_UPDOWN = esim_register_event_with_name(mod_handler_nmsi_write_request,
+				mem_domain_index, "mod_nmsi_write_request_updown");
+		EV_MOD_NMSI_WRITE_REQUEST_UPDOWN_FINISH = esim_register_event_with_name(mod_handler_nmsi_write_request,
+				mem_domain_index, "mod_nmsi_write_request_updown_finish");
+		EV_MOD_NMSI_WRITE_REQUEST_DOWNUP = esim_register_event_with_name(mod_handler_nmsi_write_request,
+				mem_domain_index, "mod_nmsi_write_request_downup");
+		EV_MOD_NMSI_WRITE_REQUEST_DOWNUP_FINISH = esim_register_event_with_name(mod_handler_nmsi_write_request,
+				mem_domain_index, "mod_nmsi_write_request_downup_finish");
+		EV_MOD_NMSI_WRITE_REQUEST_REPLY = esim_register_event_with_name(mod_handler_nmsi_write_request,
+				mem_domain_index, "mod_nmsi_write_request_reply");
+		EV_MOD_NMSI_WRITE_REQUEST_FINISH = esim_register_event_with_name(mod_handler_nmsi_write_request,
+				mem_domain_index, "mod_nmsi_write_request_finish");
 
-		EV_MOD_NMOESI_READ_REQUEST_WT = esim_register_event_with_name(mod_handler_nmoesi_read_request_wt,
-				mem_domain_index, "mod_nmoesi_read_request_wt");
-		EV_MOD_NMOESI_READ_REQUEST_RECEIVE_WT = esim_register_event_with_name(mod_handler_nmoesi_read_request_wt,
-				mem_domain_index, "mod_nmoesi_read_request_receive_wt");
-		EV_MOD_NMOESI_READ_REQUEST_ACTION_WT = esim_register_event_with_name(mod_handler_nmoesi_read_request_wt,
-				mem_domain_index, "mod_nmoesi_read_request_action_wt");
-		EV_MOD_NMOESI_READ_REQUEST_UPDOWN_WT = esim_register_event_with_name(mod_handler_nmoesi_read_request_wt,
-				mem_domain_index, "mod_nmoesi_read_request_updown_wt");
-		EV_MOD_NMOESI_READ_REQUEST_UPDOWN_MISS_WT = esim_register_event_with_name(mod_handler_nmoesi_read_request_wt,
-				mem_domain_index, "mod_nmoesi_read_request_updown_miss_wt");
-		EV_MOD_NMOESI_READ_REQUEST_UPDOWN_FINISH_WT = esim_register_event_with_name(mod_handler_nmoesi_read_request_wt,
-				mem_domain_index, "mod_nmoesi_read_request_updown_finish_wt");
-		EV_MOD_NMOESI_READ_REQUEST_DOWNUP_WT = esim_register_event_with_name(mod_handler_nmoesi_read_request_wt,
-				mem_domain_index, "mod_nmoesi_read_request_downup_wt");
-		EV_MOD_NMOESI_READ_REQUEST_DOWNUP_WAIT_FOR_REQS_WT = esim_register_event_with_name(mod_handler_nmoesi_read_request_wt,
-				mem_domain_index, "mod_nmoesi_read_request_downup_wait_for_reqs_wt");
-		EV_MOD_NMOESI_READ_REQUEST_DOWNUP_FINISH_WT = esim_register_event_with_name(mod_handler_nmoesi_read_request_wt,
-				mem_domain_index, "mod_nmoesi_read_request_downup_finish_wt");
-		EV_MOD_NMOESI_READ_REQUEST_REPLY_WT = esim_register_event_with_name(mod_handler_nmoesi_read_request_wt,
-				mem_domain_index, "mod_nmoesi_read_request_reply_wt");
-		EV_MOD_NMOESI_READ_REQUEST_FINISH_WT = esim_register_event_with_name(mod_handler_nmoesi_read_request_wt,
-				mem_domain_index, "mod_nmoesi_read_request_finish_wt");
+		EV_MOD_NMSI_READ_REQUEST = esim_register_event_with_name(mod_handler_nmsi_read_request,
+				mem_domain_index, "mod_nmsi_read_request");
+		EV_MOD_NMSI_READ_REQUEST_RECEIVE = esim_register_event_with_name(mod_handler_nmsi_read_request,
+				mem_domain_index, "mod_nmsi_read_request_receive");
+		EV_MOD_NMSI_READ_REQUEST_ACTION = esim_register_event_with_name(mod_handler_nmsi_read_request,
+				mem_domain_index, "mod_nmsi_read_request_action");
+		EV_MOD_NMSI_READ_REQUEST_UPDOWN = esim_register_event_with_name(mod_handler_nmsi_read_request,
+				mem_domain_index, "mod_nmsi_read_request_updown");
+		EV_MOD_NMSI_READ_REQUEST_UPDOWN_MISS = esim_register_event_with_name(mod_handler_nmsi_read_request,
+				mem_domain_index, "mod_nmsi_read_request_updown_miss");
+		EV_MOD_NMSI_READ_REQUEST_UPDOWN_FINISH = esim_register_event_with_name(mod_handler_nmsi_read_request,
+				mem_domain_index, "mod_nmsi_read_request_updown_finish");
+		EV_MOD_NMSI_READ_REQUEST_DOWNUP = esim_register_event_with_name(mod_handler_nmsi_read_request,
+				mem_domain_index, "mod_nmsi_read_request_downup");
+		EV_MOD_NMSI_READ_REQUEST_DOWNUP_WAIT_FOR_REQS = esim_register_event_with_name(mod_handler_nmsi_read_request,
+				mem_domain_index, "mod_nmsi_read_request_downup_wait_for_reqs");
+		EV_MOD_NMSI_READ_REQUEST_DOWNUP_FINISH = esim_register_event_with_name(mod_handler_nmsi_read_request,
+				mem_domain_index, "mod_nmsi_read_request_downup_finish");
+		EV_MOD_NMSI_READ_REQUEST_REPLY = esim_register_event_with_name(mod_handler_nmsi_read_request,
+				mem_domain_index, "mod_nmsi_read_request_reply");
+		EV_MOD_NMSI_READ_REQUEST_FINISH = esim_register_event_with_name(mod_handler_nmsi_read_request,
+				mem_domain_index, "mod_nmsi_read_request_finish");
 
-		EV_MOD_NMOESI_PEER_SEND_WT = esim_register_event_with_name(mod_handler_nmoesi_peer_wt,
-				mem_domain_index, "mod_nmoesi_peer_send_wt");
-		EV_MOD_NMOESI_PEER_RECEIVE_WT = esim_register_event_with_name(mod_handler_nmoesi_peer_wt,
-				mem_domain_index, "mod_nmoesi_peer_receive_wt");
-		EV_MOD_NMOESI_PEER_REPLY_WT = esim_register_event_with_name(mod_handler_nmoesi_peer_wt,
-				mem_domain_index, "mod_nmoesi_peer_reply_wt");
-		EV_MOD_NMOESI_PEER_FINISH_WT = esim_register_event_with_name(mod_handler_nmoesi_peer_wt,
-				mem_domain_index, "mod_nmoesi_peer_finish_wt");
+		EV_MOD_NMSI_INVALIDATE = esim_register_event_with_name(mod_handler_nmsi_invalidate,
+				mem_domain_index, "mod_nmsi_invalidate");
+		EV_MOD_NMSI_INVALIDATE_FINISH = esim_register_event_with_name(mod_handler_nmsi_invalidate,
+				mem_domain_index, "mod_nmsi_invalidate_finish");
 
-		EV_MOD_NMOESI_MESSAGE_WT = esim_register_event_with_name(mod_handler_nmoesi_message_wt,
-				mem_domain_index, "mod_nmoesi_message_wt");
-		EV_MOD_NMOESI_MESSAGE_RECEIVE_WT = esim_register_event_with_name(mod_handler_nmoesi_message_wt,
-				mem_domain_index, "mod_nmoesi_message_receive_wt");
-		EV_MOD_NMOESI_MESSAGE_ACTION_WT = esim_register_event_with_name(mod_handler_nmoesi_message_wt,
-				mem_domain_index, "mod_nmoesi_message_action_wt");
-		EV_MOD_NMOESI_MESSAGE_REPLY_WT = esim_register_event_with_name(mod_handler_nmoesi_message_wt,
-				mem_domain_index, "mod_nmoesi_message_reply_wt");
-		EV_MOD_NMOESI_MESSAGE_FINISH_WT = esim_register_event_with_name(mod_handler_nmoesi_message_wt,
-				mem_domain_index, "mod_nmoesi_message_finish_wt");
+		EV_MOD_NMSI_PEER_SEND = esim_register_event_with_name(mod_handler_nmsi_peer,
+				mem_domain_index, "mod_nmsi_peer_send");
+		EV_MOD_NMSI_PEER_RECEIVE = esim_register_event_with_name(mod_handler_nmsi_peer,
+				mem_domain_index, "mod_nmsi_peer_receive");
+		EV_MOD_NMSI_PEER_REPLY = esim_register_event_with_name(mod_handler_nmsi_peer,
+				mem_domain_index, "mod_nmsi_peer_reply");
+		EV_MOD_NMSI_PEER_FINISH = esim_register_event_with_name(mod_handler_nmsi_peer,
+				mem_domain_index, "mod_nmsi_peer_finish");
 
+		EV_MOD_NMSI_MESSAGE = esim_register_event_with_name(mod_handler_nmsi_message,
+				mem_domain_index, "mod_nmsi_message");
+		EV_MOD_NMSI_MESSAGE_RECEIVE = esim_register_event_with_name(mod_handler_nmsi_message,
+				mem_domain_index, "mod_nmsi_message_receive");
+		EV_MOD_NMSI_MESSAGE_ACTION = esim_register_event_with_name(mod_handler_nmsi_message,
+				mem_domain_index, "mod_nmsi_message_action");
+		EV_MOD_NMSI_MESSAGE_REPLY = esim_register_event_with_name(mod_handler_nmsi_message,
+				mem_domain_index, "mod_nmsi_message_reply");
+		EV_MOD_NMSI_MESSAGE_FINISH = esim_register_event_with_name(mod_handler_nmsi_message,
+				mem_domain_index, "mod_nmsi_message_finish");
+
+		EV_MOD_NMSI_FLUSH = esim_register_event_with_name(mod_handler_nmsi_flush,
+				mem_domain_index, "mod_nmsi_flush");
+		EV_MOD_NMSI_FLUSH_FINISH = esim_register_event_with_name(mod_handler_nmsi_flush,
+				mem_domain_index, "mod_nmsi_flush_finish");
 	}
-	else if (writepolicy == mem_writepolicy_combined || writepolicy == mem_writepolicy_invalid)
+	else if (policy  == mem_policy_invalid)
 	{
-		fatal("%s:Something went wrong. Memory system Writepolicy didn't roll\n"
-				"back to writeback, or is invalid\n", mem_config_file_name);
+		fatal("%s:Something went wrong. Memory system policy didn't roll\n"
+				"back to NMOESI, or is invalid\n", mem_config_file_name);
 	}
 	/* Local memory event driven simulation */
-
 	EV_MOD_LOCAL_MEM_LOAD = esim_register_event_with_name(mod_handler_local_mem_load,
 			mem_domain_index, "mod_local_mem_load");
 	EV_MOD_LOCAL_MEM_LOAD_LOCK = esim_register_event_with_name(mod_handler_local_mem_load,

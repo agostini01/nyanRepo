@@ -38,6 +38,9 @@ libmemsystem_a_SOURCES = \
 	nmoesi-wt.c \
 	nmoesi-wt.h \
 	\
+	nmsi.c \
+	nmsi.h \
+	\
 	spec-mem.c \
 	spec-mem.h \
 	\

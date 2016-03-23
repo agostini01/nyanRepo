@@ -26,7 +26,7 @@
  * Memory System Object
  */
 
-extern struct str_map_t mem_writepolicy_map;
+extern struct str_map_t mem_policy_map;
 
 
 struct mem_system_t
@@ -36,12 +36,11 @@ struct mem_system_t
 	struct list_t *net_list;
 };
 
-enum mem_writepolicy_t
+enum mem_policy_t
 {
-	mem_writepolicy_invalid = 0,
-	mem_writepolicy_writeback,			// The default nmoesi
-	mem_writepolicy_writethrough,		// The nmoesi-wt for write-through
-	mem_writepolicy_combined			// not implemented. Based on cache
+	mem_policy_invalid = 0,
+	mem_policy_nmoesi,			// The default nmoesi
+	mem_policy_nmsi		// The nmoesi-wt for write-through
 };
 
 
@@ -67,7 +66,7 @@ extern int mem_frequency;
 extern int mem_peer_transfers;
 extern int mem_multinet;
 extern int mem_shared_net;
-extern enum mem_writepolicy_t writepolicy;
+extern enum mem_policy_t policy;
 extern int mem_final_flush;
 
 /* Frequency and frequency domain */

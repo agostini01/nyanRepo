@@ -320,7 +320,7 @@ static void mem_config_read_general(struct config_t *config)
 //	char buf[MAX_STRING_SIZE];
 	char *section;
 
-	char *writepolicy_str;
+	char *policy_str;
 
 
 	/* Section with general parameters */
@@ -356,33 +356,16 @@ static void mem_config_read_general(struct config_t *config)
 	mem_shared_net = config_read_bool(config, section, "SharedNetwork", 0);
 
 	/* Memory write policy */
-	writepolicy_str = config_read_string(config, section, "GeneralWritePolicy",
-				"WriteBack");
+	policy_str = config_read_string(config, section, "Coherency",
+				"NMOESI");
 
-	writepolicy = str_map_string_case(&mem_writepolicy_map,
-			writepolicy_str);
+	policy = str_map_string_case(&mem_policy_map,
+			policy_str);
 
-	if (writepolicy == mem_writepolicy_invalid)
+	if (policy == mem_policy_invalid)
 		fatal("%s: %s: invalid write policy for memory.\n",
 				mem_config_file_name,
-				writepolicy_str);
-
-	if (writepolicy == mem_writepolicy_writeback)
-	{
-
-	}
-	if (writepolicy == mem_writepolicy_writethrough)
-	{
-
-	}
-	if (writepolicy == mem_writepolicy_combined)
-	{
-		warning("%s: write policy taking advantage of both write-back\n "
-				"and write-through is not implemented. Rolling back to write-back",
-				mem_config_file_name);
-		writepolicy = mem_writepolicy_writeback;
-	}
-
+				policy_str);
 }
 
 
