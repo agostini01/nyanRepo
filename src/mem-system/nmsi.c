@@ -1728,7 +1728,11 @@ void mod_handler_nmsi_read_request(int event, void *data)
 
 		if (stack->state)
 		{
-			/* Status = M/O/E/S/N
+			// Target state can be E only if it is a main memory
+			if (stack->state == cache_block_exclusive)
+				assert(target_mod->kind == mod_kind_main_memory); 
+
+			/* Status = M/S/N
 			 * Check: address is a multiple of requester's block_size
 			 * Check: no sub-block requested by mod is already owned by mod */
 			assert(stack->addr % mod->block_size == 0);
@@ -1848,8 +1852,10 @@ void mod_handler_nmsi_read_request(int event, void *data)
 		/* Set block state to excl/shared depending on the return value 'shared'
 		 * that comes from a read request into the next cache level.
 		 * Also set the tag of the block. */
+		// This happens only if the state was invalid. The main memory
+		// cannot have a invalid state. 
 		cache_set_block(target_mod->cache, stack->set, stack->way, stack->tag,
-				stack->shared ? cache_block_shared : cache_block_exclusive);
+				cache_block_shared);
 		esim_schedule_event(EV_MOD_NMSI_READ_REQUEST_UPDOWN_FINISH, stack, 0);
 		return;
 	}
@@ -1891,18 +1897,19 @@ void mod_handler_nmsi_read_request(int event, void *data)
 
 		dir = target_mod->dir;
 
+		// Shared is set to one since there is no exclusive state anymore
+		// Still we set it to 0 so it gets set later correctly,
+		// avoiding the M state
 		shared = 0;
-		/* With the Owned state, the directory entry may remain owned by the sender */
-		if (!stack->retain_owner)
+
+		// There is no Owned state, so 
+		// Set owner to 0 for all directory entries not owned by mod.
+		for (z = 0; z < dir->zsize; z++)
 		{
-			/* Set owner to 0 for all directory entries not owned by mod. */
-			for (z = 0; z < dir->zsize; z++)
-			{
-				dir_entry = dir_entry_get(dir, stack->set, stack->way, z);
-				if (dir_entry->owner != mod->low_net_node->index)
-					dir_entry_set_owner(dir, stack->set, stack->way, z, 
-							DIR_ENTRY_OWNER_NONE);
-			}
+			dir_entry = dir_entry_get(dir, stack->set, stack->way, z);
+			if (dir_entry->owner != mod->low_net_node->index)
+				dir_entry_set_owner(dir, stack->set, stack->way, z, 
+						DIR_ENTRY_OWNER_NONE);
 		}
 
 		/* For each sub-block requested by mod, set mod as sharer, and
@@ -1917,10 +1924,10 @@ void mod_handler_nmsi_read_request(int event, void *data)
 			if (dir_entry->num_sharers > 1 || stack->nc_write || stack->shared)
 				shared = 1;
 
-			/* If the block is owned, non-coherent, or shared,  
+			/* If the block is non-coherent, or shared,  
 			 * mod (the higher-level cache) should never be exclusive */
-			if (stack->state == cache_block_owned || 
-					stack->state == cache_block_noncoherent ||
+			assert(stack->state != cache_block_owned);
+			if (stack->state == cache_block_noncoherent ||
 					stack->state == cache_block_shared )
 				shared = 1;
 		}
@@ -2061,41 +2068,7 @@ void mod_handler_nmsi_read_request(int event, void *data)
 
 			if (stack->peer) 
 			{
-				/* Peer was found, so this directory entry 
-				 * should be changed to owned */
-				cache_set_block(target_mod->cache, stack->set, 
-						stack->way, stack->tag,
-						cache_block_owned);
-
-				/* Higher-level cache changed to shared, set 
-				 * owner of sub-blocks to NONE. */
-				dir = target_mod->dir;
-				for (z = 0; z < dir->zsize; z++)
-				{
-					dir_entry_tag = stack->tag + 
-							z * target_mod->sub_block_size;
-					assert(dir_entry_tag < stack->tag + 
-							target_mod->block_size);
-					dir_entry = dir_entry_get(dir, 
-							stack->set, stack->way, z);
-					dir_entry_set_owner(dir, stack->set, 
-							stack->way, z,
-							DIR_ENTRY_OWNER_NONE);
-				}
-
-				stack->reply_size = 8;
-				mod_stack_set_reply(ret, 
-						reply_ack_data_sent_to_peer);
-
-				/* Decrease the amount of data that mod will 
-				 * have to send back to its higher-level 
-				 * cache */
-				ret->reply_size -= target_mod->block_size;
-				assert(ret->reply_size >= 8);
-
-				/* Let the lower-level cache know not to delete 
-				 * the owner */
-				ret->retain_owner = 1;
+				fatal("Peer should be off for NMSI to work\n");
 			}
 			else
 			{
@@ -2152,15 +2125,7 @@ void mod_handler_nmsi_read_request(int event, void *data)
 
 			if (stack->peer)
 			{
-				stack->reply_size = 8;
-				mod_stack_set_reply(ret, 
-						reply_ack_data_sent_to_peer);
-
-				/* Decrease the amount of data that mod will 
-				 * have to send back to its higher-level 
-				 * cache */
-				ret->reply_size -= target_mod->block_size;
-				assert(ret->reply_size >= 8);
+				fatal("Peer should be off for NMSI to work\n");
 			}
 			else
 			{
@@ -2175,47 +2140,23 @@ void mod_handler_nmsi_read_request(int event, void *data)
 
 			if (stack->peer) 
 			{
-				stack->reply_size = 8;
-				mod_stack_set_reply(ret, 
-						reply_ack_data_sent_to_peer);
-
-				/* Decrease the amount of data that mod will 
-				 * have to send back to its higher-level 
-				 * cache */
-				ret->reply_size -= target_mod->sub_block_size;
-				assert(ret->reply_size >= 8);
-
-				if (stack->state == cache_block_modified || 
-						stack->state == cache_block_owned)
-				{
-					/* Let the lower-level cache know not 
-					 * to delete the owner */
-					ret->retain_owner = 1;
-
-					/* Set block to owned */
-					cache_set_block(target_mod->cache, 
-							stack->set, stack->way,
-							stack->tag, cache_block_owned);
-				}
-				else 
-				{
-					/* Set block to shared */
-					cache_set_block(target_mod->cache, 
-							stack->set, stack->way,
-							stack->tag, cache_block_shared);
-				}
+				fatal("Peer should be off for NMSI to work\n");
 			}
 			else 
 			{
-				if (stack->state == cache_block_exclusive || 
-						stack->state == cache_block_shared)
+				if (stack->state == cache_block_exclusive)
+				{
+					fatal("%s: Target mod block cannot be in "
+							"E state\n",
+							__FUNCTION__);
+				}
+				else if(stack->state == cache_block_shared)
 				{
 					stack->reply_size = 8;
 					mod_stack_set_reply(ret, reply_ack);
 
 				}
-				else if (stack->state == cache_block_owned ||
-						stack->state == cache_block_modified ||
+				else if (stack->state == cache_block_modified ||
 						stack->state == cache_block_noncoherent)
 				{
 					/* No peer exists, so data is returned 
@@ -2499,7 +2440,11 @@ void mod_handler_nmsi_write_request(int event, void *data)
 		mem_trace("mem.access name=\"A-%lld\" state=\"%s:write_request_updown\"\n",
 				stack->id, target_mod->name);
 
-		/* state = M/E */
+		/* state = M */
+		if (stack->state == cache_block_exclusive)
+			assert(target_mod->kind == mod_kind_main_memory);
+
+		assert(stack->state != cache_block_owned);
 		if (stack->state == cache_block_modified ||
 				stack->state == cache_block_exclusive)
 		{
@@ -2507,9 +2452,8 @@ void mod_handler_nmsi_write_request(int event, void *data)
 					EV_MOD_NMSI_WRITE_REQUEST_UPDOWN_FINISH,
 					stack, 0);
 		}
-		/* state = O/S/I/N */
-		else if (stack->state == cache_block_owned || 
-				stack->state == cache_block_shared ||
+		/* state = S/I/N */
+		else if (stack->state == cache_block_shared ||
 				stack->state == cache_block_invalid ||
 				stack->state == cache_block_noncoherent)
 		{
@@ -2580,8 +2524,12 @@ void mod_handler_nmsi_write_request(int event, void *data)
 		}
 
 		/* Set state to exclusive */
-		cache_set_block(target_mod->cache, stack->set, stack->way,
-				stack->tag, cache_block_exclusive);
+		if (target_mod->kind == mod_kind_main_memory)
+			cache_set_block(target_mod->cache, stack->set, stack->way,
+					stack->tag, cache_block_exclusive);
+		else
+			cache_set_block(target_mod->cache, stack->set, stack->way,
+					stack->tag, cache_block_shared);
 
 		/* If blocks were sent directly to the peer, the reply size 
 		 * would have been decreased.  Based on the final size, we can
@@ -2620,58 +2568,22 @@ void mod_handler_nmsi_write_request(int event, void *data)
 		assert(!dir_entry_group_shared_or_owned(target_mod->dir, 
 				stack->set, stack->way));
 
-		/* Compute reply size */	
-		if (stack->state == cache_block_exclusive || 
-				stack->state == cache_block_shared)
+		/* Compute reply size */
+		// Downup writes happen only during invalidation
+		// higher level module cannot be in exclusive state
+		assert(stack->state != cache_block_exclusive);	
+		if (stack->state == cache_block_shared)
 		{
 			/* Exclusive and shared states send an ack */
 			stack->reply_size = 8;
 			mod_stack_set_reply(ret, reply_ack);
 		}
-		else if (stack->state == cache_block_noncoherent)
+		else if (stack->state == cache_block_noncoherent ||
+				stack->state == cache_block_modified)
 		{
 			/* Non-coherent state sends data */
 			stack->reply_size = target_mod->block_size + 8;
 			mod_stack_set_reply(ret, reply_ack_data);
-		}
-		else if (stack->state == cache_block_modified || 
-				stack->state == cache_block_owned)
-		{
-			if (stack->peer) 
-			{
-				/* Modified or owned entries send data 
-				 * directly to peer if it exists */
-				mod_stack_set_reply(ret, 
-						reply_ack_data_sent_to_peer);
-				stack->reply_size = 8;
-
-				/* This control path uses an intermediate 
-				 * stack that disappears, so we have to update
-				 * the return stack of the return stack */
-				ret->ret_stack->reply_size -= 
-						target_mod->block_size;
-				assert(ret->ret_stack->reply_size >= 8);
-
-				/* Send data to the peer */
-				new_stack = mod_stack_create(stack->id, 
-						target_mod, stack->tag,
-						EV_MOD_NMSI_WRITE_REQUEST_DOWNUP_FINISH,
-						stack);
-				new_stack->peer = mod_stack_set_peer(
-						stack->peer, stack->state);
-				new_stack->target_mod = stack->target_mod;
-
-				esim_schedule_event(EV_MOD_NMSI_PEER_SEND, 
-						new_stack, 0);
-				return;
-			}	
-			else 
-			{
-				/* If peer does not exist, data is returned 
-				 * to mod */
-				mod_stack_set_reply(ret, reply_ack_data);
-				stack->reply_size = target_mod->block_size + 8;
-			}
 		}
 		else 
 		{
@@ -2975,13 +2887,13 @@ void mod_handler_nmsi_invalidate(int event, void *data)
 		 * allow this to happen */
 		if (stack->reply == reply_ack_data)
 		{
+			assert(stack->state != cache_block_owned);
 			if (stack->state == cache_block_noncoherent)
 			{
 				cache_set_block(mod->cache, stack->set, stack->way, stack->tag,
 					cache_block_noncoherent);
 			}
-			else if ((stack->state == cache_block_modified) ||
-				(stack->state == cache_block_owned))
+			else if (stack->state == cache_block_modified) 
 			{
 				cache_set_block(mod->cache, stack->set, stack->way, stack->tag,
 					cache_block_modified);
