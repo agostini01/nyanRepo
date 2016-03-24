@@ -753,7 +753,10 @@ void mod_flush(struct mod_t *mod)
 	// Initialize the stack
 
 	// Schedule
-	esim_schedule_event(EV_MOD_NMOESI_FLUSH, stack, 0);
+	if (policy == mem_policy_nmoesi)
+		esim_schedule_event(EV_MOD_NMOESI_FLUSH, stack, 0);
+	else if (policy == mem_policy_nmsi)
+		esim_schedule_event(EV_MOD_NMSI_FLUSH, stack, 0);
 
 	return;
 }

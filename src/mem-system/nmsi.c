@@ -34,7 +34,6 @@
 #include "directory.h"
 #include "mem-system.h"
 #include "mod-stack.h"
-#include "prefetcher.h"
 #include "plotter.h"
 
 int cache_snapshot;
@@ -55,13 +54,6 @@ int EV_MOD_NMSI_STORE_ACTION;
 int EV_MOD_NMSI_STORE_UNLOCK;
 int EV_MOD_NMSI_STORE_FINISH;
 
-int EV_MOD_NMSI_PREFETCH;
-int EV_MOD_NMSI_PREFETCH_LOCK;
-int EV_MOD_NMSI_PREFETCH_ACTION;
-int EV_MOD_NMSI_PREFETCH_MISS;
-int EV_MOD_NMSI_PREFETCH_UNLOCK;
-int EV_MOD_NMSI_PREFETCH_FINISH;
-
 int EV_MOD_NMSI_NC_STORE;
 int EV_MOD_NMSI_NC_STORE_LOCK;
 int EV_MOD_NMSI_NC_STORE_WRITEBACK;
@@ -80,6 +72,7 @@ int EV_MOD_NMSI_EVICT_INVALID;
 int EV_MOD_NMSI_EVICT_ACTION;
 int EV_MOD_NMSI_EVICT_RECEIVE;
 int EV_MOD_NMSI_EVICT_PROCESS;
+int EV_MOD_NMSI_EVICT_PROCESS_FINISH;
 int EV_MOD_NMSI_EVICT_PROCESS_NONCOHERENT;
 int EV_MOD_NMSI_EVICT_REPLY;
 int EV_MOD_NMSI_EVICT_REPLY_RECEIVE;
@@ -246,12 +239,13 @@ void mod_handler_nmsi_load(int event, void *data)
 		/* Hit */
 		if (stack->state)
 		{
-			esim_schedule_event(EV_MOD_NMSI_LOAD_UNLOCK, stack, 0);
+			// assert that we never have the E state unless the
+			// module is main memory
+			if (stack->state == cache_block_exclusive)
+				assert(mod->kind == mod_kind_main_memory);
 
-			/* The prefetcher may have prefetched this earlier and hence
-			 * this is a hit now. Let the prefetcher know of this hit
-			 * since without the prefetcher, this may have been a miss. */
-			prefetcher_access_hit(stack, mod);
+			// It is a hit. Unlock the block 
+			esim_schedule_event(EV_MOD_NMSI_LOAD_UNLOCK, stack, 0);
 
 			return;
 		}
@@ -263,9 +257,6 @@ void mod_handler_nmsi_load(int event, void *data)
 		new_stack->target_mod = mod_get_low_mod(mod, stack->tag);
 		new_stack->request_dir = mod_request_up_down;
 		esim_schedule_event(EV_MOD_NMSI_READ_REQUEST, new_stack, 0);
-
-		/* The prefetcher may be interested in this miss */
-		prefetcher_access_miss(stack, mod);
 
 		return;
 	}
@@ -291,10 +282,13 @@ void mod_handler_nmsi_load(int event, void *data)
 			return;
 		}
 
-		/* Set block state to excl/shared depending on return var 'shared'.
-		 * Also set the tag of the block. */
+		// Set block state to shared
+		// Also set the tag of the block.
+		// Here, the block was invalid so cannot be main memory
+		// and main memory blocks are the only ones that can have
+		// the exclusive state. 
 		cache_set_block(mod->cache, stack->set, stack->way, stack->tag,
-			stack->shared ? cache_block_shared : cache_block_exclusive);
+			cache_block_shared);
 
 		/* Continue */
 		esim_schedule_event(EV_MOD_NMSI_LOAD_UNLOCK, stack, 0);
@@ -466,26 +460,28 @@ void mod_handler_nmsi_store(int event, void *data)
 		if (stack->state == cache_block_modified ||
 			stack->state == cache_block_exclusive)
 		{
-			esim_schedule_event(EV_MOD_NMSI_STORE_UNLOCK, stack, 0);
+			// It can only be E if this is the main memory
+			if (stack->state == cache_block_exclusive)
+				assert(mod->kind == mod_kind_main_memory);
 
-			/* The prefetcher may have prefetched this earlier and hence
-			 * this is a hit now. Let the prefetcher know of this hit
-			 * since without the prefetcher, this may have been a miss. */
-			prefetcher_access_hit(stack, mod);
+			// Schedule the unlock
+			esim_schedule_event(EV_MOD_NMSI_STORE_UNLOCK, stack, 0);
 
 			return;
 		}
 
-		/* Miss - state=O/S/I/N */
+		/* Miss - state=S/I/N */
+		// we cannot have the owned state
+		assert(stack->state != cache_block_owned);
+
+		// Send a write request to update the lower level, 
+		// and possibly the other sharers
 		new_stack = mod_stack_create(stack->id, mod, stack->tag,
 			EV_MOD_NMSI_STORE_UNLOCK, stack);
 		new_stack->peer = mod_stack_set_peer(mod, stack->state);
 		new_stack->target_mod = mod_get_low_mod(mod, stack->tag);
 		new_stack->request_dir = mod_request_up_down;
 		esim_schedule_event(EV_MOD_NMSI_WRITE_REQUEST, new_stack, 0);
-
-		/* The prefetcher may be interested in this miss */
-		prefetcher_access_miss(stack, mod);
 
 		return;
 	}
@@ -672,8 +668,8 @@ void mod_handler_nmsi_nc_store(int event, void *data)
 
 		/* If the block has modified data, evict it so that the 
 		 * lower-level cache will have the latest copy */
-		if (stack->state == cache_block_modified || 
-				stack->state == cache_block_owned)
+		assert(stack->state != cache_block_owned);
+		if (stack->state == cache_block_modified) 
 		{
 			stack->eviction = 1;
 			new_stack = mod_stack_create(stack->id, mod, 0,
@@ -684,6 +680,7 @@ void mod_handler_nmsi_nc_store(int event, void *data)
 			return;
 		}
 
+		// For the rest of states N/S/I/ and E (main memory)
 		esim_schedule_event(EV_MOD_NMSI_NC_STORE_ACTION, stack, 0);
 		return;
 	}
@@ -720,23 +717,22 @@ void mod_handler_nmsi_nc_store(int event, void *data)
 			return;
 		}
 
+		// If it was exclusive, it could have been only if the
+		// cache was main memory, which previous condition takes
+		// care of it. 
+		assert(stack->state != cache_block_exclusive ||
+				stack->state != cache_block_owned);
+
 		/* N/S are hit */
-		if (stack->state == cache_block_shared || stack->state == cache_block_noncoherent)
+		if (stack->state == cache_block_shared || 
+				stack->state == cache_block_noncoherent)
 		{
 			esim_schedule_event(EV_MOD_NMSI_NC_STORE_UNLOCK, stack, 0);
 		}
-		/* E state must tell the lower-level module to remove this module as an owner */
-		else if (stack->state == cache_block_exclusive)
-		{
-			new_stack = mod_stack_create(stack->id, mod, stack->tag,
-					EV_MOD_NMSI_NC_STORE_MISS, stack);
-			new_stack->message = message_clear_owner;
-			new_stack->target_mod = mod_get_low_mod(mod, stack->tag);
-			esim_schedule_event(EV_MOD_NMSI_MESSAGE, new_stack, 0);
-		}
-		/* Modified and Owned states need to call read request because we've already
-		 * evicted the block so that the lower-level cache will have the latest value
-		 * before it becomes non-coherent */
+		/* Modified state needs to call read request because we've already
+		 * evicted the block so that the lower-level cache will have 
+		 * the latest value before it becomes non-coherent. Same as 
+		 * Invalid state */
 		else
 		{
 			new_stack = mod_stack_create(stack->id, mod, stack->tag,
@@ -784,7 +780,7 @@ void mod_handler_nmsi_nc_store(int event, void *data)
 		mem_trace("mem.access name=\"A-%lld\" state=\"%s:nc_store_unlock\"\n",
 				stack->id, mod->name);
 
-		/* Set block state to excl/shared depending on return var 'shared'.
+		/* Set block state to non-coherent.
 		 * Also set the tag of the block. */
 		cache_set_block(mod->cache, stack->set, stack->way, stack->tag,
 				cache_block_noncoherent);
@@ -803,216 +799,6 @@ void mod_handler_nmsi_nc_store(int event, void *data)
 		mem_debug("%lld %lld 0x%x %s nc store finish\n", esim_time, stack->id,
 				stack->addr, mod->name);
 		mem_trace("mem.access name=\"A-%lld\" state=\"%s:nc_store_finish\"\n",
-				stack->id, mod->name);
-		mem_trace("mem.end_access name=\"A-%lld\"\n",
-				stack->id);
-
-		/* Increment witness variable */
-		if (stack->witness_ptr)
-			(*stack->witness_ptr)++;
-
-		/* Return event queue element into event queue */
-		if (stack->event_queue && stack->event_queue_item)
-			linked_list_add(stack->event_queue, stack->event_queue_item);
-
-		/* Free the mod_client_info object, if any */
-		if (stack->client_info)
-			mod_client_info_free(mod, stack->client_info);
-
-		/* Finish access */
-		mod_access_finish(mod, stack);
-
-		/* Return */
-		mod_stack_return(stack);
-		return;
-	}
-
-	abort();
-}
-
-void mod_handler_nmsi_prefetch(int event, void *data)
-{
-	struct mod_stack_t *stack = data;
-	struct mod_stack_t *new_stack;
-
-	struct mod_t *mod = stack->mod;
-
-
-	if (event == EV_MOD_NMSI_PREFETCH)
-	{
-		struct mod_stack_t *master_stack;
-
-		mem_debug("%lld %lld 0x%x %s prefetch\n", esim_time, stack->id,
-				stack->addr, mod->name);
-		mem_trace("mem.new_access name=\"A-%lld\" type=\"store\" "
-				"state=\"%s:prefetch\" addr=0x%x\n",
-				stack->id, mod->name, stack->addr);
-
-		/* Record access */
-		mod_access_start(mod, stack, mod_access_prefetch);
-
-		/* Coalesce access */
-		master_stack = mod_can_coalesce(mod, mod_access_prefetch, stack->addr, stack);
-		if (master_stack)
-		{
-			/* Doesn't make sense to prefetch as the block is already being fetched */
-			mem_debug("  %lld %lld 0x%x %s useless prefetch - already being fetched\n",
-					esim_time, stack->id, stack->addr, mod->name);
-
-			mod->useless_prefetches++;
-			esim_schedule_event(EV_MOD_NMSI_PREFETCH_FINISH, stack, 0);
-
-			/* DEV - XXX I think the following code is incorrect. 
-			 * Within PREFETCH_FINISH, the witness pointer is 
-			 * always incremented.  This seems to be redundant. */
-			/* Increment witness variable */
-			if (stack->witness_ptr)
-				(*stack->witness_ptr)++;
-
-			return;
-		}
-
-		/* Continue */
-		esim_schedule_event(EV_MOD_NMSI_PREFETCH_LOCK, stack, 0);
-		return;
-	}
-
-
-	if (event == EV_MOD_NMSI_PREFETCH_LOCK)
-	{
-		struct mod_stack_t *older_stack;
-
-		mem_debug("  %lld %lld 0x%x %s prefetch lock\n", esim_time, stack->id,
-				stack->addr, mod->name);
-		mem_trace("mem.access name=\"A-%lld\" state=\"%s:prefetch_lock\"\n",
-				stack->id, mod->name);
-
-		/* If there is any older write, wait for it */
-		older_stack = mod_in_flight_write(mod, stack);
-		if (older_stack)
-		{
-			mem_debug("    %lld wait for write %lld\n",
-					stack->id, older_stack->id);
-			mod_stack_wait_in_stack(stack, older_stack, EV_MOD_NMSI_PREFETCH_LOCK);
-			return;
-		}
-
-		/* Call find and lock */
-		new_stack = mod_stack_create(stack->id, mod, stack->addr,
-			EV_MOD_NMSI_PREFETCH_ACTION, stack);
-		new_stack->blocking = 0;
-		new_stack->prefetch = 1;
-		new_stack->retry = 0;
-		new_stack->witness_ptr = stack->witness_ptr;
-		esim_schedule_event(EV_MOD_NMSI_FIND_AND_LOCK, new_stack, 0);
-
-		/* Set witness variable to NULL so that retries from the same
-		 * stack do not increment it multiple times */
-		stack->witness_ptr = NULL;
-
-		return;
-	}
-
-	if (event == EV_MOD_NMSI_PREFETCH_ACTION)
-	{
-		mem_debug("  %lld %lld 0x%x %s prefetch action\n", esim_time, stack->id,
-				stack->addr, mod->name);
-		mem_trace("mem.access name=\"A-%lld\" state=\"%s:prefetch_action\"\n",
-				stack->id, mod->name);
-
-		/* Error locking */
-		if (stack->err)
-		{
-			/* Don't want to ever retry prefetches if getting a lock failed. 
-			Effectively this means that prefetches are of low priority.
-			This can be improved to not retry only when the current lock
-			holder is writing to the block. */
-			mod->prefetch_aborts++;
-			mem_debug("    lock error, aborting prefetch\n");
-			esim_schedule_event(EV_MOD_NMSI_PREFETCH_FINISH, stack, 0);
-			return;
-		}
-
-		/* Hit */
-		if (stack->state)
-		{
-			/* block already in the cache */
-			mem_debug("  %lld %lld 0x%x %s useless prefetch - cache hit\n",
-					esim_time, stack->id, stack->addr, mod->name);
-
-			mod->useless_prefetches++;
-			esim_schedule_event(EV_MOD_NMSI_PREFETCH_UNLOCK, stack, 0);
-			return;
-		}
-
-		/* Miss */
-		new_stack = mod_stack_create(stack->id, mod, stack->tag,
-				EV_MOD_NMSI_PREFETCH_MISS, stack);
-		new_stack->peer = mod_stack_set_peer(mod, stack->state);
-		new_stack->target_mod = mod_get_low_mod(mod, stack->tag);
-		new_stack->request_dir = mod_request_up_down;
-		new_stack->prefetch = 1;
-		esim_schedule_event(EV_MOD_NMSI_READ_REQUEST, new_stack, 0);
-		return;
-	}
-	if (event == EV_MOD_NMSI_PREFETCH_MISS)
-	{
-		mem_debug("  %lld %lld 0x%x %s prefetch miss\n", esim_time, stack->id,
-				stack->addr, mod->name);
-		mem_trace("mem.access name=\"A-%lld\" state=\"%s:prefetch_miss\"\n",
-				stack->id, mod->name);
-
-		/* Error on read request. Unlock block and abort. */
-		if (stack->err)
-		{
-			/* Don't want to ever retry prefetches if read request failed. 
-			 * Effectively this means that prefetches are of low priority.
-			 * This can be improved depending on the reason for read request fail */
-			mod->prefetch_aborts++;
-			dir_entry_unlock(mod->dir, stack->set, stack->way);
-			mem_debug("    lock error, aborting prefetch\n");
-			esim_schedule_event(EV_MOD_NMSI_PREFETCH_FINISH, stack, 0);
-			return;
-		}
-
-		/* Set block state to excl/shared depending on return var 'shared'.
-		 * Also set the tag of the block. */
-		cache_set_block(mod->cache, stack->set, stack->way, stack->tag,
-				stack->shared ? cache_block_shared : cache_block_exclusive);
-
-		/* Mark the prefetched block as prefetched. This is needed to let the 
-		 * prefetcher know about an actual access to this block so that it
-		 * is aware of all misses as they would be without the prefetcher. 
-		 * TODO: The lower caches that will be filled because of this prefetch
-		 * do not know if it was a prefetch or not. Need to have a way to mark
-		 * them as prefetched too. */
-		mod_block_set_prefetched(mod, stack->addr, 1);
-
-		/* Continue */
-		esim_schedule_event(EV_MOD_NMSI_PREFETCH_UNLOCK, stack, 0);
-		return;
-	}
-
-	if (event == EV_MOD_NMSI_PREFETCH_UNLOCK)
-	{
-		mem_debug("  %lld %lld 0x%x %s prefetch unlock\n", esim_time, stack->id,
-				stack->addr, mod->name);
-		mem_trace("mem.access name=\"A-%lld\" state=\"%s:prefetch_unlock\"\n",
-				stack->id, mod->name);
-
-		/* Unlock directory entry */
-		dir_entry_unlock(mod->dir, stack->set, stack->way);
-
-		/* DEV - zero or 1. why? Continue */
-		esim_schedule_event(EV_MOD_NMSI_PREFETCH_FINISH, stack, 1);
-		return;
-	}
-
-	if (event == EV_MOD_NMSI_PREFETCH_FINISH)
-	{
-		mem_debug("%lld %lld 0x%x %s prefetch\n", esim_time, stack->id,
-				stack->addr, mod->name);
-		mem_trace("mem.access name=\"A-%lld\" state=\"%s:prefetch_finish\"\n",
 				stack->id, mod->name);
 		mem_trace("mem.end_access name=\"A-%lld\"\n",
 				stack->id);
@@ -1111,10 +897,6 @@ void mod_handler_nmsi_find_and_lock(int event, void *data)
 			if (stack->hit)
 				mod->read_hits++;
 		}
-		else if (stack->prefetch)
-		{
-			mod->prefetches++;
-		}
 		else if (stack->nc_write)  /* Must go after read */
 		{
 			mod->nc_writes++;
@@ -1171,10 +953,6 @@ void mod_handler_nmsi_find_and_lock(int event, void *data)
 				mod->no_retry_writes++;
 				if (stack->hit)
 					mod->no_retry_write_hits++;
-			}
-			else if (stack->prefetch)
-			{
-				/* No retries currently for prefetches */
 			}
 			else if (stack->message)
 			{
@@ -1398,7 +1176,8 @@ void mod_handler_nmsi_evict(int event, void *data)
 				stack->id, mod->name);
 
 		/* FIXME we should Update the cache state since it may have changed after its 
-		 * higher-level modules were invalidated */
+		 * higher-level modules were invalidated */	
+		cache_get_block(mod->cache, stack->set, stack->way, NULL, &stack->state);
 
 		/* If module is main memory, we just need to set the block 
 		 * as invalid, and finish. */
@@ -1415,9 +1194,10 @@ void mod_handler_nmsi_evict(int event, void *data)
 		// just skip to FINISH also?
 		/* Just set the block to invalid if there is no data to
 		 * return, and let the protocol deal with catching up later */ 
-/*		if (mod->kind == mod_kind_cache &&
-				(stack->state == cache_block_shared ||
-						stack->state == cache_block_exclusive))
+		assert(stack->state != cache_block_exclusive);
+		if (mod->kind == mod_kind_cache &&
+				(stack->state == cache_block_shared))
+
 		{
 			cache_set_block(mod->cache, stack->src_set,
 					stack->src_way, 0, cache_block_invalid);
@@ -1426,7 +1206,7 @@ void mod_handler_nmsi_evict(int event, void *data)
 					stack, 0);
 			return;
 		}
-*/
+
 		/* Continue */
 		esim_schedule_event(EV_MOD_NMSI_EVICT_ACTION, stack, 0);
 		return;
@@ -1461,23 +1241,22 @@ void mod_handler_nmsi_evict(int event, void *data)
 		}
 
 		/* If state is M/O/N, data must be sent to lower level mod */
+		assert(stack->state != cache_block_owned);
 		if (stack->state == cache_block_modified || 
-				stack->state == cache_block_owned ||
 				stack->state == cache_block_noncoherent)
 		{
 			/* Need to transmit data to low module */
 			msg_size = 8 + mod->block_size;
 			stack->reply = reply_ack_data;
 		}
-		/* If state is E/S, just an ack needs to be sent */
+		// State S shouldn't happen since we just set that to finish
+		// in the Action_invalid  
 		else 
 		{
-			/* FIXME Dana's changes would avoid this */
-			/* This is not a problem. It is more information, 
-			 * which means more traffic */
-			// assert(0); 
-			msg_size = 8;
-			stack->reply = reply_ack;
+			fatal("%s: Invalid cache block: %s\n", 
+					__FUNCTION__, 
+					str_map_value(&cache_block_state_map, 
+					stack->state));
 		}
 
 		/* Get low node */
@@ -1560,15 +1339,36 @@ void mod_handler_nmsi_evict(int event, void *data)
 		/* If data was received, set the block to modified */
 		if (stack->reply == reply_ack)
 		{
-			/* Nothing to do */
+			fatal("%s: We shouldn't send ack. Something wrong: "
+					" state %s\n", 
+					__FUNCTION__, 
+					str_map_value(&cache_block_state_map, 
+					stack->state));
 		}
 		else if (stack->reply == reply_ack_data)
 		{
 			if (stack->state == cache_block_exclusive)
 			{
-				cache_set_block(target_mod->cache, stack->set, 
-						stack->way, stack->tag,
-						cache_block_modified);
+				assert(target_mod->kind == mod_kind_main_memory);
+			}
+			else if (stack->state == cache_block_shared)
+			{
+				// This is the costly part of MSI vs MOESI
+				// get the low mod of the target
+				// Send a write-request to that mod to update
+				// its data
+				new_stack = mod_stack_create(stack->id, target_mod, 
+						stack->tag,
+						EV_MOD_NMSI_EVICT_PROCESS_FINISH,
+						stack);
+				new_stack->peer = mod_stack_set_peer(mod, stack->state);
+				new_stack->target_mod = mod_get_low_mod(target_mod, 
+						stack->tag);
+				new_stack->request_dir = mod_request_up_down;
+				esim_schedule_event(EV_MOD_NMSI_WRITE_REQUEST,
+						new_stack, 0);
+
+				return;
 			}
 			else if (stack->state == cache_block_modified)
 			{
@@ -1587,6 +1387,18 @@ void mod_handler_nmsi_evict(int event, void *data)
 					__FUNCTION__, stack->reply);
 		}
 
+		/* Continue */
+		esim_schedule_event(EV_MOD_NMSI_EVICT_PROCESS_FINISH, stack, 0);
+		return;
+	}
+	
+	if (event == EV_MOD_NMSI_EVICT_PROCESS_FINISH)
+	{
+		// After the return, no matter how we get here, the state
+		// of the target should become modified
+		cache_set_block(target_mod->cache, stack->set, stack->way, 
+				stack->tag, cache_block_modified);
+		
 		/* Remove sharer and owner */
 		dir = target_mod->dir;
 		for (z = 0; z < dir->zsize; z++)
@@ -1642,11 +1454,11 @@ void mod_handler_nmsi_evict(int event, void *data)
 		{
 			if (stack->state == cache_block_exclusive)
 			{
+				assert(target_mod->kind == mod_kind_main_memory);
 				cache_set_block(target_mod->cache, stack->set, stack->way, 
 						stack->tag, cache_block_modified);
 			}
-			else if (stack->state == cache_block_owned || 
-					stack->state == cache_block_modified)
+			else if (stack->state == cache_block_modified)
 			{
 				/* Nothing to do */
 			}
@@ -1995,13 +1807,6 @@ void mod_handler_nmsi_read_request(int event, void *data)
 			esim_schedule_event(EV_MOD_NMSI_READ_REQUEST_UPDOWN_FINISH, 
 					stack, 0);
 
-			/* The prefetcher may have prefetched this earlier and
-			 * hence this is a hit now. Let the prefetcher know of
-			 * this hit since without the prefetcher, this may have
-			 * been a miss. 
-			 * TODO: I'm not sure how relavant this is here for 
-			 * all states. */
-			prefetcher_access_hit(stack, target_mod);
 		}
 		else
 		{
@@ -2017,9 +1822,6 @@ void mod_handler_nmsi_read_request(int event, void *data)
 			new_stack->request_dir = mod_request_up_down;
 			esim_schedule_event(EV_MOD_NMSI_READ_REQUEST, 
 					new_stack, 0);
-
-			/* The prefetcher may be interested in this miss */
-			prefetcher_access_miss(stack, target_mod);
 
 		}
 		return;
@@ -2721,28 +2523,10 @@ void mod_handler_nmsi_write_request(int event, void *data)
 			new_stack->request_dir = mod_request_up_down;
 			esim_schedule_event(EV_MOD_NMSI_WRITE_REQUEST, 
 					new_stack, 0);
-
-			if (stack->state == cache_block_invalid)
-			{
-				/* The prefetcher may be interested in 
-				 * this miss */
-				prefetcher_access_miss(stack, target_mod);
-			}
 		}
 		else 
 		{
 			fatal("Invalid cache block state: %d\n", stack->state);
-		}
-
-		if (stack->state != cache_block_invalid)
-		{
-			/* The prefetcher may have prefetched this earlier and 
-			 * hence this is a hit now. Let the prefetcher know of
-			 * this hit since without the prefetcher, this may have
-			 * been a miss. 
-			 * TODO: I'm not sure how relavant this is here for 
-			 * all states. */
-			prefetcher_access_hit(stack, target_mod);
 		}
 
 		return;

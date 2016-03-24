@@ -357,19 +357,6 @@ void mem_system_init(void)
 		EV_MOD_NMSI_NC_STORE_FINISH = esim_register_event_with_name(mod_handler_nmsi_nc_store,
 				mem_domain_index, "mod_nmsi_nc_store_finish");
 
-		EV_MOD_NMSI_PREFETCH = esim_register_event_with_name(mod_handler_nmsi_prefetch,
-				mem_domain_index, "mod_nmsi_prefetch");
-		EV_MOD_NMSI_PREFETCH_LOCK = esim_register_event_with_name(mod_handler_nmsi_prefetch,
-				mem_domain_index, "mod_nmsi_prefetch_lock");
-		EV_MOD_NMSI_PREFETCH_ACTION = esim_register_event_with_name(mod_handler_nmsi_prefetch,
-				mem_domain_index, "mod_nmsi_prefetch_action");
-		EV_MOD_NMSI_PREFETCH_MISS = esim_register_event_with_name(mod_handler_nmsi_prefetch,
-				mem_domain_index, "mod_nmsi_prefetch_miss");
-		EV_MOD_NMSI_PREFETCH_UNLOCK = esim_register_event_with_name(mod_handler_nmsi_prefetch,
-				mem_domain_index, "mod_nmsi_prefetch_unlock");
-		EV_MOD_NMSI_PREFETCH_FINISH = esim_register_event_with_name(mod_handler_nmsi_prefetch,
-				mem_domain_index, "mod_nmsi_prefetch_finish");
-
 		EV_MOD_NMSI_FIND_AND_LOCK = esim_register_event_with_name(mod_handler_nmsi_find_and_lock,
 				mem_domain_index, "mod_nmsi_find_and_lock");
 		EV_MOD_NMSI_FIND_AND_LOCK_PORT = esim_register_event_with_name(mod_handler_nmsi_find_and_lock,
@@ -389,6 +376,8 @@ void mem_system_init(void)
 				mem_domain_index, "mod_nmsi_evict_receive");
 		EV_MOD_NMSI_EVICT_PROCESS = esim_register_event_with_name(mod_handler_nmsi_evict,
 				mem_domain_index, "mod_nmsi_evict_process");
+		EV_MOD_NMSI_EVICT_PROCESS_FINISH = esim_register_event_with_name(mod_handler_nmsi_evict,
+				mem_domain_index, "mod_nmsi_evict_process_finish");
 		EV_MOD_NMSI_EVICT_PROCESS_NONCOHERENT = esim_register_event_with_name(mod_handler_nmsi_evict,
 				mem_domain_index, "mod_nmsi_evict_process_noncoherent");
 		EV_MOD_NMSI_EVICT_REPLY = esim_register_event_with_name(mod_handler_nmsi_evict,
@@ -479,6 +468,7 @@ void mem_system_init(void)
 		fatal("%s:Something went wrong. Memory system policy didn't roll\n"
 				"back to NMOESI, or is invalid\n", mem_config_file_name);
 	}
+
 	/* Local memory event driven simulation */
 	EV_MOD_LOCAL_MEM_LOAD = esim_register_event_with_name(mod_handler_local_mem_load,
 			mem_domain_index, "mod_local_mem_load");
