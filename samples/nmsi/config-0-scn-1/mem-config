@@ -1,5 +1,6 @@
 [General]
 Coherency = NMSI
+PeerTransfers = Off
 
 [CacheGeometry geo-l1]
 Sets = 16
@@ -122,7 +123,7 @@ Command[7] = SetBlock mod-mm 0 7 0x0 E
 Command[8] = Access mod-l1-1 1 STORE 0x40
 Command[9] = CheckBlock mod-l1-1 1 1 0x40 M
 Command[10] = CheckBlock mod-l2-0 0 3 0x0 S
-Command[11] = CheckSharers mod-l2-0 0 3 0 mod-l1-0
+Command[11] = CheckSharers mod-l2-0 0 3 0 None 
 Command[12] = CheckSharers mod-l2-0 0 3 1 mod-l1-1
 Command[13] = CheckOwner mod-l2-0 0 3 1 mod-l1-1
 Command[14] = CheckBlock mod-l1-2 0 1 0x0 I
@@ -130,5 +131,21 @@ Command[15] = CheckBlock mod-l2-1 0 3 0x0 I
 Command[16] = CheckSharers mod-l2-1 0 3 1 None
 Command[17] = CheckSharers mod-mm 0 7 0 mod-l2-0
 Command[18] = CheckBlock mod-mm 0 7 0x0 E
-command[19] = CheckBlock mod-l1-0 0 1 0x0 S
+command[19] = CheckBlock mod-l1-0 0 1 0x0 I 
+Command[20] = CheckLink mod-l1-0 Low Out 8
+Command[21] = CheckLink mod-l1-0 Low In 8
+Command[22] = CheckLink mod-l1-1 Low Out 8
+Command[23] = CheckLink mod-l1-1 Low In 72
+Command[24] = CheckLink mod-l2-0 High Out 80
+Command[25] = CheckLink mod-l2-0 High In 16
+Command[26] = CheckLink mod-l2-0 Low Out 8
+Command[27] = CheckLink mod-l2-0 Low In 8
+Command[28] = CheckLink mod-mm High In 16
+Command[29] = CheckLink mod-mm High Out 16 
+Command[30] = CheckLink mod-l2-1 Low In 8
+Command[31] = CheckLink mod-l2-1 Low Out 8
+Command[32] = CheckLink mod-l2-1 High In 8
+Command[33] = CheckLink mod-l2-1 High Out 8
+Command[34] = CheckLink mod-l1-2 Low Out 8
+Command[35] = CheckLink mod-l1-2 Low In 8
 

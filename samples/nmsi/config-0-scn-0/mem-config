@@ -1,6 +1,6 @@
 [General]
 Coherency = NMSI
-
+PeerTransfer = Off
 [CacheGeometry geo-l1]
 Sets = 16
 Assoc = 2
