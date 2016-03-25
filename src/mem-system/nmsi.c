@@ -1935,8 +1935,11 @@ void mod_handler_nmsi_read_request(int event, void *data)
 		/* If no sub-block requested by mod is shared by other cache, set mod
 		 * as owner of all of them. Otherwise, notify requester that the block is
 		 * shared by setting the 'shared' return value to true. */
+		// The only scenario in which there is an owner is the M state.
+		// If the mod (stack) is in M state we can set that
+		// mod the owner of the subblocks
 		ret->shared = shared;
-		if (!shared)
+		if (!shared && stack->state == cache_block_modified)
 		{
 			for (z = 0; z < dir->zsize; z++)
 			{
