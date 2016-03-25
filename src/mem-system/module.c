@@ -154,7 +154,10 @@ long long mod_access(struct mod_t *mod, enum mod_access_kind_t access_kind,
 		}
 		else if (access_kind == mod_access_store)
 		{
-			event = EV_MOD_NMOESI_STORE;
+			if (policy == mem_policy_nmoesi)
+				event = EV_MOD_NMOESI_STORE;
+			else if (policy == mem_policy_nmsi)
+				event = EV_MOD_NMSI_STORE;
 		}
 		else if (access_kind == mod_access_nc_store)
 		{
