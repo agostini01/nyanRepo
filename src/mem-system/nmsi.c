@@ -476,11 +476,25 @@ void mod_handler_nmsi_store(int event, void *data)
 
 		// Send a write request to update the lower level, 
 		// and possibly the other sharers
-		new_stack = mod_stack_create(stack->id, mod, stack->tag,
+		new_stack = mod_stack_create(stack->id, mod, stack->addr,
 			EV_MOD_NMSI_STORE_UNLOCK, stack);
 		new_stack->peer = mod_stack_set_peer(mod, stack->state);
 		new_stack->target_mod = mod_get_low_mod(mod, stack->tag);
 		new_stack->request_dir = mod_request_up_down;
+
+		// We set the expected response for I to be block size,
+		// and for N/S to be an Ack. However during invalidation
+		// or down-up write-request, this value might get updated
+		if (stack->state == cache_block_invalid)
+		{
+			new_stack->reply_size = mod->block_size + 8;
+			mod_stack_set_reply(new_stack, reply_ack_data);
+		}
+		else // S or N
+		{
+			new_stack->reply_size = 8;
+			mod_stack_set_reply(new_stack, reply_ack);
+		}
 		esim_schedule_event(EV_MOD_NMSI_WRITE_REQUEST, new_stack, 0);
 
 		return;
@@ -1164,6 +1178,7 @@ void mod_handler_nmsi_evict(int event, void *data)
 		new_stack->except_mod = NULL;
 		new_stack->set = stack->set;
 		new_stack->way = stack->way;
+		new_stack->partial_invalidation = 0;
 		esim_schedule_event(EV_MOD_NMSI_INVALIDATE, new_stack, 0);
 		return;
 	}
@@ -2200,8 +2215,9 @@ void mod_handler_nmsi_read_request(int event, void *data)
 		struct net_node_t *src_node;
 		struct net_node_t *dst_node;
 
-		mem_debug("  %lld %lld 0x%x %s read request reply\n", 
-				esim_time, stack->id, stack->tag, target_mod->name);
+		mem_debug("  %lld %lld 0x%x %s read request reply (size =%d)\n", 
+				esim_time, stack->id, stack->tag, target_mod->name,
+				stack->reply_size);
 		mem_trace("mem.access name=\"A-%lld\" state=\"%s:read_request_reply\"\n",
 				stack->id, target_mod->name);
 
@@ -2306,14 +2322,6 @@ void mod_handler_nmsi_write_request(int event, void *data)
 		/* Default return values */
 		ret->err = 0;
 
-		/* For write requests, we need to set the initial reply size 
-		 * because in updown, peer transfers must be allowed to 
-		 * decrease this value (during invalidate). If the request 
-		 * turns out to be downup, then these values will get 
-		 * overwritten. */
-		stack->reply_size = mod->block_size + 8;
-		mod_stack_set_reply(stack, reply_ack_data);
-
 		/* Checks */
 		assert(stack->request_dir);
 		assert(mod_get_low_mod(mod, stack->addr) == target_mod ||
@@ -2410,12 +2418,16 @@ void mod_handler_nmsi_write_request(int event, void *data)
 		 * block has already been evicted by the higher-level cache if
 		 * it was in an unmodified state. */
 		/* Invalidate the rest of upper level sharers */
-		new_stack = mod_stack_create(stack->id, target_mod, 0,
+		new_stack = mod_stack_create(stack->id, target_mod, stack->addr,
 			EV_MOD_NMSI_WRITE_REQUEST_EXCLUSIVE, stack);
 		new_stack->except_mod = mod;
 		new_stack->set = stack->set;
 		new_stack->way = stack->way;
 		new_stack->peer = mod_stack_set_peer(stack->peer, stack->state);
+		if (stack->request_dir == mod_request_up_down)
+			new_stack->partial_invalidation = 0;
+		else if (stack->request_dir == mod_request_down_up)
+			new_stack->partial_invalidation = 1; 
 		esim_schedule_event(EV_MOD_NMSI_INVALIDATE, new_stack, 0);
 		return;
 	}
@@ -2468,6 +2480,17 @@ void mod_handler_nmsi_write_request(int event, void *data)
 			new_stack->target_mod = mod_get_low_mod(target_mod, 
 					stack->tag);
 			new_stack->request_dir = mod_request_up_down;
+			if (stack->state == cache_block_invalid)
+			{
+				new_stack->reply_size = target_mod->block_size 
+						+ 8; 
+				mod_stack_set_reply(new_stack, reply_ack_data);
+			}
+			else
+			{
+				new_stack->reply_size = 8; 
+				mod_stack_set_reply(new_stack, reply_ack);
+			}
 			esim_schedule_event(EV_MOD_NMSI_WRITE_REQUEST, 
 					new_stack, 0);
 		}
@@ -2507,16 +2530,14 @@ void mod_handler_nmsi_write_request(int event, void *data)
 		dir = target_mod->dir;
 		for (z = 0; z < dir->zsize; z++)
 		{
-			assert(stack->addr % mod->block_size == 0);
 			dir_entry_tag = stack->tag + 
 					z * target_mod->sub_block_size;
 			assert(dir_entry_tag < stack->tag + 
 					target_mod->block_size);
-			if (dir_entry_tag < stack->addr || 
-					dir_entry_tag >= stack->addr + mod->block_size)
-			{
+			if (dir_entry_tag > stack->addr || 
+					dir_entry_tag + mod->sub_block_size <= 
+					stack->addr)
 				continue;
-			}
 			dir_entry = dir_entry_get(dir, stack->set, 
 					stack->way, z);
 			dir_entry_set_sharer(dir, stack->set, stack->way, z, 
@@ -2622,8 +2643,10 @@ void mod_handler_nmsi_write_request(int event, void *data)
 		struct net_node_t *src_node;
 		struct net_node_t *dst_node;
 
-		mem_debug("  %lld %lld 0x%x %s write request reply\n", esim_time, stack->id,
-				stack->tag, target_mod->name);
+		mem_debug("  %lld %lld 0x%x %s write request reply (size = %d)\n", 
+				esim_time, stack->id,
+				stack->tag, target_mod->name,
+				stack->reply_size);
 		mem_trace("mem.access name=\"A-%lld\" state=\"%s:write_request_reply\"\n",
 				stack->id, target_mod->name);
 
@@ -2831,6 +2854,14 @@ void mod_handler_nmsi_invalidate(int event, void *data)
 		{
 			dir_entry_tag = stack->tag + z * mod->sub_block_size;
 			assert(dir_entry_tag < stack->tag + mod->block_size);
+
+			// Skipping other subblocks in case of partial invalidation
+			if ((stack->partial_invalidation == 1) && 
+					(stack->addr < dir_entry_tag || 
+					 stack->addr >= dir_entry_tag + 
+					 mod->sub_block_size))
+				continue;
+
 			dir_entry = dir_entry_get(dir, stack->set, stack->way, z);
 			for (i = 0; i < dir->num_nodes; i++)
 			{
@@ -3041,8 +3072,10 @@ void mod_handler_nmsi_message(int event, void *data)
 		struct net_node_t *src_node;
 		struct net_node_t *dst_node;
 
-		mem_debug("  %lld %lld 0x%x %s message reply\n", esim_time, stack->id,
-				stack->tag, target_mod->name);
+		mem_debug("  %lld %lld 0x%x %s message reply (size = %d)\n",
+				esim_time, stack->id,
+				stack->tag, target_mod->name,
+				stack->reply_size);
 
 		/* Checks */
 		assert(mod_get_low_mod(mod, stack->addr) == target_mod ||
