@@ -1371,7 +1371,7 @@ int SIGpuRun(Timing *self)
 		esim_finish = esim_finish_si_max_inst;
 
 	/* Stop if there was a simulation stall */
-	if ((asTiming(si_gpu)->cycle-gpu->last_complete_cycle) > 
+	if ((asTiming(si_gpu)->cycle - gpu->last_complete_cycle) > 
 		20000000)
 	{
 		warning("Southern Islands GPU simulation stalled.\n%s", 
