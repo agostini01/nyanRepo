@@ -1040,6 +1040,15 @@ static void m2s_read_command_line(int *argc_ptr, char **argv)
 			continue;
 		}
 
+		/* OpenCL runtime debug file */
+		if (!strcmp(argv[argi], "--si-debug-opencl"))
+		{
+			m2s_need_argument(argc, argv, argi);
+			opencl_debug_file_name = argv[++argi];
+			continue;
+		}
+
+
 		/* Dump Southern Islands default configuration file */
 		if (!strcmp(argv[argi], "--si-dump-default-config"))
 		{
