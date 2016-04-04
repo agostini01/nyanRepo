@@ -84,12 +84,12 @@ void OpenclDriverRequestWork(OpenclDriver *self)
 		!si_emu->running_work_groups->count &&
 		!si_emu->waiting_work_groups->count)
 	{
-		opencl_debug("ND-Range is complete\n");
+		// opencl_debug("ND-Range is complete\n");
 		self->ndrange_complete = 1;
 	}
 	else
 	{
-		opencl_debug("SI is ready for more work\n");
+		// opencl_debug("SI is ready for more work\n");
 		self->ready_for_work = 1;
 	}
 
