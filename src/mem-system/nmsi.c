@@ -36,9 +36,6 @@
 #include "mod-stack.h"
 #include "plotter.h"
 
-int cache_snapshot;
-
-
 /* Events */
 
 int EV_MOD_NMSI_LOAD;
@@ -2425,9 +2422,9 @@ void mod_handler_nmsi_write_request(int event, void *data)
 		new_stack->way = stack->way;
 		new_stack->peer = mod_stack_set_peer(stack->peer, stack->state);
 		if (stack->request_dir == mod_request_up_down)
-			new_stack->partial_invalidation = 0;
+			new_stack->partial_invalidation = 1;
 		else if (stack->request_dir == mod_request_down_up)
-			new_stack->partial_invalidation = 1; 
+			new_stack->partial_invalidation = 0; 
 		esim_schedule_event(EV_MOD_NMSI_INVALIDATE, new_stack, 0);
 		return;
 	}

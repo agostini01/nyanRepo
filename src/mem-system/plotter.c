@@ -64,7 +64,7 @@ struct snapshot_t *snapshot_create(char *name)
 			"%s_accesses", name);
 	snapshot->snapshot = file_open_for_write(snapshot->file_name);
 	if (!snapshot->snapshot)
-		fatal(": cannot write on snapshot file");
+		fatal(" cannot write on snapshot file");
 
 	snapshot->mem_regions = list_create();
 

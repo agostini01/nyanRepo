@@ -200,6 +200,9 @@ struct mod_t
 	struct snapshot_t *snapshot_load;
 	struct snapshot_t *snapshot_store;
 
+	/* Access Trace File */
+	FILE *access_trace;
+
 	/* Statistics */
 	long long accesses;
 	long long hits;

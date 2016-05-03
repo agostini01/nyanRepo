@@ -1369,14 +1369,22 @@ static void m2s_read_command_line(int *argc_ptr, char **argv)
 			mem_snapshot_block_size = atoi(argv[++argi]);
 			continue;
 		}
+
+		/* CU access trace */
+		if (!strcmp(argv[argi], "--mem-mod-access-trace"))
+		{
+			m2s_need_argument(argc, argv, argi);
+			mem_mod_access_trace_activate = 1;
+			mem_trace_mod_name = argv[++argi];
+			continue;
+		}
 		
-		/* Cache snapshot -- TRUE/FALSE */
+		/* Cache snapshot -- cache id*/
 		if (!strcmp(argv[argi], "--cache-snapshot"))
 		{
 			m2s_need_argument(argc, argv, argi);
-			cache_snapshot = atoi(argv[++argi]);
-			if (cache_snapshot != 0)
-				cache_snapshot = 1;
+			cache_snapshot_activate = 1;
+			cache_snapshot = argv[++argi];
 			continue;
 		}
 

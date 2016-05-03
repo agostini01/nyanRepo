@@ -21,6 +21,7 @@
 #include <lib/esim/esim.h>
 #include <lib/esim/trace.h>
 #include <lib/util/debug.h>
+#include <lib/util/file.h>
 #include <lib/util/linked-list.h>
 #include <lib/util/list.h>
 #include <lib/util/string.h>
@@ -37,8 +38,10 @@
 #include "prefetcher.h"
 #include "plotter.h"
 
-int cache_snapshot;
-
+int cache_snapshot_activate;
+char* cache_snapshot = 0;
+int mem_mod_access_trace_activate = 0;
+char* mem_trace_mod_name; 
 
 /* Events */
 
@@ -148,23 +151,92 @@ void mod_handler_nmoesi_load(int event, void *data)
 		mem_trace("mem.new_access name=\"A-%lld\" type=\"load\" "
 			"state=\"%s:load\" addr=0x%x\n",
 			stack->id, mod->name, stack->addr);
+
+		// Recording functions for the entire memory accesses
+		long long cycle = esim_domain_cycle(mem_domain_index);
 		if (mem_snap_period != 0)
 		{
+			// the snapshot should be there
 			assert(snapshot_load);
-			long long cycle = esim_domain_cycle(mem_domain_index);
 
+			// Recording the snapshot
 			snapshot_record(snapshot_load, cycle, stack->addr);
-
-			if (cache_snapshot && !mod->snapshot_load)
-			{
-				char file[MAX_STRING_SIZE];
-				snprintf(file, sizeof file,
-						"%s_load", mod->name);
-				mod->snapshot_load = snapshot_create(file);
-			}
-			snapshot_record(mod->snapshot_load, cycle, stack->addr);
 		}
 
+		// Snapshot for an individual cache module (by name)
+		if(cache_snapshot_activate)
+		{
+			// Get the module by name
+			struct mod_t *snapshot_mod = mem_system_get_mod(
+					cache_snapshot);
+
+			// If the module does not exist, throw an error
+			if (!snapshot_mod)
+				fatal("Unknown module for snapshot");
+
+			// If the snapshot mod is different from the stack
+			// mod continue
+			if (snapshot_mod == mod)
+			{
+				// If the module doesn't have a snapshot
+				// (load) create one
+				if (!snapshot_mod->snapshot_load)
+				{
+					char file[MAX_STRING_SIZE];
+					snprintf(file, sizeof file,
+							"%s_load", 
+							snapshot_mod->name);
+					snapshot_mod->snapshot_load = 
+							snapshot_create(
+							file);
+				}
+
+				// Record the snapshot load for the selected module
+				snapshot_record(snapshot_mod->snapshot_load, 
+						cycle, stack->addr);
+			}
+		}
+
+		// Trace record for a cache
+		if (mem_mod_access_trace_activate)
+		{
+			// Get the module by name
+			struct mod_t *trace_mod = mem_system_get_mod(
+					mem_trace_mod_name);
+
+			// If the module doesn't exists, error
+			if (!trace_mod)
+				fatal("Unknown module for trace");
+
+			// If this is not the target mod, don't record.
+			// Leads to multiple records
+			if (trace_mod == mod)
+			{
+				// If the module doesn't have an access trace 
+				// output file (both load and store) create one
+				if (!trace_mod->access_trace)
+				{
+					char file_name[MAX_STRING_SIZE];
+					snprintf(file_name, sizeof file_name,
+							"%s_access_trace",
+							trace_mod->name);
+					trace_mod->access_trace =
+							file_open_for_write( 
+							file_name);
+
+					// error if file not created
+					if(!trace_mod->access_trace)
+						fatal("cannot write in mod access "
+								"trace file"); 
+				}
+			
+				// Record the access in the trace - 0 means load
+				fprintf(trace_mod->access_trace, " LD %lld 0x%x\n",
+						cycle, 
+						stack->addr);
+			}
+		}
+ 
 		/* Record access */
 		mod_access_start(mod, stack, mod_access_load);
 
@@ -367,21 +439,92 @@ void mod_handler_nmoesi_store(int event, void *data)
 		mem_trace("mem.new_access name=\"A-%lld\" type=\"store\" "
 			"state=\"%s:store\" addr=0x%x\n",
 			stack->id, mod->name, stack->addr);
+
+		// Recording functions for the entire memory accesses
+		long long cycle = esim_domain_cycle(mem_domain_index);
 		if (mem_snap_period != 0)
 		{
+			// the snapshot should be there
 			assert(snapshot_store);
-			long long cycle = esim_domain_cycle(mem_domain_index);
 
+			// Recording the snapshot
 			snapshot_record(snapshot_store, cycle, stack->addr);
-			if (cache_snapshot && !mod->snapshot_store)
-			{
-				char file[MAX_STRING_SIZE];
-				snprintf(file, sizeof file,
-						"%s_store", mod->name);
-				mod->snapshot_store = snapshot_create(file);
-			}
-			snapshot_record(mod->snapshot_store, cycle, stack->addr);
 		}
+
+		// Snapshot for an individual cache module (by name)
+		if(cache_snapshot_activate)
+		{
+			// Get the module by name
+			struct mod_t *snapshot_mod = mem_system_get_mod(
+					cache_snapshot);
+
+			// If the module does not exist, throw an error
+			if (!snapshot_mod)
+				fatal("Unknown module for snapshot");
+
+			// If the snapshot mod is different from the stack
+			// mod continue
+			if (snapshot_mod == mod)
+			{
+				// If the module doesn't have a snapshot
+				// (load) create one
+				if (!snapshot_mod->snapshot_store)
+				{
+					char file[MAX_STRING_SIZE];
+					snprintf(file, sizeof file,
+							"%s_store", 
+							snapshot_mod->name);
+					snapshot_mod->snapshot_store = 
+							snapshot_create(
+							file);
+				}
+
+				// Record the snapshot load for the selected module
+				snapshot_record(snapshot_mod->snapshot_store, 
+						cycle, stack->addr);
+			}
+		}
+
+		// Trace record for a cache
+		if (mem_mod_access_trace_activate)
+		{
+			// Get the module by name
+			struct mod_t *trace_mod = mem_system_get_mod(
+					mem_trace_mod_name);
+
+			// If the module doesn't exists, error
+			if (!trace_mod)
+				fatal("Unknown module for trace");
+
+			// If this is not the target mod, don't record.
+			// Leads to multiple records
+			if (trace_mod == mod)
+			{
+				// If the module doesn't have an access trace 
+				// output file (both load and store) create one
+				if (!trace_mod->access_trace)
+				{
+					char file_name[MAX_STRING_SIZE];
+					snprintf(file_name, sizeof file_name,
+							"%s_access_trace",
+							trace_mod->name);
+					trace_mod->access_trace =
+							file_open_for_write( 
+							file_name);
+
+					// error if file not created
+					if(!trace_mod->access_trace)
+						fatal("cannot write in mod access "
+								"trace file"); 
+				}
+			
+				// Record the access in the trace - 0 means load
+				fprintf(trace_mod->access_trace, " ST %lld 0x%x\n",
+						cycle, 
+						stack->addr);
+			}
+		}
+ 
 
 		/* Record access */
 		mod_access_start(mod, stack, mod_access_store);
@@ -477,11 +620,24 @@ void mod_handler_nmoesi_store(int event, void *data)
 		}
 
 		/* Miss - state=O/S/I/N */
-		new_stack = mod_stack_create(stack->id, mod, stack->tag,
+		new_stack = mod_stack_create(stack->id, mod, stack->addr,
 			EV_MOD_NMOESI_STORE_UNLOCK, stack);
 		new_stack->peer = mod_stack_set_peer(mod, stack->state);
 		new_stack->target_mod = mod_get_low_mod(mod, stack->tag);
 		new_stack->request_dir = mod_request_up_down;
+
+		/* Set the expected reply size based on different states */
+		if (stack->state == cache_block_invalid)
+		{
+			new_stack->reply_size = mod->block_size + 8;
+			mod_stack_set_reply(new_stack, reply_ack_data);
+		}
+		else
+		{
+			new_stack->reply_size = 8;
+			mod_stack_set_reply(new_stack, reply_ack);
+		}
+		
 		esim_schedule_event(EV_MOD_NMOESI_WRITE_REQUEST, new_stack, 0);
 
 		/* The prefetcher may be interested in this miss */
@@ -570,23 +726,91 @@ void mod_handler_nmoesi_nc_store(int event, void *data)
 		mem_trace("mem.new_access name=\"A-%lld\" type=\"nc_store\" "
 			"state=\"%s:nc store\" addr=0x%x\n", stack->id, mod->name, stack->addr);
 
+		// Recording functions for the entire memory accesses
+		long long cycle = esim_domain_cycle(mem_domain_index);
 		if (mem_snap_period != 0)
 		{
+			// the snapshot should be there
 			assert(snapshot_store);
-			long long cycle = esim_domain_cycle(mem_domain_index);
 
+			// Recording the snapshot
 			snapshot_record(snapshot_store, cycle, stack->addr);
-
-			if (cache_snapshot && !mod->snapshot_store)
-			{
-				char file[MAX_STRING_SIZE];
-				snprintf(file, sizeof file,
-						"%s_store", mod->name);
-				mod->snapshot_store = snapshot_create(file);
-			}
-			snapshot_record(mod->snapshot_store, cycle, stack->addr);
 		}
 
+		// Snapshot for an individual cache module (by name)
+		if(cache_snapshot_activate)
+		{
+			// Get the module by name
+			struct mod_t *snapshot_mod = mem_system_get_mod(
+					cache_snapshot);
+
+			// If the module does not exist, throw an error
+			if (!snapshot_mod)
+				fatal("Unknown module for snapshot");
+
+			// If the snapshot mod is different from the stack
+			// mod continue
+			if (snapshot_mod == mod)
+			{
+				// If the module doesn't have a snapshot
+				// (load) create one
+				if (!snapshot_mod->snapshot_store)
+				{
+					char file[MAX_STRING_SIZE];
+					snprintf(file, sizeof file,
+							"%s_store", 
+							snapshot_mod->name);
+					snapshot_mod->snapshot_store = 
+							snapshot_create(
+							file);
+				}
+
+				// Record the snapshot load for the selected module
+				snapshot_record(snapshot_mod->snapshot_store, 
+						cycle, stack->addr);
+			}
+		}
+
+		// Trace record for a cache
+		if (mem_mod_access_trace_activate)
+		{
+			// Get the module by name
+			struct mod_t *trace_mod = mem_system_get_mod(
+					mem_trace_mod_name);
+
+			// If the module doesn't exists, error
+			if (!trace_mod)
+				fatal("Unknown module for trace");
+
+			// If this is not the target mod, don't record.
+			// Leads to multiple records
+			if (trace_mod == mod)
+			{
+				// If the module doesn't have an access trace 
+				// output file (both load and store) create one
+				if (!trace_mod->access_trace)
+				{
+					char file_name[MAX_STRING_SIZE];
+					snprintf(file_name, sizeof file_name,
+							"%s_access_trace",
+							trace_mod->name);
+					trace_mod->access_trace =
+							file_open_for_write( 
+							file_name);
+
+					// error if file not created
+					if(!trace_mod->access_trace)
+						fatal("cannot write in mod access "
+								"trace file"); 
+				}
+			
+				// Record the access in the trace - 0 means load
+				fprintf(trace_mod->access_trace, " NS %lld 0x%x\n",
+						cycle, 
+						stack->addr);
+			}
+		}
+ 
 		/* Record access */
 		mod_access_start(mod, stack, mod_access_nc_store);
 
@@ -1386,6 +1610,7 @@ void mod_handler_nmoesi_evict(int event, void *data)
 		new_stack->except_mod = NULL;
 		new_stack->set = stack->set;
 		new_stack->way = stack->way;
+		new_stack->partial_invalidation = 0;
 		esim_schedule_event(EV_MOD_NMOESI_INVALIDATE, new_stack, 0);
 		return;
 	}
@@ -2560,14 +2785,6 @@ void mod_handler_nmoesi_write_request(int event, void *data)
 		/* Default return values */
 		ret->err = 0;
 
-		/* For write requests, we need to set the initial reply size 
-		 * because in updown, peer transfers must be allowed to 
-		 * decrease this value (during invalidate). If the request 
-		 * turns out to be downup, then these values will get 
-		 * overwritten. */
-		stack->reply_size = mod->block_size + 8;
-		mod_stack_set_reply(stack, reply_ack_data);
-
 		/* Checks */
 		assert(stack->request_dir);
 		assert(mod_get_low_mod(mod, stack->addr) == target_mod ||
@@ -2663,13 +2880,20 @@ void mod_handler_nmoesi_write_request(int event, void *data)
 		/* FIXME If we have a down-up write request, it is possible that the
 		 * block has already been evicted by the higher-level cache if
 		 * it was in an unmodified state. */
+		// TODO this is fixed in 5.0. Apply if encountered errors 
 		/* Invalidate the rest of upper level sharers */
-		new_stack = mod_stack_create(stack->id, target_mod, 0,
+		new_stack = mod_stack_create(stack->id, target_mod, stack->addr,
 			EV_MOD_NMOESI_WRITE_REQUEST_EXCLUSIVE, stack);
 		new_stack->except_mod = mod;
 		new_stack->set = stack->set;
 		new_stack->way = stack->way;
 		new_stack->peer = mod_stack_set_peer(stack->peer, stack->state);
+
+		// Set the partial invalidation flag
+		if (stack->request_dir == mod_request_up_down)
+			new_stack->partial_invalidation = 1;
+		else if (stack->request_dir == mod_request_down_up)
+			new_stack->partial_invalidation = 0;
 		esim_schedule_event(EV_MOD_NMOESI_INVALIDATE, new_stack, 0);
 		return;
 	}
@@ -2719,6 +2943,21 @@ void mod_handler_nmoesi_write_request(int event, void *data)
 			new_stack->target_mod = mod_get_low_mod(target_mod, 
 					stack->tag);
 			new_stack->request_dir = mod_request_up_down;
+
+			// Set the reply size based on the type of state
+			if (stack->state == cache_block_invalid)
+			{
+				new_stack->reply_size = target_mod->block_size
+						+ 8;
+				mod_stack_set_reply(new_stack, reply_ack_data);
+			}
+			else
+			{
+				new_stack->reply_size = 8;
+				mod_stack_set_reply(new_stack, reply_ack);
+			}
+
+			// Schedule the event
 			esim_schedule_event(EV_MOD_NMOESI_WRITE_REQUEST, 
 					new_stack, 0);
 
@@ -2776,13 +3015,13 @@ void mod_handler_nmoesi_write_request(int event, void *data)
 		dir = target_mod->dir;
 		for (z = 0; z < dir->zsize; z++)
 		{
-			assert(stack->addr % mod->block_size == 0);
 			dir_entry_tag = stack->tag + 
 					z * target_mod->sub_block_size;
 			assert(dir_entry_tag < stack->tag + 
 					target_mod->block_size);
-			if (dir_entry_tag < stack->addr || 
-					dir_entry_tag >= stack->addr + mod->block_size)
+			if (dir_entry_tag > stack->addr || 
+					dir_entry_tag + mod->sub_block_size
+					<= stack->addr)
 			{
 				continue;
 			}
@@ -3132,6 +3371,12 @@ void mod_handler_nmoesi_invalidate(int event, void *data)
 		{
 			dir_entry_tag = stack->tag + z * mod->sub_block_size;
 			assert(dir_entry_tag < stack->tag + mod->block_size);
+			if (stack->partial_invalidation &&
+					(stack->addr < dir_entry_tag ||
+					 stack->addr >= dir_entry_tag + 
+					 mod->sub_block_size))
+				continue;
+
 			dir_entry = dir_entry_get(dir, stack->set, stack->way, z);
 			for (i = 0; i < dir->num_nodes; i++)
 			{

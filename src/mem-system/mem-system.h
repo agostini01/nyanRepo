@@ -78,7 +78,10 @@ extern struct mem_system_t *mem_system;
 /* Memory Snapshot */
 extern int mem_snap_period;
 extern int mem_snapshot_block_size;
-extern int cache_snapshot;
+extern char* cache_snapshot;
+extern int cache_snapshot_activate;
+extern char* mem_trace_mod_name;
+extern int mem_mod_access_trace_activate;
 
 struct snapshot_t *snapshot_load;
 struct snapshot_t *snapshot_store;
