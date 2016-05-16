@@ -471,18 +471,17 @@ void net_routing_table_dump(struct net_routing_table_t *routing_table, FILE *f)
 	struct net_node_t *next_node;
 	struct net_node_t *node_l;
 	/* Routing table */
-	fprintf(f, "         ");
 	for (i = 0; i < net->node_count; i++)
 	{
 		node_l = list_get(net->node_list, i);
-		fprintf(f, "\t%s \t\t", node_l->name);
+		fprintf(f, "\t%s\t", node_l->name);
 	}
 
 	fprintf(f, "\n");
 	for (i = 0; i < net->node_count; i++)
 	{
 		node_l = list_get(net->node_list, i);
-		fprintf(f, "%s\t\t", node_l->name);
+		fprintf(f, "%s\t", node_l->name);
 		for (j = 0; j < net->node_count; j++)
 		{
 			struct net_node_t *node_i;
@@ -497,16 +496,16 @@ void net_routing_table_dump(struct net_routing_table_t *routing_table, FILE *f)
 
 			if (next_node)
 			{
-				fprintf(f, "%s:\t", next_node->name);
+				fprintf(f, "%s:", next_node->name);
 				if (buffer)
 				{
-					fprintf(f,"%s   \t", buffer->name);
+					fprintf(f,"%s\t", buffer->name);
 				}
 				else
-					fprintf(f,"-------- \t");
+					fprintf(f,"--\t");
 			}
 			else
-				fprintf(f, "--\t\t\t");
+				fprintf(f, "---\t");
 		}
 		fprintf(f, "\n");
 

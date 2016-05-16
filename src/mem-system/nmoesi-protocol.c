@@ -198,10 +198,11 @@ void mod_handler_nmoesi_load(int event, void *data)
 		}
 
 		// Trace record for a cache
+		struct mod_t* trace_mod = NULL; 
 		if (mem_mod_access_trace_activate)
 		{
 			// Get the module by name
-			struct mod_t *trace_mod = mem_system_get_mod(
+			trace_mod = mem_system_get_mod(
 					mem_trace_mod_name);
 
 			// If the module doesn't exists, error
@@ -231,7 +232,7 @@ void mod_handler_nmoesi_load(int event, void *data)
 				}
 			
 				// Record the access in the trace - 0 means load
-				fprintf(trace_mod->access_trace, " LD %lld 0x%x\n",
+				fprintf(trace_mod->access_trace, " LD %lld 0x%x - ",
 						cycle, 
 						stack->addr);
 			}
@@ -242,6 +243,19 @@ void mod_handler_nmoesi_load(int event, void *data)
 
 		/* Coalesce access */
 		master_stack = mod_can_coalesce(mod, mod_access_load, stack->addr, stack);
+
+		/* if coalesced add to trace */
+		if (mem_mod_access_trace_activate &&
+				trace_mod && 
+				(trace_mod == mod))
+		{
+			if (master_stack)
+				fprintf(trace_mod->access_trace, "Coalesced\n");
+			else
+				fprintf(trace_mod->access_trace, "issued\n");
+		}
+
+		// Return due to coalescing
 		if (master_stack)
 		{
 			mod->coalesced_reads++;
@@ -486,10 +500,11 @@ void mod_handler_nmoesi_store(int event, void *data)
 		}
 
 		// Trace record for a cache
+		struct mod_t* trace_mod = NULL; 
 		if (mem_mod_access_trace_activate)
 		{
 			// Get the module by name
-			struct mod_t *trace_mod = mem_system_get_mod(
+			trace_mod = mem_system_get_mod(
 					mem_trace_mod_name);
 
 			// If the module doesn't exists, error
@@ -519,7 +534,7 @@ void mod_handler_nmoesi_store(int event, void *data)
 				}
 			
 				// Record the access in the trace - 0 means load
-				fprintf(trace_mod->access_trace, " ST %lld 0x%x\n",
+				fprintf(trace_mod->access_trace, " ST %lld 0x%x - ",
 						cycle, 
 						stack->addr);
 			}
@@ -531,6 +546,19 @@ void mod_handler_nmoesi_store(int event, void *data)
 
 		/* Coalesce access */
 		master_stack = mod_can_coalesce(mod, mod_access_store, stack->addr, stack);
+
+		/* if coalesced add to trace */
+		if (mem_mod_access_trace_activate &&
+				trace_mod && 
+				(trace_mod == mod))
+		{
+			if (master_stack)
+				fprintf(trace_mod->access_trace, "Coalesced\n");
+			else
+				fprintf(trace_mod->access_trace, "issued\n");
+		}
+
+		// Return due to coalescing
 		if (master_stack)
 		{
 			mod->coalesced_writes++;
@@ -772,10 +800,11 @@ void mod_handler_nmoesi_nc_store(int event, void *data)
 		}
 
 		// Trace record for a cache
+		struct mod_t *trace_mod = NULL; 
 		if (mem_mod_access_trace_activate)
 		{
 			// Get the module by name
-			struct mod_t *trace_mod = mem_system_get_mod(
+			trace_mod = mem_system_get_mod(
 					mem_trace_mod_name);
 
 			// If the module doesn't exists, error
@@ -805,7 +834,7 @@ void mod_handler_nmoesi_nc_store(int event, void *data)
 				}
 			
 				// Record the access in the trace - 0 means load
-				fprintf(trace_mod->access_trace, " NS %lld 0x%x\n",
+				fprintf(trace_mod->access_trace, " NS %lld 0x%x - ",
 						cycle, 
 						stack->addr);
 			}
@@ -816,6 +845,19 @@ void mod_handler_nmoesi_nc_store(int event, void *data)
 
 		/* Coalesce access */
 		master_stack = mod_can_coalesce(mod, mod_access_nc_store, stack->addr, stack);
+
+		/* if coalesced add to trace */
+		if (mem_mod_access_trace_activate &&
+				trace_mod && 
+				(trace_mod == mod))
+		{
+			if (master_stack)
+				fprintf(trace_mod->access_trace, "Coalesced\n");
+			else
+				fprintf(trace_mod->access_trace, "issued\n");
+		}
+
+		// Return due to coalescing
 		if (master_stack)
 		{
 			mod->coalesced_nc_writes++;
@@ -1321,6 +1363,33 @@ void mod_handler_nmoesi_find_and_lock(int event, void *data)
 				stack->tag, mod->name, stack->set, stack->way,
 				str_map_value(&cache_block_state_map, stack->state));
 		}
+		// Trace record for a cache
+		if (mem_mod_access_trace_activate)
+		{
+			// Get the module by name
+			struct mod_t* trace_mod = mem_system_get_mod(
+					mem_trace_mod_name);
+
+			// If the module doesn't exists, error
+			if (!trace_mod)
+				fatal("Unknown module for trace");
+
+			// If the trace_mod is the mod
+			if (trace_mod == mod)
+			{
+				assert(trace_mod->access_trace);
+				if (stack->hit)
+					fprintf(trace_mod->access_trace,
+							"0x%x - hit\n",
+							stack->addr);
+				else
+					fprintf(trace_mod->access_trace,
+							"0x%x - miss\n",
+							stack->addr);
+			
+			}
+		}
+
 
 		/* Statistics */
 		mod->accesses++;

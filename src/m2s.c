@@ -1379,7 +1379,7 @@ static void m2s_read_command_line(int *argc_ptr, char **argv)
 			continue;
 		}
 		
-		/* Cache snapshot -- cache id*/
+		/* Cache snapshot -- cache name */
 		if (!strcmp(argv[argi], "--cache-snapshot"))
 		{
 			m2s_need_argument(argc, argv, argi);
