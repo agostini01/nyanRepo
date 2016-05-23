@@ -144,8 +144,6 @@ void mod_handler_nmoesi_load(int event, void *data)
 
 	if (event == EV_MOD_NMOESI_LOAD)
 	{
-		struct mod_stack_t *master_stack;
-
 		mem_debug("%lld %lld 0x%x %s load\n", esim_time, stack->id,
 			stack->addr, mod->name);
 		mem_trace("mem.new_access name=\"A-%lld\" type=\"load\" "
@@ -240,29 +238,6 @@ void mod_handler_nmoesi_load(int event, void *data)
  
 		/* Record access */
 		mod_access_start(mod, stack, mod_access_load);
-
-		/* Coalesce access */
-		master_stack = mod_can_coalesce(mod, mod_access_load, stack->addr, stack);
-
-		/* if coalesced add to trace */
-		if (mem_mod_access_trace_activate &&
-				trace_mod && 
-				(trace_mod == mod))
-		{
-			if (master_stack)
-				fprintf(trace_mod->access_trace, "Coalesced\n");
-			else
-				fprintf(trace_mod->access_trace, "issued\n");
-		}
-
-		// Return due to coalescing
-		if (master_stack)
-		{
-			mod->coalesced_reads++;
-			mod_coalesce(mod, master_stack, stack);
-			mod_stack_wait_in_stack(stack, master_stack, EV_MOD_NMOESI_LOAD_FINISH);
-			return;
-		}
 
 		/* Next event */
 		esim_schedule_event(EV_MOD_NMOESI_LOAD_LOCK, stack, 0);
@@ -446,8 +421,6 @@ void mod_handler_nmoesi_store(int event, void *data)
 
 	if (event == EV_MOD_NMOESI_STORE)
 	{
-		struct mod_stack_t *master_stack;
-
 		mem_debug("%lld %lld 0x%x %s store\n", esim_time, stack->id,
 			stack->addr, mod->name);
 		mem_trace("mem.new_access name=\"A-%lld\" type=\"store\" "
@@ -543,34 +516,6 @@ void mod_handler_nmoesi_store(int event, void *data)
 
 		/* Record access */
 		mod_access_start(mod, stack, mod_access_store);
-
-		/* Coalesce access */
-		master_stack = mod_can_coalesce(mod, mod_access_store, stack->addr, stack);
-
-		/* if coalesced add to trace */
-		if (mem_mod_access_trace_activate &&
-				trace_mod && 
-				(trace_mod == mod))
-		{
-			if (master_stack)
-				fprintf(trace_mod->access_trace, "Coalesced\n");
-			else
-				fprintf(trace_mod->access_trace, "issued\n");
-		}
-
-		// Return due to coalescing
-		if (master_stack)
-		{
-			mod->coalesced_writes++;
-			mod_coalesce(mod, master_stack, stack);
-			mod_stack_wait_in_stack(stack, master_stack, EV_MOD_NMOESI_STORE_FINISH);
-
-			/* Increment witness variable */
-			if (stack->witness_ptr)
-				(*stack->witness_ptr)++;
-
-			return;
-		}
 
 		/* Continue */
 		esim_schedule_event(EV_MOD_NMOESI_STORE_LOCK, stack, 0);
@@ -747,7 +692,6 @@ void mod_handler_nmoesi_nc_store(int event, void *data)
 
 	if (event == EV_MOD_NMOESI_NC_STORE)
 	{
-		struct mod_stack_t *master_stack;
 
 		mem_debug("%lld %lld 0x%x %s nc store\n", esim_time, stack->id,
 			stack->addr, mod->name);
@@ -842,30 +786,6 @@ void mod_handler_nmoesi_nc_store(int event, void *data)
  
 		/* Record access */
 		mod_access_start(mod, stack, mod_access_nc_store);
-
-		/* Coalesce access */
-		master_stack = mod_can_coalesce(mod, mod_access_nc_store, stack->addr, stack);
-
-		/* if coalesced add to trace */
-		if (mem_mod_access_trace_activate &&
-				trace_mod && 
-				(trace_mod == mod))
-		{
-			if (master_stack)
-				fprintf(trace_mod->access_trace, "Coalesced\n");
-			else
-				fprintf(trace_mod->access_trace, "issued\n");
-		}
-
-		// Return due to coalescing
-		if (master_stack)
-		{
-			mod->coalesced_nc_writes++;
-			mod_coalesce(mod, master_stack, stack);
-			mod_stack_wait_in_stack(stack, master_stack, 
-					EV_MOD_NMOESI_NC_STORE_FINISH);
-			return;
-		}
 
 		/* Next event */
 		esim_schedule_event(EV_MOD_NMOESI_NC_STORE_LOCK, stack, 0);
@@ -1106,7 +1026,6 @@ void mod_handler_nmoesi_prefetch(int event, void *data)
 
 	if (event == EV_MOD_NMOESI_PREFETCH)
 	{
-		struct mod_stack_t *master_stack;
 
 		mem_debug("%lld %lld 0x%x %s prefetch\n", esim_time, stack->id,
 				stack->addr, mod->name);
@@ -1116,27 +1035,6 @@ void mod_handler_nmoesi_prefetch(int event, void *data)
 
 		/* Record access */
 		mod_access_start(mod, stack, mod_access_prefetch);
-
-		/* Coalesce access */
-		master_stack = mod_can_coalesce(mod, mod_access_prefetch, stack->addr, stack);
-		if (master_stack)
-		{
-			/* Doesn't make sense to prefetch as the block is already being fetched */
-			mem_debug("  %lld %lld 0x%x %s useless prefetch - already being fetched\n",
-					esim_time, stack->id, stack->addr, mod->name);
-
-			mod->useless_prefetches++;
-			esim_schedule_event(EV_MOD_NMOESI_PREFETCH_FINISH, stack, 0);
-
-			/* DEV - XXX I think the following code is incorrect. 
-			 * Within PREFETCH_FINISH, the witness pointer is 
-			 * always incremented.  This seems to be redundant. */
-			/* Increment witness variable */
-			if (stack->witness_ptr)
-				(*stack->witness_ptr)++;
-
-			return;
-		}
 
 		/* Continue */
 		esim_schedule_event(EV_MOD_NMOESI_PREFETCH_LOCK, stack, 0);
