@@ -357,7 +357,7 @@ void mod_lock_port(struct mod_t *mod, struct mod_stack_t *stack, int event)
 	mem_debug("  %lld stack %lld %s port %d locked\n", esim_time, stack->id, mod->name, i);
 
 	/* Schedule event */
-	esim_schedule_event(event, stack, 0);
+	esim_schedule_event(event, stack, 1);
 }
 
 
