@@ -39,7 +39,11 @@ struct si_work_item_uop_t
 	unsigned int global_mem_access_size;
 
 	/* Flags */
-	unsigned int active : 1;  /* Active after instruction emulation */
+	/* Active after instruction emulation */
+	unsigned int active : 1;
+
+	/* Mark a work item that has successfully made a cache access */
+	unsigned int accessed_cache : 1; 
 
 	/* LDS accesses */
 	int lds_access_count;

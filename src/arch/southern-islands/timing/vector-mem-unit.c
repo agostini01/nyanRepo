@@ -231,20 +231,60 @@ void si_vector_mem_mem(struct si_vector_mem_unit_t *vector_mem)
 		else 
 			fatal("%s: invalid access kind", __FUNCTION__);
 
+		// This variable keeps track if any work items are unsuccessful
+		// in making an access to the vector cache.
+		unsigned int all_work_items_accessed = 1;
+
 		/* Access global memory */
 		assert(!uop->global_mem_witness);
 		SI_FOREACH_WORK_ITEM_IN_WAVEFRONT(uop->wavefront, work_item_id)
 		{
+			// Get work item
 			work_item = uop->wavefront->work_items[work_item_id];
 			work_item_uop = 
 				&uop->work_item_uop[work_item->id_in_wavefront];
 
-			mod_access(vector_mem->compute_unit->vector_cache, 
-				access_kind, 
-				work_item_uop->global_mem_access_addr,
-				&uop->global_mem_witness, NULL, NULL, NULL);
-			uop->global_mem_witness--;
+			// Check if the work item info struct has
+			// already made a successful vector cache
+			// access. If so, move on to the next work item.
+			if (work_item_uop->accessed_cache == 1)
+				continue;
+
+			// Translate virtual address to a physical
+			// address
+			unsigned physical_address =
+				work_item_uop->global_mem_access_addr;
+
+
+			// Make sure we can access the vector cache. If
+			// so, submit the access. If we can access the
+			// cache, mark the accessed flag of the work
+			// item info struct.
+			if (mod_can_access(vector_mem->compute_unit->vector_cache,
+							   physical_address))
+			{
+			  mod_access(vector_mem->compute_unit->vector_cache,
+				  access_kind,
+				  physical_address,
+				  &uop->global_mem_witness, NULL, NULL, NULL);
+			  work_item_uop->accessed_cache = 1;
+
+			  // Access global memory
+			  uop->global_mem_witness--;
+			}
+			else
+			{
+			  all_work_items_accessed = 0;
+			}
 		}
+
+		// Make sure that all the work items in the wavefront have
+		// successfully accessed the vector cache. If not, the uop
+		// is not moved to the write buffer. Instead, the uop will
+		// be re-processed next cycle. Once all work items access
+		// the vector cache, the uop will be moved to the write buffer.
+		if (all_work_items_accessed==0)
+			continue;
 
 		if(si_spatial_report_active)
 		{
